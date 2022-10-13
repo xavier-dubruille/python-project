@@ -6,6 +6,7 @@ class Car():
         self._timeInStock = 0
         self._nextInspection = 0
         self._priceEuro = 0
+        self._rented = False
 
     def __str__(self):
         return "Product(name={})".format(self._brand)
