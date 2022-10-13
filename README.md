@@ -26,7 +26,7 @@ gérer les réservations
 gérer le controle technique, si une voiture doit passer dans 1 mois, elle ne peut pas etre achetee ni louée (contrainte!!)
 
 
-Fin de semaine pro 21/10 : cahier des charges 
+Fin de semaine pro 21/10 : cahier des charges\n 
 2 - 3 semaines : MVP
 
 => python (new release)
