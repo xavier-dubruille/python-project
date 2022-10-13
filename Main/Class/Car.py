@@ -11,7 +11,7 @@ class Car():
         return "Product(name={})".format(self._brand)
   
     @property
-    def name(self):
+    def brand(self):
         return self._brand
 
     @property
