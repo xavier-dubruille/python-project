@@ -5,7 +5,7 @@ Rencontre avec le client ce jeudi 13 octobre 2022 :
 nom : axel air 
 responsable concess voiture 
 gestion voiture 
-marques différentes, tyoe de voiture, type de moteur
+marques différentes, type de voiture, type de moteur
 
 appli pour encoder les voitures, vendre une voiture, depuis combien de temps elle est dans le stock
 
