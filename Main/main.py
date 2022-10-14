@@ -11,6 +11,6 @@ def main():
     for e in array:
         print(e)
     dbCursor.close()
-    
+     
 if __name__ == "__main__":
     main()
