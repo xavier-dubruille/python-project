@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/samfl/OneDrive - EPHEC asbl/BAC2/Python/ExamenJanvier/PythonGit/Db/bambooConcessDB.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="0"/></window><tab_structure><column_width id="0" width="172"/><column_width id="1" width="0"/><column_width id="2" width="115"/><column_width id="3" width="2250"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="2" parent="0"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,8:mainCustomer"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Customer" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="56"/><column index="2" value="80"/><column index="3" value="104"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">CREATE TABLE Brand(
+        idBrand   Int  Auto_increment  NOT NULL ,
+        nameBrand Varchar (250) NOT NULL
+	,CONSTRAINT Brand_PK PRIMARY KEY (idBrand)
+);
+
+
+CREATE TABLE Motor(
+        idMotor   Int  Auto_increment  NOT NULL ,
+        nameMotor Varchar (250) NOT NULL
+	,CONSTRAINT Motor_PK PRIMARY KEY (idMotor)
+);
+
+
+CREATE TABLE Car(
+        idCar              Int  Auto_increment  NOT NULL ,
+        stockDateCar       Date ,
+        techControlDateCar Date ,
+        rentedCar          Bool NOT NULL ,
+        idBrand            Int NOT NULL ,
+        idMotor            Int NOT NULL
+	,CONSTRAINT Car_PK PRIMARY KEY (idCar)
+
+	,CONSTRAINT Car_Brand_FK FOREIGN KEY (idBrand) REFERENCES Brand(idBrand)
+	,CONSTRAINT Car_Motor0_FK FOREIGN KEY (idMotor) REFERENCES Motor(idMotor)
+);
+
+
+
+CREATE TABLE Reservation(
+        idRes   Int  Auto_increment  NOT NULL ,
+        idCar   Int NOT NULL ,
+        idCusto Int NOT NULL
+	,CONSTRAINT Reservation_PK PRIMARY KEY (idRes)
+
+	,CONSTRAINT Reservation_Car_FK FOREIGN KEY (idCar) REFERENCES Car(idCar)
+	,CONSTRAINT Reservation_Customer0_FK FOREIGN KEY (idCusto) REFERENCES Customer(idCusto)
+);
+
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
