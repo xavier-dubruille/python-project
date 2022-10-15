@@ -18,12 +18,12 @@ def ExecuteQuery(query, frameResults):
     cursor.close()
 
 def ShowStock(frameResults):
-    ExecuteQuery("select prixCar as Prix, nameBrand as Brand, nameMotor as Motor, nameType as Type, \
+    ExecuteQuery("select priceCar as Prix, nameBrand as Brand, nameMotor as Motor, nameType as Type, \
         stockDateCar as DateStock, techControlDateCar as ControlDate, promoCar as Promotion from car \
         NATURAL join Brand NATURAL join Motor NATURAL join Type", frameResults)
 
 def ShowHistory(frameResults):
-    ExecuteQuery("select prixCar as Prix, nameBrand as Brand, nameMotor as Motor, nameType as Type, \
+    ExecuteQuery("select priceCar as Prix, nameBrand as Brand, nameMotor as Motor, nameType as Type, \
         stockDateCar as DateStock, techControlDateCar as ControlDate, promoCar as Promotion from car \
         NATURAL join Brand NATURAL join Motor NATURAL join Type", frameResults)
 
@@ -84,7 +84,7 @@ def main():
     buttonExit = tk.Button(frameExit, text = "Exit", command = window.destroy, relief='raised', font=font.Font(family='Helvetica', size=15, weight='bold'))
     buttonExit.pack()
 
-    ExecuteQuery("select prixCar as Prix, nameBrand as Brand, nameMotor as Motor, nameType as Type, \
+    ExecuteQuery("select priceCar as Prix, nameBrand as Brand, nameMotor as Motor, nameType as Type, \
         stockDateCar as DateStock, techControlDateCar as ControlDate, promoCar as Promotion from car \
         NATURAL join Brand NATURAL join Motor NATURAL join Type", frameDisplay)
 

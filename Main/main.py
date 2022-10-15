@@ -33,14 +33,14 @@ class Application:
         for car in carList:
             listboxType.insert(END, "{}".format(car.nameType))
             listboxBrand.insert(END, "{}".format(car.nameBrand))
-            listboxPrice.insert(END, "{}".format(car.prixCar))
+            listboxPrice.insert(END, "{}".format(car.priceCar))
 
         # listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
         # listboxStock.pack(expand = True, fill = "both")
         # carList = Car.CarListStock()
         # for car in carList:
         #     listboxStock.insert(END, "Prix : {}. Type : {}. Motor : {}. Brand : {}. Promotion : {}. In stock since : {}. Next Control : {}" \
-        #         .format(car.prixCar, car.nameType, car.nameMotor, car.nameBrand, car.promoCar, car.dateStockCar, car.dateTechControlCar))
+        #         .format(car.priceCar, car.nameType, car.nameMotor, car.nameBrand, car.promoCar, car.dateStockCar, car.dateTechControlCar))
                 
     def ShowHistory(self):
         self.ShowStock()
