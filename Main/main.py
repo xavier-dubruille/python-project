@@ -5,6 +5,8 @@ import tkinter as tk
 def main():
 
     window = tk.Tk()
+    window.title("Bamboo Concess")
+    window.geometry("{}x{}+{}+{}".format(500, 500, 50,50))
 
     frameButtonQuit = tk.Frame(window)
     frameButtonQuit.grid()
