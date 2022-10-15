@@ -12,6 +12,7 @@ class Application:
         self.title = "Bamboo Concess"
         self.DisplayBasicWindow()
 
+    # The main display function for the application.
     def DisplayBasicWindow(self):
 
         self.window = tk.Tk()
@@ -73,6 +74,7 @@ class Application:
 
         self.window.mainloop()
 
+    # It show you which car you have in your stock. It is display by default.
     def ShowStock(self):
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
@@ -92,6 +94,7 @@ class Application:
         listboxStock.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listboxStock.yview)
 
+    # When you click a row to show more information about the car you selected.
     def ShowDetails(self, event):
         for widget in self.frameDetails.winfo_children(): 
             widget.destroy()
@@ -100,15 +103,19 @@ class Application:
         labelDetails = tk.Label(self.frameDetails, text = printDetails)
         labelDetails.grid(column = 0, row = 0, sticky = "wesn")
 
+    # It will show you which car you sell.
     def ShowHistory(self):
         self.ShowStock()
 
+    # It will help you to change the reservation's statut for a particular car.
     def MakeReservation(self):
         pass
 
+    # It will help you to sell a particular car.
     def MakeDeal(self):
         pass
 
+    # Tis menu will help you to add a new car in your stock with a form.
     def AddCar(self):
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
