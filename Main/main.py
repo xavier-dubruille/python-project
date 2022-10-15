@@ -26,16 +26,15 @@ class Application:
         spaceType = len(max(carList, key=lambda x:len(x.nameType)).nameType) + 4
         for car in carList:
             listboxStock.insert(END, f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
-            listboxStock.bind('<<ListboxSelect>>', lambda x : self.ShowDetails(car))
+            listboxStock.bind('<<ListboxSelect>>', self.ShowDetails)
 
         listboxStock.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listboxStock.yview)
 
-    def ShowDetails(self, car):
+    def ShowDetails(self, event):
         for widget in self.frameDetails.winfo_children(): 
             widget.destroy()
-        # listbox = event.widget
-        # selection = listbox.curselection()
+        car = Car.CarListStock()[event.widget.curselection()[0]]
         printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}\nPromo : {car.promoCar}\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
         labelDetails = tk.Label(self.frameDetails, text = printDetails)
         labelDetails.pack()
