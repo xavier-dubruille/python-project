@@ -17,7 +17,7 @@ class Application:
             widget.destroy()
 
         scrollbar = Scrollbar(self.frameDisplay)
-        scrollbar.pack(side=RIGHT, fill=Y)
+        scrollbar.pack(side="right", fill="y")
 
         listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
         listboxStock.pack(expand = True, fill = "both")
