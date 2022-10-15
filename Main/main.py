@@ -1,3 +1,4 @@
+from cgitb import text
 from Class.Car import Car
 import sqlite3 as sql
 import tkinter as tk
@@ -31,6 +32,9 @@ def MakeReservation():
     pass
 
 def MakeDeal(): 
+    pass
+
+def AddCar():
     pass
 
 
@@ -79,7 +83,8 @@ def main():
     buttonDeal = tk.Button(frameButtons, text = "Make a deal", command = MakeDeal)
     buttonDeal.pack()
 
-    buttonAdd
+    buttonAddCar = tk.Button(frameButtons, text = "Add a car", command = AddCar)
+    buttonAddCar.pack()
 
     buttonExit = tk.Button(frameExit, text = "Exit", command = window.destroy, relief='raised', font=font.Font(family='Helvetica', size=15, weight='bold'))
     buttonExit.pack()
