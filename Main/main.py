@@ -1,5 +1,5 @@
 from Class.Car import Car
-import sqlite3
+import sqlite3 as sql
 import tkinter as tk
 
 def main():
@@ -12,7 +12,7 @@ def main():
     buttonQuit = tk.Button(frameButtonQuit, text = "Quit", command = lambda : window.destroy())
     buttonQuit.pack()
 
-    dbConnection = sqlite3.connect("./Db/bambooConcess.db")
+    dbConnection = sql.connect("./Db/bambooConcess.db")
     dbCursor = dbConnection.cursor()
 
     dbCursor.execute("select idCar, firstNameCusto from deal natural join Customer where idCusto = 1")
@@ -21,7 +21,7 @@ def main():
     arrayLabelQuery = []
     count = 0
     for e in array:
-        arrayLabelQuery.append(tkinter.Label(window, text = e))
+        arrayLabelQuery.append(tk.Label(window, text = e))
         arrayLabelQuery[count].grid()
         count += 1
     
