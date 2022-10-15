@@ -6,7 +6,7 @@ class Car(DB):
         self.idCar = None
         self.dateStockCar = None
         self.dateTechControlCar = None
-        self.prixCar = None
+        self.priceCar = None
         self.nameBrand = None
         self.nameMotor = None
         self.nameType = None
@@ -29,13 +29,13 @@ class Car(DB):
         cursor = DB.DBCursor()
         if cursor != None:
             try:
-                cursor.execute("SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, prixCar, nameBrand, nameMotor, \
+                cursor.execute("SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, priceCar, nameBrand, nameMotor, \
                 nameType, promoCar \
                 FROM Car \
                 NATURAL JOIN Brand \
                 NATURAL JOIN Motor\
                 NATURAL JOIN Type\
-                where idCar NOT in (select idCar from deal)")
+                WHERE idCar NOT IN (select idCar FROM deal WHERE isResDeal = 0)")
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
                     car = clss.LoadResults(cursor, row)

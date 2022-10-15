@@ -16,12 +16,31 @@ class Application:
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
 
+        for i in range(4):
+            self.frameDisplay.columnconfigure(i, weight = 1)
+        self.frameDisplay.rowconfigure(0, weight = 1)
+
+        listboxType = tk.Listbox(self.frameDisplay)
+        listboxType.grid(column = 0, row = 0, sticky = "wesn")
+
+        listboxBrand = tk.Listbox(self.frameDisplay)
+        listboxBrand.grid(column = 1, row = 0, sticky = "wesn")
+
+        listboxPrice = tk.Listbox(self.frameDisplay)
+        listboxPrice.grid(column = 2, row = 0, sticky = "wesn")
+         
         carList = Car.CarListStock()
-        listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
-        listboxStock.pack(expand = True, fill = "both")
         for car in carList:
-            listboxStock.insert(END, "Prix : {}. Type : {}. Motor : {}. Brand : {}. Promotion : {}. In stock since : {}. Next Control : {}" \
-                .format(car.prixCar, car.nameType, car.nameMotor, car.nameBrand, car.promoCar, car.dateStockCar, car.dateTechControlCar))
+            listboxType.insert(END, "{}".format(car.nameType))
+            listboxBrand.insert(END, "{}".format(car.nameBrand))
+            listboxPrice.insert(END, "{}".format(car.prixCar))
+
+        # listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
+        # listboxStock.pack(expand = True, fill = "both")
+        # carList = Car.CarListStock()
+        # for car in carList:
+        #     listboxStock.insert(END, "Prix : {}. Type : {}. Motor : {}. Brand : {}. Promotion : {}. In stock since : {}. Next Control : {}" \
+        #         .format(car.prixCar, car.nameType, car.nameMotor, car.nameBrand, car.promoCar, car.dateStockCar, car.dateTechControlCar))
                 
     def ShowHistory(self):
         self.ShowStock()
@@ -46,16 +65,15 @@ class Application:
         self.window.option_add("*Font", self.police)
         self.window.config(bg="white")
 
-        self.window.columnconfigure(0, weight = 2)
-        self.window.columnconfigure(1, weight = 3)
+        self.window.columnconfigure(0, weight = 1)
+        self.window.columnconfigure(1, weight = 2)
         self.window.columnconfigure(2, weight = 1)
-        self.window.columnconfigure(3, weight = 1)
 
         for i in range(6):
             self.window.rowconfigure(i, weight = 1)
         self.window.rowconfigure(7, weight = 2)
 
-        frameButtons = tk.Frame(self.window, highlightthickness=2, highlightbackground = "black")
+        frameButtons = tk.Frame(self.window)
         frameButtons.grid(column = 0, row = 1, rowspan = 5, sticky = "wesn")
         for i in range(5):
             frameButtons.rowconfigure(i, weight = 1)
@@ -73,22 +91,22 @@ class Application:
         buttonAddCar.grid(column = 0, row = 4, sticky = "wesn")
 
 
-        frameTitle = tk.Frame(self.window, highlightthickness=2, highlightbackground = "yellow")
+        frameTitle = tk.Frame(self.window, highlightthickness = 2, highlightbackground = "black")
         frameTitle.grid(column = 1, row = 0, sticky = "wesn")
         labelTitle = tk.Label(frameTitle, text = self.title)
         labelTitle.pack(expand = True, fill = "y")
 
-        frameSort = tk.Frame(self.window, highlightthickness = 2, highlightbackground = "blue")
+        frameSort = tk.Frame(self.window, highlightthickness = 1, highlightbackground = "black")
         frameSort.grid(column = 1, row = 1, sticky = "wesn")
 
-        self.frameDisplay = tk.Frame(self.window, highlightthickness=2, highlightbackground = "pink")
+        self.frameDisplay = tk.Frame(self.window)
         self.frameDisplay.grid(column = 1, row = 2, rowspan=6, sticky="wesn")
 
-        frameOnClick = tk.Frame(self.window, highlightthickness=2, highlightbackground = "purple")
-        frameOnClick.grid(column = 2, row = 1, rowspan = 7, columnspan = 2, sticky ="wesn")
+        frameOnClick = tk.Frame(self.window, highlightthickness=2, highlightbackground = "black")
+        frameOnClick.grid(column = 2, row = 1, rowspan = 7, sticky ="wesn")
 
         frameExit = tk.Frame(self.window)
-        frameExit.grid(column = 2, row = 0, columnspan = 2, sticky = "wesn")
+        frameExit.grid(column = 2, row = 0, sticky = "wesn")
         frameExit.rowconfigure(0, weight = 1)
         frameExit.columnconfigure(0, weight = 1)
         buttonExit = tk.Button(frameExit, text = "Exit", command = self.window.destroy, relief='raised', font=font.Font(family='Helvetica', size=15, weight='bold'))
