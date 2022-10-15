@@ -58,9 +58,9 @@ class Application:
             frameButtons.rowconfigure(i, weight = 1)
         frameButtons.columnconfigure(0, weight = 1)
 
-        buttonStock = tk.Button(frameButtons, text = "Display Stock", command = lambda : self.ShowStock(), state = "disabled", relief = "raised")
+        buttonStock = tk.Button(frameButtons, text = "Display Stock", command = self.ShowStock, state = "disabled", relief = "raised")
         buttonStock.grid(column = 0, row = 0, sticky = "wesn")
-        buttonHistory = tk.Button(frameButtons, text = "Display History", command = lambda : self.ShowHistory(), relief = "raised")
+        buttonHistory = tk.Button(frameButtons, text = "Display History", command = self.ShowHistory, relief = "raised")
         buttonHistory.grid(column = 0, row = 1, sticky = "wesn")
         buttonReservation = tk.Button(frameButtons, text = "Make a reservation", command = self.MakeReservation, relief = "raised")
         buttonReservation.grid(column = 0, row = 2, sticky = "wesn")
