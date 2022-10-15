@@ -23,7 +23,7 @@ def main():
     window.title("Bamboo Concess")
     window.geometry("{}x{}+{}+{}".format(500, 500, 50,50))
 
-    frameButtonQuit = tk.Frame(window, )
+    frameButtonQuit = tk.Frame(window)
     frameButtonQuit.grid()
 
     buttonQuit = tk.Button(frameButtonQuit, text = "Quit", command = window.destroy)
