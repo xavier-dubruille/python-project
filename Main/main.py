@@ -17,7 +17,8 @@ def main():
     dbConnection = sql.connect("./Db/bambooConcess.db")
     dbCursor = dbConnection.cursor()
 
-    dbCursor.execute("select idCar, firstNameCusto from deal natural join Customer where idCusto = 1")
+    # dbCursor.execute("select idCar, firstNameCusto from deal natural join Customer where idCusto = 1")
+    dbCursor.execute('select idDeal, substr(firstNameCusto, 1, 1) || \'.  \' || lastNameCusto as nameCusto,  idCar, nameBrand, nameMotor, nameType from Deal natural join Car natural join Brand natural join Motor natural join Type natural join customer where firstNameCusto = "Samuel"')
     array = dbCursor.fetchall()
     
     arrayLabelQuery = []
@@ -33,3 +34,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
