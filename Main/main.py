@@ -42,6 +42,7 @@ class Application:
         self.window.title(self.title)
         self.window.attributes('-fullscreen', True)
         self.window.option_add("*Font", self.police)
+        self.window.config(bg="white")
 
         self.window.columnconfigure(0, weight = 2)
         self.window.columnconfigure(1, weight = 3)
