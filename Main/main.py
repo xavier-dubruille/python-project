@@ -8,7 +8,7 @@ import sys
 
 class Application:
     def __init__(self): 
-        self.police = "corbel 15"
+        self.police = "courier 15"
         self.title = "Bamboo Concess"
         self.DisplayBasicWindow()
 
@@ -16,32 +16,30 @@ class Application:
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
 
-        for i in range(4):
-            self.frameDisplay.columnconfigure(i, weight = 1)
-        self.frameDisplay.rowconfigure(0, weight = 1)
+        scrollbar = Scrollbar(self.frameDisplay)
+        scrollbar.pack(side=RIGHT, fill=Y)
 
-        listboxType = tk.Listbox(self.frameDisplay)
-        listboxType.grid(column = 0, row = 0, sticky = "wesn")
-
-        listboxBrand = tk.Listbox(self.frameDisplay)
-        listboxBrand.grid(column = 1, row = 0, sticky = "wesn")
-
-        listboxPrice = tk.Listbox(self.frameDisplay)
-        listboxPrice.grid(column = 2, row = 0, sticky = "wesn")
-         
+        listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
+        listboxStock.pack(expand = True, fill = "both")
         carList = Car.CarListStock()
+        spaceBrand = len(max(carList, key=lambda car:len(car.nameBrand)).nameBrand) + 4
+        spaceType = len(max(carList, key=lambda x:len(x.nameType)).nameType) + 4
         for car in carList:
-            listboxType.insert(END, "{}".format(car.nameType))
-            listboxBrand.insert(END, "{}".format(car.nameBrand))
-            listboxPrice.insert(END, "{}".format(car.priceCar))
+            listboxStock.insert(END, f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
+            listboxStock.bind('<<ListboxSelect>>', lambda x : self.ShowDetails(car))
 
-        # listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
-        # listboxStock.pack(expand = True, fill = "both")
-        # carList = Car.CarListStock()
-        # for car in carList:
-        #     listboxStock.insert(END, "Prix : {}. Type : {}. Motor : {}. Brand : {}. Promotion : {}. In stock since : {}. Next Control : {}" \
-        #         .format(car.priceCar, car.nameType, car.nameMotor, car.nameBrand, car.promoCar, car.dateStockCar, car.dateTechControlCar))
-                
+        listboxStock.configure(yscrollcommand=scrollbar.set)
+        scrollbar.configure(command=listboxStock.yview)
+
+    def ShowDetails(self, car):
+        for widget in self.frameDetails.winfo_children(): 
+            widget.destroy()
+        # listbox = event.widget
+        # selection = listbox.curselection()
+        printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}\nPromo : {car.promoCar}\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
+        labelDetails = tk.Label(self.frameDetails, text = printDetails)
+        labelDetails.pack()
+
     def ShowHistory(self):
         self.ShowStock()
 
@@ -102,8 +100,8 @@ class Application:
         self.frameDisplay = tk.Frame(self.window)
         self.frameDisplay.grid(column = 1, row = 2, rowspan=6, sticky="wesn")
 
-        frameOnClick = tk.Frame(self.window, highlightthickness=2, highlightbackground = "black")
-        frameOnClick.grid(column = 2, row = 1, rowspan = 7, sticky ="wesn")
+        self.frameDetails = tk.Frame(self.window, highlightthickness=2, highlightbackground = "black")
+        self.frameDetails.grid(column = 2, row = 1, rowspan = 7, sticky ="wesn")
 
         frameExit = tk.Frame(self.window)
         frameExit.grid(column = 2, row = 0, sticky = "wesn")
