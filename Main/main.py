@@ -16,7 +16,7 @@ class Application:
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
         carList = Car.CarListStock()
-        listboxStock = tk.Listbox(self.frameDisplay)
+        listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
         listboxStock.pack(expand = True, fill = "both")
         for car in carList:
             listboxStock.insert(END, "Prix : {}. Type : {}. Motor : {}. Brand : {}. Promotion : {}. In stock since : {}. Next Control : {}" \
