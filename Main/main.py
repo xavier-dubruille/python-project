@@ -73,7 +73,7 @@ class Application:
         frameTitle = tk.Frame(self.window, highlightthickness=2, highlightbackground = "yellow")
         frameTitle.grid(column = 1, row = 0, sticky = "wesn")
         labelTitle = tk.Label(frameTitle, text = self.title)
-        labelTitle.pack()
+        labelTitle.pack(expand = True, fill = "y")
 
         frameSort = tk.Frame(self.window, highlightthickness = 2, highlightbackground = "blue")
         frameSort.grid(column = 1, row = 1, sticky = "wesn")
