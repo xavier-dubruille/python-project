@@ -1,4 +1,3 @@
-from cgitb import text
 from Class.Car import Car
 import sqlite3 as sql
 import tkinter as tk
@@ -28,15 +27,14 @@ def ShowHistory(frameResults):
         stockDateCar as DateStock, techControlDateCar as ControlDate, promoCar as Promotion from car \
         NATURAL join Brand NATURAL join Motor NATURAL join Type", frameResults)
 
-def MakeReservation(): 
+def MakeReservation():
     pass
 
-def MakeDeal(): 
+def MakeDeal():
     pass
 
 def AddCar():
     pass
-
 
 def main():
 
@@ -55,9 +53,22 @@ def main():
 
     frameButtons = tk.Frame(window, highlightthickness=2, highlightbackground = "black")
     frameButtons.grid(column = 0, row = 1, rowspan = 5, sticky = "wesn")
+    buttonStock = tk.Button(frameButtons, text = "Display Stock", command = lambda : ShowStock(frameDisplay))
+    buttonStock.pack()
+    buttonHistory = tk.Button(frameButtons, text = "Display History", command = lambda : ShowHistory(frameDisplay))
+    buttonHistory.pack()
+    buttonReservation = tk.Button(frameButtons, text = "Make a reservation", command = MakeReservation)
+    buttonReservation.pack()
+    buttonDeal = tk.Button(frameButtons, text = "Make a deal", command = MakeDeal)
+    buttonDeal.pack()
+    buttonAddCar = tk.Button(frameButtons, text = "Add a car", command = AddCar)
+    buttonAddCar.pack()
+
 
     frameTitle = tk.Frame(window, highlightthickness=2, highlightbackground = "yellow")
     frameTitle.grid(column = 1, row = 0, sticky = "wesn")
+    labelTitle = tk.Label(frameTitle, text = "Bamboo Concess")
+    labelTitle.pack()
 
     frameSort = tk.Frame(window, highlightthickness = 2, highlightbackground = "blue")
     frameSort.grid(column = 1, row = 1, sticky = "wesn")
@@ -69,23 +80,7 @@ def main():
     frameOnClick.grid(column = 2, row = 1, rowspan = 7, columnspan = 2, sticky ="wesn")
 
     frameExit = tk.Frame(window)
-    frameExit.grid(column = 3, row = 0, sticky = "wesn")
-
-    buttonStock = tk.Button(frameButtons, text = "Display Stock", command = lambda : ShowStock(frameDisplay))
-    buttonStock.pack()
-
-    buttonHistory = tk.Button(frameButtons, text = "Display History", command = lambda : ShowHistory(frameDisplay))
-    buttonHistory.pack()
-
-    buttonReservation = tk.Button(frameButtons, text = "Make a reservation", command = MakeReservation)
-    buttonReservation.pack()
-
-    buttonDeal = tk.Button(frameButtons, text = "Make a deal", command = MakeDeal)
-    buttonDeal.pack()
-
-    buttonAddCar = tk.Button(frameButtons, text = "Add a car", command = AddCar)
-    buttonAddCar.pack()
-
+    frameExit.grid(column = 3, row = 0, sticky = "wesn")    
     buttonExit = tk.Button(frameExit, text = "Exit", command = window.destroy, relief='raised', font=font.Font(family='Helvetica', size=15, weight='bold'))
     buttonExit.pack()
 
@@ -95,9 +90,4 @@ def main():
 
     window.mainloop()
 
-if __name__ == "__main__":
-    main()
-
-
-
-
+main()
