@@ -12,48 +12,6 @@ class Application:
         self.title = "Bamboo Concess"
         self.DisplayBasicWindow()
 
-    def ShowStock(self):
-        for widget in self.frameDisplay.winfo_children(): 
-            widget.destroy()
-
-        scrollbar = Scrollbar(self.frameDisplay)
-        scrollbar.pack(side="right", fill="y")
-
-        listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
-        listboxStock.pack(expand = True, fill = "both")
-        carList = Car.CarListStock()
-        spaceBrand = len(max(carList, key=lambda car:len(car.nameBrand)).nameBrand) + 4
-        spaceType = len(max(carList, key=lambda x:len(x.nameType)).nameType) + 4
-        for car in carList:
-            listboxStock.insert(END, f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
-            listboxStock.bind('<<ListboxSelect>>', self.ShowDetails)
-
-        listboxStock.configure(yscrollcommand=scrollbar.set)
-        scrollbar.configure(command=listboxStock.yview)
-
-    def ShowDetails(self, event):
-        for widget in self.frameDetails.winfo_children(): 
-            widget.destroy()
-        car = Car.CarListStock()[event.widget.curselection()[0]]
-        printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}\nPromo : {car.promoCar}\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
-        labelDetails = tk.Label(self.frameDetails, text = printDetails)
-        labelDetails.pack()
-
-    def ShowHistory(self):
-        self.ShowStock()
-
-    def MakeReservation(self):
-        pass
-
-    def MakeDeal(self):
-        pass
-
-    def AddCar(self):
-        for widget in self.frameDisplay.winfo_children(): 
-            widget.destroy()
-        
-        
-
     def DisplayBasicWindow(self):
 
         self.window = tk.Tk()
@@ -112,5 +70,45 @@ class Application:
         self.ShowStock()
 
         self.window.mainloop()
+
+    def ShowStock(self):
+        for widget in self.frameDisplay.winfo_children(): 
+            widget.destroy()
+
+        scrollbar = Scrollbar(self.frameDisplay)
+        scrollbar.pack(side="right", fill="y")
+
+        listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
+        listboxStock.pack(expand = True, fill = "both")
+        carList = Car.CarListStock()
+        spaceBrand = len(max(carList, key=lambda car:len(car.nameBrand)).nameBrand) + 4
+        spaceType = len(max(carList, key=lambda x:len(x.nameType)).nameType) + 4
+        for car in carList:
+            listboxStock.insert(END, f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
+            listboxStock.bind('<<ListboxSelect>>', self.ShowDetails)
+
+        listboxStock.configure(yscrollcommand=scrollbar.set)
+        scrollbar.configure(command=listboxStock.yview)
+
+    def ShowDetails(self, event):
+        for widget in self.frameDetails.winfo_children(): 
+            widget.destroy()
+        car = Car.CarListStock()[event.widget.curselection()[0]]
+        printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}\nPromo : {car.promoCar}\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
+        labelDetails = tk.Label(self.frameDetails, text = printDetails)
+        labelDetails.pack()
+
+    def ShowHistory(self):
+        self.ShowStock()
+
+    def MakeReservation(self):
+        pass
+
+    def MakeDeal(self):
+        pass
+
+    def AddCar(self):
+        for widget in self.frameDisplay.winfo_children(): 
+            widget.destroy()
 
 Application()
