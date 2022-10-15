@@ -59,6 +59,8 @@ class Application:
 
         self.frameDetails = tk.Frame(self.window, highlightthickness=2, highlightbackground = "black")
         self.frameDetails.grid(column = 2, row = 1, rowspan = 7, sticky ="wesn")
+        self.frameDetails.rowconfigure(0, weight = 1)
+        self.frameDetails.columnconfigure(0, weight = 1)
 
         frameExit = tk.Frame(self.window)
         frameExit.grid(column = 2, row = 0, sticky = "wesn")
@@ -94,9 +96,9 @@ class Application:
         for widget in self.frameDetails.winfo_children(): 
             widget.destroy()
         car = Car.CarListStock()[event.widget.curselection()[0]]
-        printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}\nPromo : {car.promoCar}\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
+        printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
         labelDetails = tk.Label(self.frameDetails, text = printDetails)
-        labelDetails.pack()
+        labelDetails.grid(column = 0, row = 0, sticky = "wesn")
 
     def ShowHistory(self):
         self.ShowStock()
