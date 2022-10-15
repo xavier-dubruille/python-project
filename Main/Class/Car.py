@@ -1,24 +1,23 @@
-class Car():
-    def __init__(self, arg_brand = "No brand at the moment"):
-        self._brand = arg_brand
-        self._typeOfCar = ""
-        self._typeOfMotor = ""
-        self._timeInStock = 0
-        self._nextInspection = 0
-        self._priceEuro = 0
-        self._rented = False
+from DB import DBAccess as DB
 
-    def __str__(self):
-        return "Product(name={})".format(self._brand)
-  
-    @property
-    def brand(self):
-        return self._brand
+class Car(DB): 
+    def __init__(self): 
+        self.idCar = None
+        self.stockDateCar = None
+        self.techControlDateCar = None
+        self.prixCar = None
+        self.idBrand = None
+        self.idMotor = None
+        self.idType = None
+        self.promoCar = None
 
-    @property
-    def price_euro(self):
-        return self._priceEuro
 
-    @price_euro.setter
-    def price_euro(self, arg_priceEuro):
-        self._priceEuro = arg_priceEuro
+    @staticmethod
+    def NameTable():
+        # Return the name table
+        return "Car"
+
+    @staticmethod
+    def IdColumn():
+        # Return the id column
+        return "idCar"
