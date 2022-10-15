@@ -26,7 +26,7 @@ def main():
     frameButtonQuit = tk.Frame(window)
     frameButtonQuit.grid()
 
-    buttonQuit = tk.Button(frameButtonQuit, text = "Quit", command = window.destroy)
+    buttonQuit = tk.Button(frameButtonQuit, text = "Exit", command = window.destroy)
     buttonQuit.pack()
 
 
