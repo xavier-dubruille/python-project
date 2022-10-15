@@ -8,6 +8,8 @@ import sys
 
 class Application:
     def __init__(self): 
+        self.police = "corbel 15"
+        self.title = "Bamboo Concess"
         self.main()
 
     def ShowStock(self, frameResults):
@@ -35,8 +37,9 @@ class Application:
     def main(self):
 
         window = tk.Tk()
-        window.title("Bamboo Concess")
+        window.title(self.title)
         window.attributes('-fullscreen', True)
+        window.option_add("*Font", self.police)
 
         window.columnconfigure(0, weight = 2)
         window.columnconfigure(1, weight = 3)
@@ -49,21 +52,25 @@ class Application:
 
         frameButtons = tk.Frame(window, highlightthickness=2, highlightbackground = "black")
         frameButtons.grid(column = 0, row = 1, rowspan = 5, sticky = "wesn")
+        for i in range(5):
+            frameButtons.rowconfigure(i, weight = 1)
+        frameButtons.columnconfigure(0, weight = 1)
+
         buttonStock = tk.Button(frameButtons, text = "Display Stock", command = lambda : self.ShowStock(frameDisplay), state = "disabled")
-        buttonStock.pack()
+        buttonStock.grid(column = 0, row = 0, sticky = "wesn")
         buttonHistory = tk.Button(frameButtons, text = "Display History", command = lambda : self.ShowHistory(frameDisplay))
-        buttonHistory.pack()
+        buttonHistory.grid(column = 0, row = 1, sticky = "wesn")
         buttonReservation = tk.Button(frameButtons, text = "Make a reservation", command = self.MakeReservation)
-        buttonReservation.pack()
+        buttonReservation.grid(column = 0, row = 2, sticky = "wesn")
         buttonDeal = tk.Button(frameButtons, text = "Make a deal", command = self.MakeDeal)
-        buttonDeal.pack()
+        buttonDeal.grid(column = 0, row = 3, sticky = "wesn")
         buttonAddCar = tk.Button(frameButtons, text = "Add a car", command = self.AddCar)
-        buttonAddCar.pack()
+        buttonAddCar.grid(column = 0, row = 4, sticky = "wesn")
 
 
         frameTitle = tk.Frame(window, highlightthickness=2, highlightbackground = "yellow")
         frameTitle.grid(column = 1, row = 0, sticky = "wesn")
-        labelTitle = tk.Label(frameTitle, text = "Bamboo Concess")
+        labelTitle = tk.Label(frameTitle, text = self.title)
         labelTitle.pack()
 
         frameSort = tk.Frame(window, highlightthickness = 2, highlightbackground = "blue")
@@ -76,9 +83,11 @@ class Application:
         frameOnClick.grid(column = 2, row = 1, rowspan = 7, columnspan = 2, sticky ="wesn")
 
         frameExit = tk.Frame(window)
-        frameExit.grid(column = 3, row = 0, sticky = "wesn")    
+        frameExit.grid(column = 2, row = 0, columnspan = 2, sticky = "wesn")
+        frameExit.rowconfigure(0, weight = 1)
+        frameExit.columnconfigure(0, weight = 1)
         buttonExit = tk.Button(frameExit, text = "Exit", command = window.destroy, relief='raised', font=font.Font(family='Helvetica', size=15, weight='bold'))
-        buttonExit.pack()
+        buttonExit.grid(column = 0, row = 0, sticky = "wesn")
 
         self.ShowStock(frameDisplay)
 
