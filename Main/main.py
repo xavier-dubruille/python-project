@@ -18,9 +18,12 @@ def main():
     dbCursor.execute("select idCar, firstNameCusto from deal natural join Customer where idCusto = 1")
     array = dbCursor.fetchall()
     
-    count = 1
+    arrayLabelQuery = []
+    count = 0
     for e in array:
-        count +=1
+        arrayLabelQuery.append(tkinter.Label(window, text = e))
+        arrayLabelQuery[count].grid()
+        count += 1
     
     dbCursor.close()
 
