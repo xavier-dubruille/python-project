@@ -29,11 +29,10 @@ def main():
     buttonQuit = tk.Button(frameButtonQuit, text = "Quit", command = window.destroy)
     buttonQuit.pack()
 
-    dbConnection = sql.connect("./Db/bambooConcess.db")
-    dbCursor = dbConnection.cursor()
 
     # dbCursor.execute("select idCar, firstNameCusto from deal natural join Customer where idCusto = 1")
-    dbCursor.execute('select idDeal, substr(firstNameCusto, 1, 1) || \'.  \' || lastNameCusto as nameCusto,  idCar, nameBrand, nameMotor, nameType from Deal natural join Car natural join Brand natural join Motor natural join Type natural join customer where firstNameCusto = "Samuel"')
+    buttonQuery = tk.Button(window, text = "query", command = lambda : ExecuteQuery('select idDeal, substr(firstNameCusto, 1, 1) || \'.  \' || lastNameCusto as nameCusto,  idCar, nameBrand, nameMotor, nameType from Deal natural join Car natural join Brand natural join Motor natural join Type natural join customer where firstNameCusto = "Samuel"', window))
+    buttonQuery.grid()
 
     window.mainloop()
 
