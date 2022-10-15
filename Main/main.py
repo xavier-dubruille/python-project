@@ -1,6 +1,7 @@
 # from Class.Car import Car
 from Class.DB import DBAccess as DB
-import sqlite3 as sql
+from Class.Car import Car
+from tkinter import *
 import tkinter as tk
 import tkinter.font as font
 import sys
@@ -31,9 +32,14 @@ class Application:
                 DB.DBClose(cursor)
 
     def ShowStock(self, frameResults):
-        self.ExecuteQuery("SECT prixCar AS Prix, nameBrand AS Brand, nameMotor AS Motor, nameType AS Type, \
-            stockDateCar AS DateStock, techControlDateCar AS ControlDate, promoCar AS Promotion FROM car \
-            NATURAL JOIN Brand NATURAL JOIN Motor NATURAL JOIN Type", frameResults)
+        carList = Car.CarListStock()
+        listboxStock = tk.Listbox(frameResults)
+        listboxStock.pack(expand = True, fill = "both")
+        for car in carList:
+            listboxStock.insert(END, "Prix : {}. Type : {}. Motor : {}. Brand : {}. Promotion : {}. In stock since : {}. Next Control : {}" \
+                .format(car.prixCar, car.idType, car.idMotor, car.idBrand, car.promoCar, car.stockDateCar, car.techControlDateCar))
+        
+
 
         
     def ShowHistory(self, frameResults):
@@ -98,9 +104,7 @@ class Application:
         buttonExit = tk.Button(frameExit, text = "Exit", command = window.destroy, relief='raised', font=font.Font(family='Helvetica', size=15, weight='bold'))
         buttonExit.pack()
 
-        self.ExecuteQuery("select prixCar as Prix, nameBrand as Brand, nameMotor as Motor, nameType as Type, \
-            stockDateCar as DateStock, techControlDateCar as ControlDate, promoCar as Promotion from car \
-            NATURAL join Brand NATURAL join Motor NATURAL join Type", frameDisplay)
+        self.ShowStock(frameDisplay)
 
         window.mainloop()
 

@@ -30,6 +30,7 @@ class DBAccess():
                 print("Error in LoadWithId")
                 print(sys.exc_info())
                 return None
+                
             finally:
                 clss.DBClose(cursor)
     
@@ -42,5 +43,3 @@ class DBAccess():
             setattr(newInstance, columnName, data[counter])
             counter += 1
         return newInstance
-
-
