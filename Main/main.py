@@ -10,42 +10,18 @@ class Application:
     def __init__(self): 
         self.main()
 
-    def ExecuteQuery(self, query, frameResults): 
-        cursor = DB.DBCursor()
-        if cursor != None:
-            try:
-                cursor.execute(query) 
-
-                arrayLabelQuery = []
-                count = 0
-                for e in cursor.fetchall():
-                    arrayLabelQuery.append(tk.Label(frameResults, text = e))
-                    arrayLabelQuery[count].pack()
-                    count += 1
-                return 1
-            except: 
-                print("Error in ExecuteQuery")
-                print(sys.exc_info())
-                return None
-            
-            finally:
-                DB.DBClose(cursor)
-
     def ShowStock(self, frameResults):
+        for widget in frameResults.winfo_children(): 
+            widget.destroy()
         carList = Car.CarListStock()
         listboxStock = tk.Listbox(frameResults)
         listboxStock.pack(expand = True, fill = "both")
         for car in carList:
             listboxStock.insert(END, "Prix : {}. Type : {}. Motor : {}. Brand : {}. Promotion : {}. In stock since : {}. Next Control : {}" \
-                .format(car.prixCar, car.idType, car.idMotor, car.idBrand, car.promoCar, car.stockDateCar, car.techControlDateCar))
-        
-
-
-        
+                .format(car.prixCar, car.nameType, car.nameMotor, car.nameBrand, car.promoCar, car.dateStockCar, car.dateTechControlCar))
+                
     def ShowHistory(self, frameResults):
-        self.ExecuteQuery("select prixCar as Prix, nameBrand as Brand, nameMotor as Motor, nameType as Type, \
-            stockDateCar as DateStock, techControlDateCar as ControlDate, promoCar as Promotion from car \
-            NATURAL join Brand NATURAL join Motor NATURAL join Type", frameResults)
+        self.ShowStock(frameResults)
 
     def MakeReservation(self):
         pass
@@ -73,7 +49,7 @@ class Application:
 
         frameButtons = tk.Frame(window, highlightthickness=2, highlightbackground = "black")
         frameButtons.grid(column = 0, row = 1, rowspan = 5, sticky = "wesn")
-        buttonStock = tk.Button(frameButtons, text = "Display Stock", command = lambda : self.ShowStock(frameDisplay))
+        buttonStock = tk.Button(frameButtons, text = "Display Stock", command = lambda : self.ShowStock(frameDisplay), state = "disabled")
         buttonStock.pack()
         buttonHistory = tk.Button(frameButtons, text = "Display History", command = lambda : self.ShowHistory(frameDisplay))
         buttonHistory.pack()

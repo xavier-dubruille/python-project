@@ -7,9 +7,9 @@ class Car(DB):
         self.dateStockCar = None
         self.dateTechControlCar = None
         self.prixCar = None
-        self.idBrand = None
-        self.idMotor = None
-        self.idType = None
+        self.nameBrand = None
+        self.nameMotor = None
+        self.nameType = None
         self.promoCar = None
 
 
