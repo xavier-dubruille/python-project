@@ -15,6 +15,7 @@ class Application:
     def ShowStock(self):
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
+
         carList = Car.CarListStock()
         listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
         listboxStock.pack(expand = True, fill = "both")
@@ -32,9 +33,10 @@ class Application:
         pass
 
     def AddCar(self):
-        return
-        for widget in self.window.winfo_children(): 
+        for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
+        
+        
 
     def DisplayBasicWindow(self):
 
