@@ -9,7 +9,7 @@ def main():
     frameButtonQuit = tkinter.Frame(window)
     frameButtonQuit.grid()
 
-    buttonQuit = tkinter.Button(frameButtonQuit, text = "Quit", command = lambda self : Quit(self))
+    buttonQuit = tkinter.Button(frameButtonQuit, text = "Quit", command = lambda : window.destroy())
     buttonQuit.pack()
 
     dbConnection = sqlite3.connect("./Db/bambooConcess.db")
@@ -26,8 +26,5 @@ def main():
 
     window.mainloop()
 
-def Quit(window):
-    window.destroy() 
-     
 if __name__ == "__main__":
     main()
