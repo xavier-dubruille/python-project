@@ -44,7 +44,7 @@ def main():
     frameButtonQuit = tk.Frame(window, highlightthickness=2, highlightbackground = "black")
     frameButtonQuit.grid(column = 3, row = 0, sticky = "wesn")
 
-    buttonQuit = tk.Button(frameButtonQuit, text = "Quit", command = window.destroy)
+    buttonQuit = tk.Button(frameButtonQuit, text = "Exit", command = window.destroy)
     buttonQuit.pack()
 
     ExecuteQuery("select prixCar as Prix, nameBrand as Brand, nameMotor as Motor, nameType as Type, stockDateCar as DateStock, techControlDateCar as ControlDate, promoCar as Promotion from car NATURAL join Brand NATURAL join Motor NATURAL join Type", frameStock)
