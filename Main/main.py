@@ -1,15 +1,15 @@
 from Class.Car import Car
 import sqlite3
-import tkinter
+import tkinter as tk
 
 def main():
 
-    window = tkinter.Tk()
+    window = tk.Tk()
 
-    frameButtonQuit = tkinter.Frame(window)
+    frameButtonQuit = tk.Frame(window)
     frameButtonQuit.grid()
 
-    buttonQuit = tkinter.Button(frameButtonQuit, text = "Quit", command = lambda : window.destroy())
+    buttonQuit = tk.Button(frameButtonQuit, text = "Quit", command = lambda : window.destroy())
     buttonQuit.pack()
 
     dbConnection = sqlite3.connect("./Db/bambooConcess.db")
