@@ -7,6 +7,7 @@ from Class.Motor import Motor
 from tkinter import *
 import tkinter as tk
 import tkinter.font as font
+from tkcalendar import DateEntry as tkCal
 import sys
 
 class Application:
@@ -195,20 +196,46 @@ class Application:
         for i in range(2):
             self.frameDisplay.columnconfigure(i, weight = 1)
         
-        for i in range(6):
+        for i in range(7):
             self.frameDisplay.rowconfigure(i, weight = 1)
         
         if Car.CarFreePlacesStock() <= 40:
             brandVar = tk.StringVar()
+            typeVar = tk.StringVar()
+            motorVar = tk.StringVar()
+            priceVar = tk.StringVar()
+            promoVar = tk.StringVar()
+            nextControlVar = tk.StringVar()
+
             labelBrand = tk.Label(self.frameDisplay, text = "Brand : ")
             labelBrand.grid(column = 0, row = 0, sticky = "wesn")
             dropdownBrand = tk.OptionMenu(self.frameDisplay, brandVar, *map(lambda brand: brand.nameBrand, Brand.GetAllBrand()))
             dropdownBrand.grid(column = 1, row = 0, sticky = "wesn")
+
             labelType = tk.Label(self.frameDisplay, text = "Type : ")
-            labelType.grid(column = 0, row = 0, sticky = "wesn")
-            dropdownType = tk.OptionMenu(self.frameDisplay, brandVar, *map(lambda brand: brand.nameType, Type.GetAllType()))
-            dropdownType.grid(column = 1, row = 0, sticky = "wesn")
-            
+            labelType.grid(column = 0, row = 1, sticky = "wesn")
+            dropdownType = tk.OptionMenu(self.frameDisplay, typeVar, *map(lambda brand: brand.nameType, Type.GetAllType()))
+            dropdownType.grid(column = 1, row = 1, sticky = "wesn")
+
+            labelMotor = tk.Label(self.frameDisplay, text = "Motor : ")
+            labelMotor.grid(column = 0, row = 2, sticky = "wesn")
+            dropdownMotor = tk.OptionMenu(self.frameDisplay, motorVar, *map(lambda brand: brand.nameMotor, Motor.GetAllMotor()))
+            dropdownMotor.grid(column = 1, row = 2, sticky = "wesn")
+
+            labelPrice = tk.Label(self.frameDisplay, text = "Price : ")
+            labelPrice.grid(column = 0, row = 3, sticky = "wesn")
+            entryPrice = tk.Entry(self.frameDisplay, textvariable = priceVar)
+            entryPrice.grid(column = 1, row = 3, sticky = "wesn")
+
+            labelPromo = tk.Label(self.frameDisplay, text = "Promo : ")
+            labelPromo.grid(column = 0, row = 4, sticky = "wesn")
+            entryPromo = tk.Entry(self.frameDisplay, textvariable = promoVar)
+            entryPromo.grid(column = 1, row = 4, sticky = "wesn")
+
+            labelNextControl = tk.Label(self.frameDisplay, text = "Next tech control :")
+            labelNextControl.grid(column = 0, row = 5, sticky = "wesn")
+            entryNextControl = tkCal.DateEntry(self.frameDisplay, textvariable = nextControlVar, selectmode = 'day')
+            entryNextControl.grid(column = 1, row = 5, sticky = "wesn")
 
         else: 
             labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
