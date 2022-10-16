@@ -36,15 +36,15 @@ class Application:
             self.frameButtons.rowconfigure(i, weight = 1)
         self.frameButtons.columnconfigure(0, weight = 1)
 
-        buttonStock = tk.Button(frameButtons, text = "Display Stock", command = self.ShowStock, relief = "raised")
+        buttonStock = tk.Button(self.frameButtons, text = "Display Stock", command = self.ShowStock, relief = "raised")
         buttonStock.grid(column = 0, row = 0, sticky = "wesn")
-        buttonHistory = tk.Button(frameButtons, text = "Display History", command = self.ShowHistory, relief = "raised")
+        buttonHistory = tk.Button(self.frameButtons, text = "Display History", command = self.ShowHistory, relief = "raised")
         buttonHistory.grid(column = 0, row = 1, sticky = "wesn")
-        buttonReservation = tk.Button(frameButtons, text = "Make a reservation", command = self.MakeReservation, relief = "raised")
+        buttonReservation = tk.Button(self.frameButtons, text = "Make a reservation", command = self.MakeReservation, relief = "raised")
         buttonReservation.grid(column = 0, row = 2, sticky = "wesn")
-        buttonDeal = tk.Button(frameButtons, text = "Make a deal", command = self.MakeDeal, relief = "raised")
+        buttonDeal = tk.Button(self.frameButtons, text = "Make a deal", command = self.MakeDeal, relief = "raised")
         buttonDeal.grid(column = 0, row = 3, sticky = "wesn")
-        buttonAddCar = tk.Button(frameButtons, text = "Add a car", command = self.AddCar)
+        buttonAddCar = tk.Button(self.frameButtons, text = "Add a car", command = self.AddCar)
         buttonAddCar.grid(column = 0, row = 4, sticky = "wesn")
 
 
@@ -85,6 +85,8 @@ class Application:
 
     # It show you which car you have in your stock. It is display by default.
     def ShowStock(self):
+        # for widget in self.frameButtons.winfo_children():
+        #     if widget
         self.buttonStock['state'] = 'disabled'
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
