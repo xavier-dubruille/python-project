@@ -20,9 +20,9 @@ class DBAccess():
     @classmethod
     def LoadWithId(clss, id):
         cursor = clss.DBCursor()
-        if cursor != None: 
+        if cursor != None:
             try: 
-                cursor.execute("SELECT * FROM %s WHERE %s = ?" % (clss.NameTable(), clss.IdColumn()), (id, ))
+                cursor.execute("SELECT * FROM %s WHERE %s = %s" % (clss.NameTable(), clss.IdColumn(), id))
                 result = cursor.fetchone()
                 return clss.LoadResults(cursor, result)
 
@@ -38,9 +38,8 @@ class DBAccess():
     def LoadResults(clss, cursor, data): 
         newInstance = clss()
         counter = 0
-        columnsName = [description[0] for description in cursor.description]
-        for columnName in columnsName:
-            setattr(newInstance, columnName, data[counter])
+        for columnName in cursor.description:
+            setattr(newInstance, columnName[0], data[counter])
             counter += 1
         return newInstance
     
@@ -63,16 +62,20 @@ class DBAccess():
 
             finally: 
                 clss.DBClose(cursor)
-    
+
     @classmethod
-    def InsertDB(clss, dictData): 
+    def IsStockedWithId(clss, id): 
         cursor = clss.DBCursor()
         if cursor != None:
             try:
-                for key in dictData: 
-                    print(key)
-                # cursor.execute("Insert etc")
+                cursor.execute("SELECT * FROM %s WHERE %s = %s" % (clss.NameTable(), clss.IdColumn(), id))
+                result = cursor.fetchone()
+                if result: 
+                    return True
+                return False
             except:
-                print("Error in InsertDB")
+                print("Error in IsStocked")
+                print(sys.exc_info())
+                return None
             finally:
                 clss.DBClose(cursor)

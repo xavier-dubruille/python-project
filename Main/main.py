@@ -18,9 +18,6 @@ class Application:
         self.printDetails = ""
         self.DisplayBasicWindow()
 
-
-
-
     # The main display function for the application.
     def DisplayBasicWindow(self):
 
@@ -242,11 +239,6 @@ class Application:
             labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
             labelNoFreePlaces.grid(column = 0, row = 0)
 
-
-
-
-
-
     # Tis menu will help you to add a new car in your stock with a form.
     def AddCar(self):
         for widget in self.frameButtons.winfo_children():
@@ -264,46 +256,49 @@ class Application:
             self.frameDisplay.rowconfigure(i, weight = 1)
         
         if Car.CarFreePlacesStock() <= 40:
-            vars = {
-            "nameBrand" : tk.StringVar(),
-            "nameType" : tk.StringVar(),
-            "nameMotor" : tk.StringVar(),
-            "priceCar" : tk.StringVar(),
-            "promoCar" : tk.StringVar(),
-            "dateTechControlCar" : tk.StringVar()
-            }
+            # vars = {"nameBrand" : tk.StringVar(), "nameType" : tk.StringVar(), "nameMotor" : tk.StringVar(), "priceCar" : tk.StringVar(),
+            # "promoCar" : tk.StringVar(),"dateTechControlCar" : tk.StringVar()}
+
+            car = Car()
+
+            car.nameBrand = tk.StringVar()
+            car.nameType = tk.StringVar()
+            car.nameMotor = tk.StringVar()
+            car.priceCar = tk.StringVar()
+            car.promoCar = tk.StringVar()
+            car.dateTechControlCar = tk.StringVar()
 
             labelBrand = tk.Label(self.frameDisplay, text = "Brand : ")
             labelBrand.grid(column = 0, row = 0, sticky = "wesn")
-            dropdownBrand = tk.OptionMenu(self.frameDisplay, vars['nameBrand'], *map(lambda brand: brand.nameBrand, Brand.GetAll()))
+            dropdownBrand = tk.OptionMenu(self.frameDisplay, car.nameBrand, *map(lambda brand: brand.nameBrand, Brand.GetAll()))
             dropdownBrand.grid(column = 1, row = 0, sticky = "wesn")
 
             labelType = tk.Label(self.frameDisplay, text = "Type : ")
             labelType.grid(column = 0, row = 1, sticky = "wesn")
-            dropdownType = tk.OptionMenu(self.frameDisplay, vars['nameType'], *map(lambda type: type.nameType, Type.GetAll()))
+            dropdownType = tk.OptionMenu(self.frameDisplay, car.nameType, *map(lambda type: type.nameType, Type.GetAll()))
             dropdownType.grid(column = 1, row = 1, sticky = "wesn")
 
             labelMotor = tk.Label(self.frameDisplay, text = "Motor : ")
             labelMotor.grid(column = 0, row = 2, sticky = "wesn")
-            dropdownMotor = tk.OptionMenu(self.frameDisplay, vars['nameMotor'], *map(lambda motor: motor.nameMotor, Motor.GetAll()))
+            dropdownMotor = tk.OptionMenu(self.frameDisplay, car.nameMotor, *map(lambda motor: motor.nameMotor, Motor.GetAll()))
             dropdownMotor.grid(column = 1, row = 2, sticky = "wesn")
 
             labelNextControl = tk.Label(self.frameDisplay, text = "Next tech control :")
             labelNextControl.grid(column = 0, row = 3, sticky = "wesn")
-            entryNextControl = tkCal(self.frameDisplay, textvariable = vars['dateTechControlCar'], selectmode = 'day')
+            entryNextControl = tkCal(self.frameDisplay, textvariable = car.dateTechControlCar, selectmode = 'day')
             entryNextControl.grid(column = 1, row = 3, sticky = "wesn")
 
             labelPrice = tk.Label(self.frameDisplay, text = "Price : ")
             labelPrice.grid(column = 0, row = 4, sticky = "wesn")
-            entryPrice = tk.Entry(self.frameDisplay, textvariable = vars['priceCar'])
+            entryPrice = tk.Entry(self.frameDisplay, textvariable = car.priceCar)
             entryPrice.grid(column = 1, row = 4, sticky = "wesn")
 
             labelPromo = tk.Label(self.frameDisplay, text = "Promo : ")
             labelPromo.grid(column = 0, row = 5, sticky = "wesn")
-            entryPromo = tk.Entry(self.frameDisplay, textvariable = vars['promoCar'])
+            entryPromo = tk.Entry(self.frameDisplay, textvariable = car.promoCar)
             entryPromo.grid(column = 1, row = 5, sticky = "wesn")
 
-            buttonAddCar = tk.Button(self.frameDisplay, text = "Add Car", command = lambda :Car.InsertDB(vars))
+            buttonAddCar = tk.Button(self.frameDisplay, text = "Add Car", command = lambda :car.InsertDB())
             buttonAddCar.grid(column = 0, row = 6, sticky = "wesn")
 
         else: 
@@ -313,4 +308,7 @@ class Application:
       
 
 # It will launch the application
-Application()
+# Application()
+
+
+Brand.GetIdWithName("Toyota")

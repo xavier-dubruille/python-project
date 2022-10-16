@@ -3,13 +3,13 @@ import sys
 
 class Car(DB): 
     def __init__(self): 
-        self.idCar = None
+        self.idCard = None
         self.dateStockCar = None
         self.dateTechControlCar = None
         self.priceCar = None
         self.nameBrand = None
-        self.nameMotor = None
         self.nameType = None
+        self.nameMotor = None
         self.promoCar = None
 
 
@@ -54,13 +54,14 @@ class Car(DB):
         cursor = DB.DBCursor()
         if cursor != None:
             try:
-                cursor.execute("SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, priceCar || '0' as priceCar, nameBrand, nameMotor, nameType, promoCar, SUBSTR(firstNameCusto, 1, 1) || '.'  ||  lastNameCusto as nameCusto\
-                FROM Car\
-                NATURAL JOIN Brand\
-                NATURAL JOIN Motor\
-                NATURAL JOIN Type\
-                NATURAL JOIN Deal\
-                NATURAL JOIN Customer\
+                cursor.execute("SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, priceCar || '0' as priceCar, \
+                nameBrand, nameMotor, nameType, promoCar, SUBSTR(firstNameCusto, 1, 1) || '.'  ||  lastNameCusto as nameCusto \
+                FROM Car \
+                NATURAL JOIN Brand \
+                NATURAL JOIN Motor \
+                NATURAL JOIN Type \
+                NATURAL JOIN Deal \
+                NATURAL JOIN Customer \
                 WHERE idCar  IN (select idCar FROM deal WHERE isResDeal = 0)")
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
@@ -92,4 +93,14 @@ class Car(DB):
                 print(sys.exc_info())
                 return None 
             finally: 
+                DB.DBClose(cursor)
+
+    def InsertDB(self): 
+        cursor = DB.DBCursor()
+        if cursor != None:
+            try:
+                pass
+            except:
+                print("Error in InsertDB")
+            finally:
                 DB.DBClose(cursor)
