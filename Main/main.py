@@ -110,7 +110,7 @@ class Application:
         #     widget.destroy()
         car = Car.CarListStock()[event.widget.curselection()[0]]
         self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
-        self.labelDetails.configure = self.printDetails
+        self.labelDetails.configure( text = self.printDetails)
 
 
     # It will show you which car you sell.
