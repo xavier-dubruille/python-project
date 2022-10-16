@@ -1,3 +1,4 @@
+from typing import Literal
 from Class.DB import DBAccess as DB
 from Class.Car import Car
 from tkinter import *
@@ -91,7 +92,7 @@ class Application:
 
         titleColumn = "Brand" + " "*spaceBrand + "Type" + " "*spaceType +  "Prix"
         labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn, anchor="nw")
-        labelTitle.pack(side="top")
+        labelTitle.pack(side="top", anchor="nw")
 
         listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
         listboxStock.pack(expand = True, fill = "both")
