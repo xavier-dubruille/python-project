@@ -120,7 +120,7 @@ class Application:
 
     # It will show you which car you sell.
     def ShowHistory(self):
-        self.ShowStock()
+        pass
 
     # It will help you to change the reservation's statut for a particular car.
     def MakeReservation(self):
