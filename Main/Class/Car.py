@@ -50,8 +50,8 @@ class Car(DB):
 
     @classmethod
     def CarListHistory(clss):
-        carListHist = []
-        cursor = DB.DBcursor()
+        carList = []
+        cursor = DB.DBCursor()
         if cursor != None:
             try:
                 cursor.execute("SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, priceCar, nameBrand, nameMotor, nameType, promoCar \
@@ -59,12 +59,12 @@ class Car(DB):
                 NATURAL JOIN Brand \
                 NATURAL JOIN Motor\
                 NATURAL JOIN Type\
-                WHERE idCar IN (select idCar FROM deal WHERE isResDeal = 0)")
+                WHERE idCar  IN (select idCar FROM deal WHERE isResDeal = 0)")
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
                     car = clss.LoadResults(cursor, row)
-                    carListHist.append(car)
-                return carListHist
+                    carList.append(car)
+                return carList
 
             except:
                 print("Error in CarListHistory")

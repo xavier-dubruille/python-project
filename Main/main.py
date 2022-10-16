@@ -134,7 +134,7 @@ class Application:
             if widget.widgetName == "button":
                 widget["state"] = "normal"
         self.buttonHistory["state"] = "disabled"
-
+        
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
 
