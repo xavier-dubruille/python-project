@@ -17,6 +17,9 @@ class Application:
         self.printDetails = ""
         self.DisplayBasicWindow()
 
+
+
+
     # The main display function for the application.
     def DisplayBasicWindow(self):
 
@@ -87,6 +90,9 @@ class Application:
 
         self.window.mainloop()
 
+
+
+
     # It show you which car you have in your stock. It is display by default.
     def ShowStock(self):
         for widget in self.frameButtons.winfo_children():
@@ -122,6 +128,9 @@ class Application:
         listboxStock.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listboxStock.yview)
 
+
+
+
     # When you click a row to show more information about the car you selected.
     def ShowDetailsStock(self, event):
         # for widget in self.frameDetails.winfo_children(): 
@@ -129,6 +138,8 @@ class Application:
         car = Car.CarListStock()[event.widget.curselection()[0]]
         self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
         self.labelDetails.configure(text = self.printDetails)
+
+
 
 
     # It will show you which car you sell.
@@ -177,6 +188,8 @@ class Application:
         self.labelDetails.configure(text = self.printDetails)
 
 
+
+
     # It will help you to change the reservation's statut for a particular car.
     def MakeReservation(self):
         for widget in self.frameButtons.winfo_children():
@@ -184,12 +197,18 @@ class Application:
                 widget["state"] = "normal"
         self.buttonReservation["state"] = "disabled"
 
+
+
+
     # It will help you to sell a particular car.
     def MakeDeal(self):
         for widget in self.frameButtons.winfo_children():
             if widget.widgetName == "button":
                 widget["state"] = "normal"
         self.buttonDeal["state"] = "disabled"
+
+
+
 
     # Tis menu will help you to add a new car in your stock with a form.
     def AddCar(self):
