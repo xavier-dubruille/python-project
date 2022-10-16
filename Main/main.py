@@ -2,6 +2,8 @@ from typing import Literal
 from Class.DB import DBAccess as DB
 from Class.Car import Car
 from Class.Brand import Brand
+from Class.Type import Type
+from Class.Motor import Motor
 from tkinter import *
 import tkinter as tk
 import tkinter.font as font
@@ -168,10 +170,10 @@ class Application:
             labelBrand.grid(column = 0, row = 0, sticky = "wesn")
             dropdownBrand = tk.OptionMenu(self.frameDisplay, brandVar, *map(lambda brand: brand.nameBrand, Brand.GetAllBrand()))
             dropdownBrand.grid(column = 1, row = 0, sticky = "wesn")
-            labelBrand = tk.Label(self.frameDisplay, text = "Type : ")
-            labelBrand.grid(column = 0, row = 0, sticky = "wesn")
-            dropdownBrand = tk.OptionMenu(self.frameDisplay, brandVar, *map(lambda brand: brand.nameBrand, Brand.GetAllBrand()))
-            dropdownBrand.grid(column = 1, row = 0, sticky = "wesn")
+            labelType = tk.Label(self.frameDisplay, text = "Type : ")
+            labelType.grid(column = 0, row = 0, sticky = "wesn")
+            dropdownType = tk.OptionMenu(self.frameDisplay, brandVar, *map(lambda brand: brand.nameType, Type.GetAllType()))
+            dropdownType.grid(column = 1, row = 0, sticky = "wesn")
             
 
         else: 
