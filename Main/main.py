@@ -1,4 +1,3 @@
-# from Class.Car import Car
 from Class.DB import DBAccess as DB
 from Class.Car import Car
 from tkinter import *
