@@ -86,6 +86,11 @@ class Application:
         carList = Car.CarListStock()
         spaceBrand = len(max(carList, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(carList, key=lambda x:len(x.nameType)).nameType) + 4
+
+        # titleColumn = "Brand" + " "*spaceBrand + "Type" + " "*spaceType +  "Prix"
+        # labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn, anchor="n")
+        # labelTitle.pack(side="top")
+
         for car in carList:
             listboxStock.insert(END, f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
             listboxStock.bind('<<ListboxSelect>>', self.ShowDetails)
