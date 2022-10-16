@@ -1,6 +1,7 @@
 from typing import Literal
 from Class.DB import DBAccess as DB
 from Class.Car import Car
+from Class.Brand import Brand
 from tkinter import *
 import tkinter as tk
 import tkinter.font as font
@@ -36,16 +37,16 @@ class Application:
             self.frameButtons.rowconfigure(i, weight = 1)
         self.frameButtons.columnconfigure(0, weight = 1)
 
-        buttonStock = tk.Button(self.frameButtons, text = "Display Stock", command = self.ShowStock, relief = "raised")
-        buttonStock.grid(column = 0, row = 0, sticky = "wesn")
-        buttonHistory = tk.Button(self.frameButtons, text = "Display History", command = self.ShowHistory, relief = "raised")
-        buttonHistory.grid(column = 0, row = 1, sticky = "wesn")
-        buttonReservation = tk.Button(self.frameButtons, text = "Make a reservation", command = self.MakeReservation, relief = "raised")
-        buttonReservation.grid(column = 0, row = 2, sticky = "wesn")
-        buttonDeal = tk.Button(self.frameButtons, text = "Make a deal", command = self.MakeDeal, relief = "raised")
-        buttonDeal.grid(column = 0, row = 3, sticky = "wesn")
-        buttonAddCar = tk.Button(self.frameButtons, text = "Add a car", command = self.AddCar)
-        buttonAddCar.grid(column = 0, row = 4, sticky = "wesn")
+        self.buttonStock = tk.Button(self.frameButtons, text = "Display Stock", command = self.ShowStock, relief = "raised")
+        self.buttonStock.grid(column = 0, row = 0, sticky = "wesn")
+        self.buttonHistory = tk.Button(self.frameButtons, text = "Display History", command = self.ShowHistory, relief = "raised")
+        self.buttonHistory.grid(column = 0, row = 1, sticky = "wesn")
+        self.buttonReservation = tk.Button(self.frameButtons, text = "Make a reservation", command = self.MakeReservation, relief = "raised")
+        self.buttonReservation.grid(column = 0, row = 2, sticky = "wesn")
+        self.buttonDeal = tk.Button(self.frameButtons, text = "Make a deal", command = self.MakeDeal, relief = "raised")
+        self.buttonDeal.grid(column = 0, row = 3, sticky = "wesn")
+        self.buttonAddCar = tk.Button(self.frameButtons, text = "Add a car", command = self.AddCar)
+        self.buttonAddCar.grid(column = 0, row = 4, sticky = "wesn")
 
 
         frameTitle = tk.Frame(self.window, highlightthickness = 2, highlightbackground = "black")
@@ -85,9 +86,12 @@ class Application:
 
     # It show you which car you have in your stock. It is display by default.
     def ShowStock(self):
-        # for widget in self.frameButtons.winfo_children():
-        #     if widget
-        self.buttonStock['state'] = 'disabled'
+        for widget in self.frameButtons.winfo_children():
+            if widget.widgetName == "button":
+                widget["state"] = "normal"
+        self.buttonStock["state"] = "disabled"
+        
+        # self.buttonStock['state'] = 'disabled'
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
 
@@ -123,18 +127,32 @@ class Application:
 
     # It will show you which car you sell.
     def ShowHistory(self):
-        pass
+        for widget in self.frameButtons.winfo_children():
+            if widget.widgetName == "button":
+                widget["state"] = "normal"
+        self.buttonHistory["state"] = "disabled"
 
     # It will help you to change the reservation's statut for a particular car.
     def MakeReservation(self):
-        pass
+        for widget in self.frameButtons.winfo_children():
+            if widget.widgetName == "button":
+                widget["state"] = "normal"
+        self.buttonReservation["state"] = "disabled"
 
     # It will help you to sell a particular car.
     def MakeDeal(self):
-        pass
+        for widget in self.frameButtons.winfo_children():
+            if widget.widgetName == "button":
+                widget["state"] = "normal"
+        self.buttonDeal["state"] = "disabled"
 
     # Tis menu will help you to add a new car in your stock with a form.
     def AddCar(self):
+        for widget in self.frameButtons.winfo_children():
+            if widget.widgetName == "button":
+                widget["state"] = "normal"
+        self.buttonAddCar["state"] = "disabled"
+
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
 
@@ -145,8 +163,11 @@ class Application:
             self.frameDisplay.rowconfigure(i, weight = 1)
         
         if Car.CarFreePlacesStock() <= 40:
+            brandVar = tk.StringVar()
             labelBrand = tk.Label(self.frameDisplay, text = "Brand : ")
-            labelBrand.grid(column = 0, row = 0)
+            labelBrand.grid(column = 0, row = 0, sticky = "wesn")
+            # dropdownBrand = tk.OptionMenu(self.frameDisplay, brandVar, Brand.GetAllBrand())
+            # dropdownBrand.grid(column = 1, row = 0, sticky = "wesn")
 
         else: 
             labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
