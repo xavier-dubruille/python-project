@@ -54,11 +54,12 @@ class Car(DB):
         cursor = DB.DBCursor()
         if cursor != None:
             try:
-                cursor.execute("SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, priceCar, nameBrand, nameMotor, nameType, promoCar \
+                cursor.execute("SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, priceCar || '0' as priceCar, nameBrand, nameMotor, nameType, promoCar, SUBSTR(firstNameCusto, 1, 1) || '.'  ||  lastNameCusto as nameCusto \
                 FROM Car \
                 NATURAL JOIN Brand \
                 NATURAL JOIN Motor\
                 NATURAL JOIN Type\
+                NATURAL JOIN Customer\
                 WHERE idCar  IN (select idCar FROM deal WHERE isResDeal = 0)")
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:

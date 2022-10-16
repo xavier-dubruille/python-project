@@ -144,8 +144,9 @@ class Application:
         carListHistory = Car.CarListHistory()
         spaceBrand = len(max(carListHistory, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(carListHistory, key=lambda x:len(x.nameType)).nameType) + 4
+        spacePrice = len(max(carListHistory, key=lambda x:len(x.priceCar)).priceCar) + 4
 
-        titleColumn = "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Prix"
+        titleColumn = "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Prix" + " "*(spacePrice-len("Prix")) + "Customer"
         labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
         labelTitle.pack(side="top", anchor="nw")
 
@@ -153,7 +154,7 @@ class Application:
         listboxHistory.pack(expand = True, fill = "both")
 
         for car in carListHistory:
-            listboxHistory.insert(END, f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
+            listboxHistory.insert(END, f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}")
             listboxHistory.bind('<<ListboxSelect>>', self.ShowDetailsHistory)
 
         listboxHistory.configure(yscrollcommand=scrollbar.set)
@@ -165,7 +166,7 @@ class Application:
         # for widget in self.frameDetails.winfo_children(): 
         #     widget.destroy()
         car = Car.CarListHistory()[event.widget.curselection()[0]]
-        self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
+        self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control {car.dateTechControlCar}\nThe customer is : {car.nameCusto}"
         self.labelDetails.configure(text = self.printDetails)
 
 
