@@ -1,3 +1,4 @@
+from typing import Literal
 from Class.DB import DBAccess as DB
 from Class.Car import Car
 from tkinter import *
@@ -94,11 +95,9 @@ class Application:
         spaceBrand = len(max(carList, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(carList, key=lambda x:len(x.nameType)).nameType) + 4
 
-        f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}"
-
-        titleColumn = "Brand" + " "*spaceBrand + "Type" + " "*spaceType +  "Prix"
-        labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn, anchor="n", justify = 'left')
-        labelTitle.pack(side="top")
+        titleColumn = "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Prix"
+        labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
+        labelTitle.pack(side="top", anchor="nw")
 
         listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
         listboxStock.pack(expand = True, fill = "both")
