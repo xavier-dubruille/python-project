@@ -209,17 +209,17 @@ class Application:
 
             labelBrand = tk.Label(self.frameDisplay, text = "Brand : ")
             labelBrand.grid(column = 0, row = 0, sticky = "wesn")
-            dropdownBrand = tk.OptionMenu(self.frameDisplay, brandVar, *map(lambda brand: brand.nameBrand, Brand.GetAllBrand()))
+            dropdownBrand = tk.OptionMenu(self.frameDisplay, brandVar, *map(lambda brand: brand.nameBrand, Brand.GetAll()))
             dropdownBrand.grid(column = 1, row = 0, sticky = "wesn")
 
             labelType = tk.Label(self.frameDisplay, text = "Type : ")
             labelType.grid(column = 0, row = 1, sticky = "wesn")
-            dropdownType = tk.OptionMenu(self.frameDisplay, typeVar, *map(lambda brand: brand.nameType, Type.GetAllType()))
+            dropdownType = tk.OptionMenu(self.frameDisplay, typeVar, *map(lambda type: type.nameType, Type.GetAll()))
             dropdownType.grid(column = 1, row = 1, sticky = "wesn")
 
             labelMotor = tk.Label(self.frameDisplay, text = "Motor : ")
             labelMotor.grid(column = 0, row = 2, sticky = "wesn")
-            dropdownMotor = tk.OptionMenu(self.frameDisplay, motorVar, *map(lambda brand: brand.nameMotor, Motor.GetAllMotor()))
+            dropdownMotor = tk.OptionMenu(self.frameDisplay, motorVar, *map(lambda motor: motor.nameMotor, Motor.GetAll()))
             dropdownMotor.grid(column = 1, row = 2, sticky = "wesn")
 
             labelPrice = tk.Label(self.frameDisplay, text = "Price : ")
@@ -234,7 +234,7 @@ class Application:
 
             labelNextControl = tk.Label(self.frameDisplay, text = "Next tech control :")
             labelNextControl.grid(column = 0, row = 5, sticky = "wesn")
-            entryNextControl = tkCal.DateEntry(self.frameDisplay, textvariable = nextControlVar, selectmode = 'day')
+            entryNextControl = tkCal(self.frameDisplay, textvariable = nextControlVar, selectmode = 'day')
             entryNextControl.grid(column = 1, row = 5, sticky = "wesn")
 
         else: 

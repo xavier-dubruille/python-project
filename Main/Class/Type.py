@@ -6,22 +6,12 @@ class Type(DB):
         self.idType = None
         self.nameType = None
 
-    @classmethod
-    def GetAllType(clss):
-        cursor = DB.DBCursor()
-        typeList = []
-        if cursor != None: 
-            try: 
-                cursor.execute("SELECT * FROM Type")
-                resultsQuery = cursor.fetchall()
-                for row in resultsQuery:
-                    type = clss.LoadResults(cursor, row)
-                    typeList.append(type)
-                    return typeList
-            except: 
-                print("Error in GetAllType")
-                print(sys.exc_info()[0])
-                return None
+    @staticmethod
+    def NameTable():
+        # Return the name table
+        return "Type"
 
-            finally: 
-                DB.DBClose(cursor)
+    @staticmethod
+    def IdColumn():
+        # Return the id column
+        return "idType"

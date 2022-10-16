@@ -43,3 +43,23 @@ class DBAccess():
             setattr(newInstance, columnName, data[counter])
             counter += 1
         return newInstance
+    
+    @classmethod
+    def GetAll(clss):
+        cursor = clss.DBCursor()
+        instancesList = []
+        if cursor != None: 
+            try: 
+                cursor.execute("SELECT * FROM %s" % (clss.NameTable()))
+                resultsQuery = cursor.fetchall()
+                for row in resultsQuery:
+                    newInstance = clss.LoadResults(cursor, row)
+                    instancesList.append(newInstance)
+                return instancesList
+            except: 
+                print("Error in GetAll")
+                print(sys.exc_info()[0])
+                return None
+
+            finally: 
+                clss.DBClose(cursor)

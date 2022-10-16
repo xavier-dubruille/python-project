@@ -5,23 +5,13 @@ class Motor(DB):
     def __init__(self): 
         self.idMotor = None
         self.nameMotor = None
+    
+    @staticmethod
+    def NameTable():
+        # Return the name table
+        return "Motor"
 
-    @classmethod
-    def GetAllMotor(clss):
-        cursor = DB.DBCursor()
-        motorList = []
-        if cursor != None: 
-            try: 
-                cursor.execute("SELECT * FROM Motor")
-                resultsQuery = cursor.fetchall()
-                for row in resultsQuery:
-                    motor = clss.LoadResults(cursor, row)
-                    motorList.append(motor)
-                    return motorList
-            except: 
-                print("Error in GetAllMotor")
-                print(sys.exc_info()[0])
-                return None
-
-            finally: 
-                DB.DBClose(cursor)
+    @staticmethod
+    def IdColumn():
+        # Return the id column
+        return "idMotor"
