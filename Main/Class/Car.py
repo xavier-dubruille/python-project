@@ -47,6 +47,31 @@ class Car(DB):
                 return None 
             finally: 
                 DB.DBClose(cursor)
+
+    @classmethod
+    def CarListHistory(clss):
+        carListHist = []
+        cursor = DB.DBcursor()
+        if cursor != None:
+            try:
+                cursor.execute("SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, priceCar, nameBrand, nameMotor, nameType, promoCar \
+                FROM Car \
+                NATURAL JOIN Brand \
+                NATURAL JOIN Motor\
+                NATURAL JOIN Type\
+                WHERE idCar  IN (select idCar FROM deal WHERE isResDeal = 0)")
+                resultsQuery = cursor.fetchall()
+                for row in resultsQuery:
+                    car = clss.LoadResults(cursor, row)
+                    carListHist.append(car)
+                return carListHist
+
+            except:
+                print("Error in CarListHistory")
+                print(sys.exc_info())
+                return None
+            finally:
+                DB.DBClose(cursor)
     
     @classmethod
     def CarFreePlacesStock(clss): 
