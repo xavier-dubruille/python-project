@@ -84,16 +84,18 @@ class Application:
 
         scrollbar = Scrollbar(self.frameDisplay)
         scrollbar.pack(side="right", fill="y")
-
-        listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
-        listboxStock.pack(expand = True, fill = "both")
         carList = Car.CarListStock()
         spaceBrand = len(max(carList, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(carList, key=lambda x:len(x.nameType)).nameType) + 4
 
-        # titleColumn = "Brand" + " "*spaceBrand + "Type" + " "*spaceType +  "Prix"
-        # labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn, anchor="n")
-        # labelTitle.pack(side="top")
+        titleColumn = "Brand" + " "*spaceBrand + "Type" + " "*spaceType +  "Prix"
+        labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn, anchor="n")
+        labelTitle.pack(side="top")
+
+        listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
+        listboxStock.pack(expand = True, fill = "both")
+
+
 
         for car in carList:
             listboxStock.insert(END, f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
