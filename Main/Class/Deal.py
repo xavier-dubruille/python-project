@@ -1,17 +1,17 @@
 from Class.DB import DBAccess as DB
 import sys
 
-class Brand(DB):
+class Deal(DB):
     def __init__(self): 
-        self.idBrand = None
-        self.nameBrand = None
+        self.idCar = None
+        self.idCusto = None
     
     @staticmethod
     def NameTable():
         # Return the name table
-        return "Brand"
+        return "Deal"
 
     @staticmethod
     def IdColumn():
         # Return the id column
-        return "idDeal"
+        return "idMotor"

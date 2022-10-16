@@ -4,6 +4,7 @@ from Class.Car import Car
 from Class.Brand import Brand
 from Class.Type import Type
 from Class.Motor import Motor
+from Class.Deal import Deal
 from tkinter import *
 import tkinter as tk
 import tkinter.font as font
@@ -196,6 +197,9 @@ class Application:
             if widget.widgetName == "button":
                 widget["state"] = "normal"
         self.buttonReservation["state"] = "disabled"
+        for widget in self.frameDisplay.winfo_children(): 
+            widget.destroy()
+        
 
 
 
@@ -206,6 +210,39 @@ class Application:
             if widget.widgetName == "button":
                 widget["state"] = "normal"
         self.buttonDeal["state"] = "disabled"
+        for widget in self.frameDisplay.winfo_children(): 
+            widget.destroy()
+        
+        for i in range(2):
+            self.frameDisplay.columnconfigure(i, weight = 1)
+        
+        for i in range(2):
+            self.frameDisplay.rowconfigure(i, weight = 1)
+
+        if Car.CarFreePlacesStock() <= 40:
+            vars = {
+            "idCar" : tk.StringVar(),
+            "idCusto" : tk.StringVar()
+            }
+
+            labelCarId = tk.Label(self.frameDisplay, text = "Car id : ")
+            labelCarId.grid(column = 0, row = 0, sticky = "wesn")
+            dropdownCarId = tk.OptionMenu(self.frameDisplay, vars['idCar'], *map(lambda idCar: idCar.idCar, Deal.GetAll()))
+            dropdownCarId.grid(column = 1, row = 0, sticky = "wesn")
+
+            labelIdCusto = tk.Label(self.frameDisplay, text = "Customer id : ")
+            labelIdCusto.grid(column = 0, row = 1, sticky = "wesn")
+            dropdownIdCusto = tk.OptionMenu(self.frameDisplay, vars['idCusto'], *map(lambda idCusto: idCusto.idCusto, Deal.GetAll()))
+            dropdownIdCusto.grid(column = 1, row = 1, sticky = "wesn")
+
+            buttonMakeDeal = tk.Button(self.frameDisplay, text = "Make the deal", command = lambda :Car.InsertDB(vars))
+            buttonMakeDeal.grid(column = 0, row = 6, sticky = "wesn")
+
+        else: 
+            labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
+            labelNoFreePlaces.grid(column = 0, row = 0)
+
+
 
 
 
