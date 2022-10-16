@@ -1,7 +1,7 @@
 from Class.DB import DBAccess as DB
 import sys
 
-class Brand(DB):
+class Motor(DB):
     def __init__(self): 
         self.idMotor = None
         self.nameMotor = None
@@ -19,7 +19,7 @@ class Brand(DB):
                     motorList.append(motor)
                     return motorList
             except: 
-                print("Error in GetAllBrand")
+                print("Error in GetAllMotor")
                 print(sys.exc_info()[0])
                 return None
 
