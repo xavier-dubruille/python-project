@@ -168,6 +168,10 @@ class Application:
             labelBrand.grid(column = 0, row = 0, sticky = "wesn")
             dropdownBrand = tk.OptionMenu(self.frameDisplay, brandVar, *map(lambda brand: brand.nameBrand, Brand.GetAllBrand()))
             dropdownBrand.grid(column = 1, row = 0, sticky = "wesn")
+            labelBrand = tk.Label(self.frameDisplay, text = "Type : ")
+            labelBrand.grid(column = 0, row = 0, sticky = "wesn")
+            dropdownBrand = tk.OptionMenu(self.frameDisplay, brandVar, *map(lambda brand: brand.nameBrand, Brand.GetAllBrand()))
+            dropdownBrand.grid(column = 1, row = 0, sticky = "wesn")
             
 
         else: 
