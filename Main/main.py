@@ -84,9 +84,6 @@ class Application:
 
         scrollbar = Scrollbar(self.frameDisplay)
         scrollbar.pack(side="right", fill="y")
-
-        listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
-        listboxStock.pack(expand = True, fill = "both")
         carList = Car.CarListStock()
         spaceBrand = len(max(carList, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(carList, key=lambda x:len(x.nameType)).nameType) + 4
@@ -113,7 +110,7 @@ class Application:
         #     widget.destroy()
         car = Car.CarListStock()[event.widget.curselection()[0]]
         self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
-        self.labelDetails["text"] = self.printDetails
+        self.labelDetails.configure = self.printDetails
 
 
     # It will show you which car you sell.
