@@ -30,13 +30,13 @@ class Application:
             self.window.rowconfigure(i, weight = 1)
         self.window.rowconfigure(7, weight = 2)
 
-        frameButtons = tk.Frame(self.window)
-        frameButtons.grid(column = 0, row = 1, rowspan = 5, sticky = "wesn")
+        self.frameButtons = tk.Frame(self.window)
+        self.frameButtons.grid(column = 0, row = 1, rowspan = 5, sticky = "wesn")
         for i in range(5):
-            frameButtons.rowconfigure(i, weight = 1)
-        frameButtons.columnconfigure(0, weight = 1)
+            self.frameButtons.rowconfigure(i, weight = 1)
+        self.frameButtons.columnconfigure(0, weight = 1)
 
-        buttonStock = tk.Button(frameButtons, text = "Display Stock", command = self.ShowStock, state = "disabled", relief = "raised")
+        buttonStock = tk.Button(frameButtons, text = "Display Stock", command = self.ShowStock, relief = "raised")
         buttonStock.grid(column = 0, row = 0, sticky = "wesn")
         buttonHistory = tk.Button(frameButtons, text = "Display History", command = self.ShowHistory, relief = "raised")
         buttonHistory.grid(column = 0, row = 1, sticky = "wesn")
@@ -65,7 +65,7 @@ class Application:
             self.frameDetails.rowconfigure(i, weight = 1)
         self.frameDetails.columnconfigure(0, weight = 1)
         
-        labelTitleDetails = tk.Label(self.frameDetails, text = "DETAILS", anchor = "s")
+        labelTitleDetails = tk.Label(self.frameDetails, text = "DETAILS", anchor = "s", font =  self.police + " underline")
         labelTitleDetails.grid(column = 0, row = 0, sticky = 'wesn')
         
         self.labelDetails = tk.Label(self.frameDetails, width = self.frameDetails.winfo_width(), text = self.printDetails, justify="left", anchor= 'nw')
@@ -85,6 +85,7 @@ class Application:
 
     # It show you which car you have in your stock. It is display by default.
     def ShowStock(self):
+        self.buttonStock['state'] = 'disabled'
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
 
@@ -134,7 +135,21 @@ class Application:
     def AddCar(self):
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
+
+        for i in range(2):
+            self.frameDisplay.columnconfigure(i, weight = 1)
         
+        for i in range(6):
+            self.frameDisplay.rowconfigure(i, weight = 1)
+        
+        if Car.CarFreePlacesStock() <= 40:
+            labelBrand = tk.Label(self.frameDisplay, text = "Brand : ")
+            labelBrand.grid(column = 0, row = 0)
+
+        else: 
+            labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
+            labelNoFreePlaces.grid(column = 0, row = 0)
+
 
 # It will launch the application
 Application()

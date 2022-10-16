@@ -47,3 +47,22 @@ class Car(DB):
                 return None 
             finally: 
                 DB.DBClose(cursor)
+    
+    @classmethod
+    def CarFreePlacesStock(clss): 
+        cursor = DB.DBCursor()
+        if cursor != None: 
+            try: 
+                cursor.execute("SELECT count(*) \
+                FROM Car \
+                NATURAL JOIN Brand \
+                NATURAL JOIN Motor \
+                NATURAL JOIN Type \
+                WHERE idCar NOT IN (select idCar FROM deal WHERE isResDeal = 0)")
+                return cursor.fetchone()[0]
+            except:
+                print("Error in CarFreePlacesStock")
+                print(sys.exc_info())
+                return None 
+            finally: 
+                DB.DBClose(cursor)
