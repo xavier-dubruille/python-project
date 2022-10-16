@@ -98,9 +98,9 @@ class Application:
         scrollbar = Scrollbar(self.frameDisplay)
         scrollbar.pack(side="right", fill="y")
 
-        carList = Car.CarListStock()
-        spaceBrand = len(max(carList, key=lambda car:len(car.nameBrand)).nameBrand) + 4
-        spaceType = len(max(carList, key=lambda x:len(x.nameType)).nameType) + 4
+        carListStock = Car.CarListStock()
+        spaceBrand = len(max(carListStock, key=lambda car:len(car.nameBrand)).nameBrand) + 4
+        spaceType = len(max(carListStock, key=lambda x:len(x.nameType)).nameType) + 4
 
         titleColumn = "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Prix"
         labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
@@ -109,15 +109,15 @@ class Application:
         listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
         listboxStock.pack(expand = True, fill = "both")
 
-        for car in carList:
+        for car in carListStock:
             listboxStock.insert(END, f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
-            listboxStock.bind('<<ListboxSelect>>', self.ShowDetails)
+            listboxStock.bind('<<ListboxSelect>>', self.ShowDetailsStock)
 
         listboxStock.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listboxStock.yview)
 
     # When you click a row to show more information about the car you selected.
-    def ShowDetails(self, event):
+    def ShowDetailsStock(self, event):
         # for widget in self.frameDetails.winfo_children(): 
         #     widget.destroy()
         car = Car.CarListStock()[event.widget.curselection()[0]]
@@ -131,6 +131,40 @@ class Application:
             if widget.widgetName == "button":
                 widget["state"] = "normal"
         self.buttonHistory["state"] = "disabled"
+
+        for widget in self.frameDisplay.winfo_children(): 
+            widget.destroy()
+
+        scrollbar = Scrollbar(self.frameDisplay)
+        scrollbar.pack(side="right", fill="y")
+
+        carListHistory = Car.CarListHistory()
+        spaceBrand = len(max(carListHistory, key=lambda car:len(car.nameBrand)).nameBrand) + 4
+        spaceType = len(max(carListHistory, key=lambda x:len(x.nameType)).nameType) + 4
+
+        titleColumn = "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Prix"
+        labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
+        labelTitle.pack(side="top", anchor="nw")
+
+        listboxHistory = tk.Listbox(self.frameDisplay, state = "normal")
+        listboxHistory.pack(expand = True, fill = "both")
+
+        for car in carListHistory:
+            listboxHistory.insert(END, f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
+            listboxHistory.bind('<<ListboxSelect>>', self.ShowDetailsHistory)
+
+        listboxHistory.configure(yscrollcommand=scrollbar.set)
+        scrollbar.configure(command=listboxHistory.yview)
+
+
+    # When you click a row to show more information about the car you selected.
+    def ShowDetailsHistory(self, event):
+        # for widget in self.frameDetails.winfo_children(): 
+        #     widget.destroy()
+        car = Car.CarListHistory()[event.widget.curselection()[0]]
+        self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
+        self.labelDetails.configure(text = self.printDetails)
+
 
     # It will help you to change the reservation's statut for a particular car.
     def MakeReservation(self):
