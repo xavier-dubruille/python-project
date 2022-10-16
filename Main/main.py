@@ -100,7 +100,7 @@ class Application:
             widget.destroy()
         car = Car.CarListStock()[event.widget.curselection()[0]]
         printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
-        labelDetails = tk.Label(self.frameDetails, text = printDetails)
+        labelDetails = tk.Label(self.frameDetails, text = printDetails, justify="right", highlightthickness = 2, highlightbackground = "black", anchor= 'e')
         labelDetails.grid(column = 0, row = 0, sticky = "wesn")
 
     # It will show you which car you sell.
