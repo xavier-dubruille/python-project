@@ -63,3 +63,14 @@ class DBAccess():
 
             finally: 
                 clss.DBClose(cursor)
+    
+    @classmethod
+    def InsertDB(clss, dictData): 
+        cursor = clss.DBCursor()
+        if cursor != None:
+            try:
+                cursor.execute("Insert etc")
+            except:
+                print("Error in InsertDB")
+            finally:
+                clss.DBClose()
