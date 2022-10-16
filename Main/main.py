@@ -247,7 +247,7 @@ class Application:
             entryPromo = tk.Entry(self.frameDisplay, textvariable = vars['promoCar'])
             entryPromo.grid(column = 1, row = 5, sticky = "wesn")
 
-            buttonAddCar = tk.Button(self.frameDisplay, text = "Add Car", command = lambda x: Car.InsertDB(vars))
+            buttonAddCar = tk.Button(self.frameDisplay, text = "Add Car", command = lambda :Car.InsertDB(vars))
             buttonAddCar.grid(column = 0, row = 6, sticky = "wesn")
 
         else: 

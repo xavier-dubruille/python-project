@@ -69,8 +69,10 @@ class DBAccess():
         cursor = clss.DBCursor()
         if cursor != None:
             try:
-                cursor.execute("Insert etc")
+                for key in dictData: 
+                    print(key)
+                # cursor.execute("Insert etc")
             except:
                 print("Error in InsertDB")
             finally:
-                clss.DBClose()
+                clss.DBClose(cursor)
