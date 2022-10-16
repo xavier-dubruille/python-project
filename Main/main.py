@@ -104,9 +104,9 @@ class Application:
         carListStock = Car.CarListStock()
         spaceBrand = len(max(carListStock, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(carListStock, key=lambda x:len(x.nameType)).nameType) + 4
-        spaceCompteur = len("compteur") + 4
+        spaceCompteur = len("Number") + 4
 
-        titleColumn = "Compteur" + " "*4 + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Prix"
+        titleColumn = "Number" + " "*4 + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Prix"
         labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
         labelTitle.pack(side="top", anchor="nw")
 
@@ -148,10 +148,10 @@ class Application:
         spaceBrand = len(max(carListHistory, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(carListHistory, key=lambda x:len(x.nameType)).nameType) + 4
         spacePrice = len(max(carListHistory, key=lambda x:len(x.priceCar)).priceCar) + 4
-        spaceCompteur = len("compteur") + 4
+        spaceCompteur = len("Number") + 4
 
 
-        titleColumn = "Compteur" + " "*4 + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Prix" + " "*(spacePrice-len("Prix")) + "Customer"
+        titleColumn = "Number" + " "*4 + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Prix" + " "*(spacePrice-len("Prix")) + "Customer"
         labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
         labelTitle.pack(side="top", anchor="nw")
 
