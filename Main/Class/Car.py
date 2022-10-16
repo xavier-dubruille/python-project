@@ -59,7 +59,7 @@ class Car(DB):
                 NATURAL JOIN Brand \
                 NATURAL JOIN Motor\
                 NATURAL JOIN Type\
-                WHERE idCar  IN (select idCar FROM deal WHERE isResDeal = 0)")
+                WHERE idCar IN (select idCar FROM deal WHERE isResDeal = 0)")
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
                     car = clss.LoadResults(cursor, row)
