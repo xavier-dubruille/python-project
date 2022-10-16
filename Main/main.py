@@ -9,6 +9,7 @@ class Application:
     def __init__(self): 
         self.police = "courier 15"
         self.title = "Bamboo Concess"
+        self.printDetails = ""
         self.DisplayBasicWindow()
 
     # The main display function for the application.
@@ -61,6 +62,9 @@ class Application:
         self.frameDetails.grid(column = 2, row = 1, rowspan = 7, sticky ="wesn")
         self.frameDetails.rowconfigure(0, weight = 1)
         self.frameDetails.columnconfigure(0, weight = 1)
+        self.labelDetails = tk.Label(self.frameDetails, text = self.printDetails, justify="left", highlightthickness = 2, highlightbackground = "black", anchor= 'w')
+        self.labelDetails.grid(column = 0, row = 0, sticky = "wesn")
+
 
         frameExit = tk.Frame(self.window)
         frameExit.grid(column = 2, row = 0, sticky = "wesn")
@@ -95,12 +99,12 @@ class Application:
 
     # When you click a row to show more information about the car you selected.
     def ShowDetails(self, event):
-        for widget in self.frameDetails.winfo_children(): 
-            widget.destroy()
+        # for widget in self.frameDetails.winfo_children(): 
+        #     widget.destroy()
         car = Car.CarListStock()[event.widget.curselection()[0]]
-        printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
-        labelDetails = tk.Label(self.frameDetails, text = printDetails, justify="right", highlightthickness = 2, highlightbackground = "black", anchor= 'e')
-        labelDetails.grid(column = 0, row = 0, sticky = "wesn")
+        self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
+        self.labelDetails["text"] = self.printDetails
+
 
     # It will show you which car you sell.
     def ShowHistory(self):
