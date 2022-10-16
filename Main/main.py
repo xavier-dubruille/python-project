@@ -166,8 +166,9 @@ class Application:
             brandVar = tk.StringVar()
             labelBrand = tk.Label(self.frameDisplay, text = "Brand : ")
             labelBrand.grid(column = 0, row = 0, sticky = "wesn")
-            # dropdownBrand = tk.OptionMenu(self.frameDisplay, brandVar, Brand.GetAllBrand())
-            # dropdownBrand.grid(column = 1, row = 0, sticky = "wesn")
+            dropdownBrand = tk.OptionMenu(self.frameDisplay, brandVar, *map(lambda brand: brand.nameBrand, Brand.GetAllBrand()))
+            dropdownBrand.grid(column = 1, row = 0, sticky = "wesn")
+            
 
         else: 
             labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
