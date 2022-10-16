@@ -120,4 +120,5 @@ class Application:
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
 
+# It will launch the application
 Application()
