@@ -60,10 +60,15 @@ class Application:
 
         self.frameDetails = tk.Frame(self.window, highlightthickness=2, highlightbackground = "black")
         self.frameDetails.grid(column = 2, row = 1, rowspan = 7, sticky ="wesn")
-        self.frameDetails.rowconfigure(0, weight = 1)
+        for i in range(2):
+            self.frameDetails.rowconfigure(i, weight = 1)
         self.frameDetails.columnconfigure(0, weight = 1)
-        self.labelDetails = tk.Label(self.frameDetails, text = self.printDetails, justify="left", highlightthickness = 2, highlightbackground = "black", anchor= 'w')
-        self.labelDetails.grid(column = 0, row = 0, sticky = "wesn")
+        
+        labelTitleDetails = tk.Label(self.frameDetails, text = "DETAILS", anchor = "s")
+        labelTitleDetails.grid(column = 0, row = 0, sticky = 'wesn')
+        
+        self.labelDetails = tk.Label(self.frameDetails, width = self.frameDetails.winfo_width(), text = self.printDetails, justify="left", anchor= 'nw')
+        self.labelDetails.grid(column = 0, row = 1, sticky = "wesn")
 
 
         frameExit = tk.Frame(self.window)
@@ -89,8 +94,10 @@ class Application:
         spaceBrand = len(max(carList, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(carList, key=lambda x:len(x.nameType)).nameType) + 4
 
+        f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}"
+
         titleColumn = "Brand" + " "*spaceBrand + "Type" + " "*spaceType +  "Prix"
-        labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn, anchor="n")
+        labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn, anchor="n", justify = 'left')
         labelTitle.pack(side="top")
 
         listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
@@ -128,6 +135,7 @@ class Application:
     def AddCar(self):
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
+
 
 # It will launch the application
 Application()
