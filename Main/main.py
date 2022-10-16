@@ -90,7 +90,7 @@ class Application:
         spaceType = len(max(carList, key=lambda x:len(x.nameType)).nameType) + 4
 
         titleColumn = "Brand" + " "*spaceBrand + "Type" + " "*spaceType +  "Prix"
-        labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn, anchor="n")
+        labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn, anchor="nw")
         labelTitle.pack(side="top")
 
         listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
