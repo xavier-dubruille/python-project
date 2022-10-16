@@ -95,6 +95,10 @@ class Application:
 
         listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
         listboxStock.pack(expand = True, fill = "both")
+        carList = Car.CarListStock()
+
+        listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
+        listboxStock.pack(expand = True, fill = "both")
 
         for car in carList:
             listboxStock.insert(END, f"{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
