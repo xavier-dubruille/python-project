@@ -107,8 +107,8 @@ class Application:
         spaceIdCar = len("Id") + 4
 
         titleColumn = "Id" + " "*4  + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price"
-        labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
-        labelTitle.pack(side="top", anchor="nw")
+        self.labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
+        self.labelTitle.pack(side="top", anchor="nw")
 
         listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
         listboxStock.pack(expand = True, fill = "both")
@@ -286,8 +286,6 @@ class Application:
             labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
             labelNoFreePlaces.grid(column = 0, row = 0)
     
-      
-
 # It will launch the application
 Application()
 
