@@ -107,20 +107,20 @@ class Application:
         carListStock = Car.CarListStock()
         spaceBrand = len(max(carListStock, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(carListStock, key=lambda x:len(x.nameType)).nameType) + 4
-        spaceCompteur = len("Number") + 4
+        spaceIdCar = len("idCar") + 4
 
-        titleColumn = "Number" + " "*4 + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price"
+        titleColumn = "idCar" + " "*4  + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price"
         labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
         labelTitle.pack(side="top", anchor="nw")
 
         listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
         listboxStock.pack(expand = True, fill = "both")
 
-        cpt = 1
+        
         for car in carListStock:
-            listboxStock.insert(END, f"{str(cpt):{spaceCompteur}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
+            listboxStock.insert(END, f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
             listboxStock.bind('<<ListboxSelect>>', self.ShowDetailsStock)
-            cpt+=1
+            
 
         listboxStock.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listboxStock.yview)
@@ -159,7 +159,7 @@ class Application:
         spaceIdCar = len("idCar") + 4
 
 
-        titleColumn = "idCar" + " "*(spaceIdCar-len("idCar")) + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price" + " "*(spacePrice-len("Price")) + "Customer"
+        titleColumn = "idCar" + " "*4 + "Brand" +" "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price" + " "*(spacePrice-len("Price")) + "Customer"
         labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
         labelTitle.pack(side="top", anchor="nw")
 
