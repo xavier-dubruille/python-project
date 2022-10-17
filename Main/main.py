@@ -1,4 +1,3 @@
-from typing import Literal
 from Class.DB import DBAccess as DB
 from Class.Car import Car
 from Class.Brand import Brand
@@ -91,7 +90,7 @@ class Application:
 
 
 
-    # It show you which car you have in your stock. It is display by default.
+    # It shows you which car you have in your stock. It is displayed by default.
     def ShowStock(self):
         for widget in self.frameButtons.winfo_children():
             if widget.widgetName == "button":
@@ -110,7 +109,7 @@ class Application:
         spaceType = len(max(carListStock, key=lambda x:len(x.nameType)).nameType) + 4
         spaceCompteur = len("Number") + 4
 
-        titleColumn = "Number" + " "*4 + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Prix"
+        titleColumn = "Number" + " "*4 + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price"
         labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
         labelTitle.pack(side="top", anchor="nw")
 
