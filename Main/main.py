@@ -307,7 +307,6 @@ class Application:
       
 
 # It will launch the application
-# Application()
+Application()
 
 
-Brand.GetIdWithName("Toyota")
