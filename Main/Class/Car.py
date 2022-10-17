@@ -101,24 +101,9 @@ class Car(DB):
     def InsertDB(self): 
         cursor, dbConnection = DB.DBCursor()
         if cursor != None:
-            try:
-                for motor in self.motorList:
-                    if motor.nameMotor == self.nameMotor.get():
-                        self.idMotor = motor.idMotor 
-                        break
-                        
-                for type in self.typeList:
-                    if type.nameType == self.nameType.get():
-                        self.idType = type.idType
-                        break
-                
-                for brand in self.brandList:
-                    if brand.nameBrand == self.nameBrand.get():
-                        self.idBrand = brand.idBrand
-                        break
-                
+            try:                
                 cursor.execute("INSERT INTO Car (dateTechControlCar, priceCar, idBrand, idType, idMotor, promoCar) VALUES (?, ?, ?, ?, ?, ?)"\
-                    , (self.dateTechControlCar.get(), self.priceCar.get(), self.idBrand, self.idType, self.idMotor, self.promoCar.get(), ))
+                    , (self.dateTechControlCar, self.priceCar, self.idBrand, self.idType, self.idMotor, self.promoCar))
                 dbConnection.commit()
             except:
                 print("Error in InsertDB")

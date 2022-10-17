@@ -265,10 +265,6 @@ class Application:
             # "promoCar" : tk.StringVar(),"dateTechControlCar" : tk.StringVar()}
 
             car = Car()
-
-            car.brandList = self.brandList
-            car.typeList = self.typeList
-            car.motorList = self.motorList
             car.nameBrand = tk.StringVar()
             car.nameType = tk.StringVar()
             car.nameMotor = tk.StringVar()
@@ -306,7 +302,7 @@ class Application:
             entryPromo = tk.Entry(self.frameDisplay, textvariable = car.promoCar)
             entryPromo.grid(column = 1, row = 5, sticky = "wesn")
 
-            buttonAddCar = tk.Button(self.frameDisplay, text = "Add a car in stock", command = lambda :car.InsertDB())
+            buttonAddCar = tk.Button(self.frameDisplay, text = "Add a car in stock", command = lambda :self.VerifyCarInsert(car))
             buttonAddCar.grid(column = 0, row = 6, sticky = "wesn")
 
         else: 
@@ -314,7 +310,32 @@ class Application:
             labelNoFreePlaces.grid(column = 0, row = 0)
     
     def VerifyCarInsert(self, carRawData): 
-        pass
+        car = Car()
+        counter = 0
+        #Get the id for the motor
+        while counter < len(self.motorList) or car.idMotor == None:
+            if self.motorList[counter].nameMotor == carRawData.nameMotor.get():
+                car.idMotor = self.motorList[counter].idMotor
+            counter += 1
+        
+        counter = 0
+        while counter < len(self.brandList) or car.idBrand == None:
+            if self.brandList[counter].nameBrand == carRawData.nameBrand.get():
+                car.idBrand = self.brandList[counter].idBrand
+            counter += 1
+        
+        counter = 0
+        while counter < len(self.typeList) or car.idType == None:
+            if self.typeList[counter].nameType == carRawData.nameType.get():
+                car.idType = self.typeList[counter].idType
+            counter += 1
+        
+        car.dateTechControlCar = carRawData.dateTechControlCar.get()
+        car.priceCar = float(carRawData.priceCar.get())
+        car.promoCar = carRawData.promoCar.get()
+        car.InsertDB()        
+        self.carListStock = Car.CarListStock()
+        
 # It will launch the application
 Application()
 
