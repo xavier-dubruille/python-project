@@ -15,6 +15,7 @@ class Application:
         self.police = "courier 15"
         self.title = "Bamboo Concess"
         self.printDetails = ""
+        self.labelColumn = None
         self.DisplayBasicWindow()
 
     # The main display function for the application.
@@ -107,10 +108,12 @@ class Application:
         spaceIdCar = len("Id") + 4
 
         titleColumn = "Id" + " "*4  + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price"
-        self.labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
-        self.labelTitle.pack(side="top", anchor="nw")
+       
+        self.labelColumn = tk.Label(self.frameDisplay)
+        self.labelColumn.pack(side="top", anchor="nw")
+        self.labelColumn.configure(text = titleColumn)
 
-        listboxStock = tk.Listbox(self.frameDisplay, state = "normal")
+        listboxStock = tk.Listbox(self.frameDisplay)
         listboxStock.pack(expand = True, fill = "both")
 
         
@@ -139,6 +142,7 @@ class Application:
 
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
+            widget = None
 
         scrollbar = Scrollbar(self.frameDisplay)
         scrollbar.pack(side="right", fill="y")
