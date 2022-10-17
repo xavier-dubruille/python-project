@@ -69,7 +69,7 @@ class Application:
             self.frameDetails.rowconfigure(i, weight = 1)
         self.frameDetails.columnconfigure(0, weight = 1)
         
-        labelTitleDetails = tk.Label(self.frameDetails, text = "DETAILS", anchor = "s", font =  self.police + " underline")
+        labelTitleDetails = tk.Label(self.frameDetails, text = "DETAILS", anchor = "s", font =  self.police + " underline", width=self.frameDetails.winfo_width())
         labelTitleDetails.grid(column = 0, row = 0, sticky = 'wesn')
         
         self.labelDetails = tk.Label(self.frameDetails, width = self.frameDetails.winfo_width(), text = self.printDetails, justify="left", anchor= 'nw')
@@ -107,9 +107,9 @@ class Application:
         carListStock = Car.CarListStock()
         spaceBrand = len(max(carListStock, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(carListStock, key=lambda x:len(x.nameType)).nameType) + 4
-        spaceIdCar = len("idCar") + 4
+        spaceIdCar = len("Id") + 4
 
-        titleColumn = "idCar" + " "*4  + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price"
+        titleColumn = "Id" + " "*4  + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price"
         labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
         labelTitle.pack(side="top", anchor="nw")
 
@@ -156,20 +156,19 @@ class Application:
         spaceBrand = len(max(carListHistory, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(carListHistory, key=lambda x:len(x.nameType)).nameType) + 4
         spacePrice = len(max(carListHistory, key=lambda x:len(x.priceCar)).priceCar) + 4
-        spaceIdCar = len("idCar") + 4
+        spaceIdCar = len("Id") + 4
 
 
-        titleColumn = "idCar" + " "*4 + "Brand" +" "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price" + " "*(spacePrice-len("Price")) + "Customer"
-        labelTitle = tk.Label(self.frameDisplay, state = "normal", text = titleColumn)
+        titleColumn = "Id" + " "*4 + "Brand" +" "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price" + " "*(spacePrice-len("Price")) + "Customer"
+        labelTitle = tk.Label(self.frameDisplay, text = titleColumn)
         labelTitle.pack(side="top", anchor="nw")
 
-        listboxHistory = tk.Listbox(self.frameDisplay, state = "normal")
+        listboxHistory = tk.Listbox(self.frameDisplay)
         listboxHistory.pack(expand = True, fill = "both")
 
         for car in carListHistory:
             listboxHistory.insert(END, f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}")
-            listboxHistory.bind('<<ListboxSelect>>', self.ShowDetailsHistory)
-            
+            listboxHistory.bind('<<ListboxSelect>>', self.ShowDetailsHistory)            
 
         listboxHistory.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listboxHistory.yview)
