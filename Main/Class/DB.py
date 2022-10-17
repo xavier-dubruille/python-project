@@ -7,7 +7,7 @@ class DBAccess():
     def DBCursor():
         try: 
             dbConnection = sql.connect("./Db/bambooConcess.db")
-            return dbConnection.cursor()
+            return dbConnection.cursor(), dbConnection
         except: 
             print("Db Could not be resolved")
             print(sys.exc_info())
@@ -19,7 +19,7 @@ class DBAccess():
 
     @classmethod
     def LoadWithId(clss, id):
-        cursor = clss.DBCursor()
+        cursor = clss.DBCursor()[0]
         if cursor != None:
             try: 
                 cursor.execute("SELECT * FROM %s WHERE %s = %s" % (clss.NameTable(), clss.IdColumn(), id))
@@ -45,7 +45,7 @@ class DBAccess():
     
     @classmethod
     def GetAll(clss):
-        cursor = clss.DBCursor()
+        cursor = clss.DBCursor()[0]
         instancesList = []
         if cursor != None: 
             try: 
@@ -65,7 +65,7 @@ class DBAccess():
 
     @classmethod
     def IsStockedWithId(clss, id): 
-        cursor = clss.DBCursor()
+        cursor = clss.DBCursor()[0]
         if cursor != None:
             try:
                 cursor.execute("SELECT * FROM %s WHERE %s = %s" % (clss.NameTable(), clss.IdColumn(), id))

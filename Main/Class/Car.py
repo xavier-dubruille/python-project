@@ -11,6 +11,9 @@ class Car(DB):
         self.nameType = None
         self.nameMotor = None
         self.promoCar = None
+        self.idBrand = None
+        self.idType = None
+        self.idMotor = None
 
 
     @staticmethod
@@ -26,7 +29,7 @@ class Car(DB):
     @classmethod
     def CarListStock(clss): 
         carList = []
-        cursor = DB.DBCursor()
+        cursor = DB.DBCursor()[0]
         if cursor != None:
             try:
                 cursor.execute("SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, priceCar, nameBrand, nameMotor, \
@@ -35,7 +38,7 @@ class Car(DB):
                 NATURAL JOIN Brand \
                 NATURAL JOIN Motor\
                 NATURAL JOIN Type\
-                WHERE idCar NOT IN (select idCar FROM deal WHERE isResDeal = 0)")
+                WHERE idCar NOT IN (select idCar FROM deal WHERE isRentDeal = 0)")
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
                     car = clss.LoadResults(cursor, row)
@@ -51,7 +54,7 @@ class Car(DB):
     @classmethod
     def CarListHistory(clss):
         carList = []
-        cursor = DB.DBCursor()
+        cursor = DB.DBCursor()[0]
         if cursor != None:
             try:
                 cursor.execute("SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, priceCar || '0' as priceCar, \
@@ -62,7 +65,7 @@ class Car(DB):
                 NATURAL JOIN Type \
                 NATURAL JOIN Deal \
                 NATURAL JOIN Customer \
-                WHERE idCar  IN (select idCar FROM deal WHERE isResDeal = 0)")
+                WHERE idCar  IN (select idCar FROM deal WHERE isRentDeal = 0)")
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
                     car = clss.LoadResults(cursor, row)
@@ -78,7 +81,7 @@ class Car(DB):
     
     @classmethod
     def CarFreePlacesStock(clss): 
-        cursor = DB.DBCursor()
+        cursor = DB.DBCursor()[0]
         if cursor != None: 
             try: 
                 cursor.execute("SELECT count(*) \
@@ -86,7 +89,7 @@ class Car(DB):
                 NATURAL JOIN Brand \
                 NATURAL JOIN Motor \
                 NATURAL JOIN Type \
-                WHERE idCar NOT IN (select idCar FROM deal WHERE isResDeal = 0)")
+                WHERE idCar NOT IN (select idCar FROM deal WHERE isRentDeal = 0)")
                 return cursor.fetchone()[0]
             except:
                 print("Error in CarFreePlacesStock")
@@ -96,11 +99,29 @@ class Car(DB):
                 DB.DBClose(cursor)
 
     def InsertDB(self): 
-        cursor = DB.DBCursor()
+        cursor, dbConnection = DB.DBCursor()
         if cursor != None:
             try:
-                pass
+                for motor in self.motorList:
+                    if motor.nameMotor == self.nameMotor.get():
+                        self.idMotor = motor.idMotor 
+                        break
+                        
+                for type in self.typeList:
+                    if type.nameType == self.nameType.get():
+                        self.idType = type.idType
+                        break
+                
+                for brand in self.brandList:
+                    if brand.nameBrand == self.nameBrand.get():
+                        self.idBrand = brand.idBrand
+                        break
+                
+                cursor.execute("INSERT INTO Car (dateTechControlCar, priceCar, idBrand, idType, idMotor, promoCar) VALUES (?, ?, ?, ?, ?, ?)"\
+                    , (self.dateTechControlCar.get(), self.priceCar.get(), self.idBrand, self.idType, self.idMotor, self.promoCar.get(), ))
+                dbConnection.commit()
             except:
                 print("Error in InsertDB")
+                print(sys.exc_info())
             finally:
                 DB.DBClose(cursor)
