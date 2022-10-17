@@ -16,17 +16,4 @@ class Brand(DB):
         # Return the id column
         return "idDeal"
     
-    @classmethod
-    def GetIdWithName(clss, name):
-        cursor = clss.DBCursor()
-        if cursor != None:
-            try:
-                cursor.execute("SELECT idBrand FROM Brand WHERE nameBrand = %s" % (name))
-                cursor.fetchone()
-
-            except:
-                print("Error in GetIdWithNameBrand")
-                print(sys.exc_info())
-                return None
-            finally:
-                clss.DBClose(cursor)
+   
