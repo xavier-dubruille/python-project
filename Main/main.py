@@ -145,7 +145,7 @@ class Application:
             if widget.widgetName == "button":
                 widget["state"] = "normal"
         self.buttonHistory["state"] = "disabled"
-        
+
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
 
@@ -207,6 +207,7 @@ class Application:
         self.buttonDeal["state"] = "disabled"
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
+        
         
         for i in range(2):
             self.frameDisplay.columnconfigure(i, weight = 1)
