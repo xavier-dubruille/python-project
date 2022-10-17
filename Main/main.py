@@ -87,9 +87,6 @@ class Application:
 
         self.window.mainloop()
 
-
-
-
     # It shows you which car you have in your stock. It is displayed by default.
     def ShowStock(self):
         for widget in self.frameButtons.winfo_children():
@@ -125,9 +122,6 @@ class Application:
         listboxStock.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listboxStock.yview)
 
-
-
-
     # When you click a row to show more information about the car you selected.
     def ShowDetailsStock(self, event):
         # for widget in self.frameDetails.winfo_children(): 
@@ -135,9 +129,6 @@ class Application:
         car = Car.CarListStock()[event.widget.curselection()[0]]
         self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
         self.labelDetails.configure(text = self.printDetails)
-
-
-
 
     # It will show you which car you sell.
     def ShowHistory(self):
@@ -173,7 +164,6 @@ class Application:
         listboxHistory.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listboxHistory.yview)
 
-
     # When you click a row to show more information about the car you selected.
     def ShowDetailsHistory(self, event):
         # for widget in self.frameDetails.winfo_children(): 
@@ -181,9 +171,6 @@ class Application:
         car = Car.CarListHistory()[event.widget.curselection()[0]]
         self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control {car.dateTechControlCar}\nThe customer is : {car.nameCusto}"
         self.labelDetails.configure(text = self.printDetails)
-
-
-
 
     # It will help you to change the reservation's statut for a particular car.
     def MakeReservation(self):
@@ -194,10 +181,6 @@ class Application:
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
         
-
-
-
-
     # It will help you to sell a particular car.
     def MakeDeal(self):
         for widget in self.frameButtons.winfo_children():
