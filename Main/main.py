@@ -76,8 +76,10 @@ class Application:
 
         self.frameDetails = tk.Frame(self.window, highlightthickness=2, highlightbackground = "black")
         self.frameDetails.grid(column = 2, row = 1, rowspan = 7, sticky ="wesn")
-        self.frameDetails.grid_propagate(False)
-        
+        self.frameDetails.grid_propagate(False)        
+        for i in range(2):
+            self.frameDetails.rowconfigure(i, weight = 1)
+        self.frameDetails.columnconfigure(0, weight = 1)
         labelTitleDetails = tk.Label(self.frameDetails, text = "DETAILS", anchor = "s", font =  self.police + " underline")
         labelTitleDetails.grid(column = 0, row = 0, sticky = 'wesn')        
         self.labelDetails = tk.Label(self.frameDetails, text = self.printDetails, justify="left", anchor= 'nw')
