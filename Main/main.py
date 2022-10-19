@@ -248,7 +248,7 @@ class Application:
 
 
             buttonRentACar = tk.Button(self.frameDisplay, text = "Rent", command = lambda : Car.InsertDB(vars))
-            buttonRentACar.grid(column = 0, row = 6, sticky = "wesn")
+            buttonRentACar.grid(column = 1, row = 6, sticky = "wesn")
 
         else: 
             labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
@@ -287,7 +287,7 @@ class Application:
             dropdownIdCusto.grid(column = 1, row = 1, sticky = "wesn")
 
             buttonMakeDeal = tk.Button(self.frameDisplay, text = "Make the deal", command = lambda : Car.InsertDB(vars))
-            buttonMakeDeal.grid(column = 0, row = 6, sticky = "wesn")
+            buttonMakeDeal.grid(column = 1, row = 6, sticky = "wesn")
 
         else: 
             labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
@@ -352,7 +352,7 @@ class Application:
             entryPromo.grid(column = 1, row = 5, sticky = "wesn")
 
             buttonAddCar = tk.Button(self.frameDisplay, text = "Add a car in stock", command = lambda :self.VerifyCarInsert(car))
-            buttonAddCar.grid(column = 0, row = 6, sticky = "wesn")
+            buttonAddCar.grid(column = 1, row = 6, sticky = "wesn")
 
         else: 
             labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
