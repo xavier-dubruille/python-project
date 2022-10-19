@@ -51,7 +51,7 @@ class Application:
         self.buttonStock.grid(column = 0, row = 0, sticky = "wesn")
         self.buttonHistory = tk.Button(self.frameButtons, text = "Display History", command = self.DisplayWindowHistory)
         self.buttonHistory.grid(column = 0, row = 1, sticky = "wesn")
-        self.buttonReservation = tk.Button(self.frameButtons, text = "Rent a cor", command = self.DisplayWindowRent)
+        self.buttonReservation = tk.Button(self.frameButtons, text = "Rent a car", command = self.DisplayWindowRent)
         self.buttonReservation.grid(column = 0, row = 2, sticky = "wesn")
         self.buttonDeal = tk.Button(self.frameButtons, text = "Make a deal", command = self.DisplayWindowDeal)
         self.buttonDeal.grid(column = 0, row = 3, sticky = "wesn")
@@ -204,6 +204,53 @@ class Application:
         self.buttonReservation["state"] = "disabled"
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
+
+        for i in range(2):
+            self.frameDisplay.columnconfigure(i, weight = 1)
+        for i in range(6):
+            self.frameDisplay.rowconfigure(i, weight = 1)
+
+        if Car.CarFreePlacesStock() <= 40:
+            car = Car()
+            car.idCar = tk.StringVar()
+            car.idCusto = tk.StringVar()
+            car.isRentDeal = tk.StringVar()
+            car.dateStartRentDeal = tk.StringVar()
+            car.durationDaysRentDeal = tk.StringVar()
+            
+
+            labelCarId = tk.Label(self.frameDisplay, text = "Car id : ")
+            labelCarId.grid(column = 0, row = 0, sticky = "wesn")
+            dropdownCarId = tk.OptionMenu(self.frameDisplay, car.idCar, *map(lambda idCar: idCar.idCar, self.dealList))
+            dropdownCarId.grid(column = 1, row = 0, sticky = "wesn")
+
+            labelIdCusto = tk.Label(self.frameDisplay, text = "Customer id : ")
+            labelIdCusto.grid(column = 0, row = 1, sticky = "wesn")
+            dropdownIdCusto = tk.OptionMenu(self.frameDisplay, car.idCusto, *map(lambda idCusto: idCusto.idCusto, self.dealList))
+            dropdownIdCusto.grid(column = 1, row = 1, sticky = "wesn")
+
+            labelIsRentDeal = tk.Label(self.frameDisplay, text = "Rent ? ")
+            labelIsRentDeal.grid(column = 0, row = 2, sticky = "wesn")
+            dropdownIsRentDeal = tk.OptionMenu(self.frameDisplay, car.isRentDeal, *map(lambda isRentDeal: isRentDeal.isRentDeal, self.dealList))
+            dropdownIsRentDeal.grid(column = 1, row = 2, sticky = "wesn")
+
+            labelDateStartRentDeal = tk.Label(self.frameDisplay, text = "Date start of the rent : ")
+            labelDateStartRentDeal.grid(column = 0, row = 3, sticky = "wesn")
+            entryDateStartRentDeal = tkCal(self.frameDisplay, textvariable = car.dateStartRentDeal, locale='fr_BE', date_pattern = "dd/mm/yyyy")
+            entryDateStartRentDeal.grid(column = 1, row = 3, sticky = "wesn")
+
+            labelDurationDaysRentDeal = tk.Label(self.frameDisplay, text = "Duration days of the rent : ")
+            labelDurationDaysRentDeal.grid(column = 0, row = 4, sticky = "wesn")
+            entryDurationDaysRentDeal = tk.Entry(self.frameDisplay, textvariable = car.durationDaysRentDeal)
+            entryDurationDaysRentDeal.grid(column = 1, row = 4, sticky = "wesn")
+
+
+            buttonRentACar = tk.Button(self.frameDisplay, text = "Rent", command = lambda : Car.InsertDB(vars))
+            buttonRentACar.grid(column = 1, row = 6, sticky = "wesn")
+
+        else: 
+            labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
+            labelNoFreePlaces.grid(column = 0, row = 0)
         
     # It will help you to sell a particular car.
     def DisplayWindowDeal(self):
@@ -238,7 +285,7 @@ class Application:
             dropdownIdCusto.grid(column = 1, row = 1, sticky = "wesn")
 
             buttonMakeDeal = tk.Button(self.frameDisplay, text = "Make the deal", command = lambda : Car.InsertDB(vars))
-            buttonMakeDeal.grid(column = 0, row = 6, sticky = "wesn")
+            buttonMakeDeal.grid(column = 1, row = 6, sticky = "wesn")
 
         else: 
             labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
@@ -303,7 +350,7 @@ class Application:
             entryPromo.grid(column = 1, row = 5, sticky = "wesn")
 
             buttonAddCar = tk.Button(self.frameDisplay, text = "Add a car in stock", command = lambda :self.VerifyCarInsert(car))
-            buttonAddCar.grid(column = 0, row = 6, sticky = "wesn")
+            buttonAddCar.grid(column = 1, row = 6, sticky = "wesn")
 
         else: 
             labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
