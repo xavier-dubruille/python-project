@@ -4,6 +4,7 @@ from Class.Brand import Brand
 from Class.Type import Type
 from Class.Motor import Motor
 from Class.Deal import Deal
+from Class.Customer import Customer
 from tkinter import *
 import tkinter as tk
 import tkinter.font as font
@@ -22,6 +23,7 @@ class Application:
         self.motorList = Motor.GetAll()
         self.typeList = Type.GetAll()
         self.dealList = Deal.GetAll()
+        self.custoList = Customer.GetAll()
         self.CreateBasicWindow()
 
     # The main display function for the application.
@@ -108,8 +110,8 @@ class Application:
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
 
-        for i in range(6):
-            self.frameDisplay.rowconfigure(i, weight = i + 1)
+        for i in range(2):
+            self.frameDisplay.rowconfigure(i, weight = i)
         self.frameDisplay.columnconfigure(0, weight = 1)
 
         spaceBrand = len(max(self.carListStock, key=lambda car:len(car.nameBrand)).nameBrand) + 4
@@ -121,7 +123,7 @@ class Application:
         labelColumn.grid(column = 0, row = 0, sticky = "wen")
         
         frameListBoxScroll = tk.Frame(self.frameDisplay)
-        frameListBoxScroll.grid(column = 0, row = 1, rowspan = 5, sticky = "wesn")
+        frameListBoxScroll.grid(column = 0, row = 1, sticky = "wesn", pady = self.frameDisplay.winfo_height()/2)
 
         scrollbar = Scrollbar(frameListBoxScroll)
         scrollbar.pack(side="right", fill="y")
@@ -157,8 +159,8 @@ class Application:
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
 
-        for i in range(6):
-            self.frameDisplay.rowconfigure(i, weight = i + 1)
+        for i in range(2):
+            self.frameDisplay.rowconfigure(i, weight = i)
         self.frameDisplay.columnconfigure(0, weight = 1)
 
         spaceBrand = len(max(self.carListHistory, key=lambda car:len(car.nameBrand)).nameBrand) + 4
@@ -171,7 +173,7 @@ class Application:
         labelTitle.grid(column = 0, row = 0, sticky = "wen")
 
         frameListBoxScroll = tk.Frame(self.frameDisplay)
-        frameListBoxScroll.grid(column = 0, row = 1, rowspan = 5, sticky = "wesn")
+        frameListBoxScroll.grid(column = 0, row = 1, sticky = "wesn", pady = self.frameDisplay.winfo_height()/2)
 
         scrollbar = Scrollbar(frameListBoxScroll)
         scrollbar.pack(side="right", fill="y")
@@ -202,51 +204,47 @@ class Application:
             if widget.widgetName == "button":
                 widget["state"] = "normal"
         self.buttonReservation["state"] = "disabled"
+        
         for widget in self.frameDisplay.winfo_children(): 
             widget.destroy()
-
+        
         for i in range(2):
             self.frameDisplay.columnconfigure(i, weight = 1)
-        for i in range(6):
+        for i in range(5):
             self.frameDisplay.rowconfigure(i, weight = 1)
 
         if Car.CarFreePlacesStock() <= 40:
-            car = Car()
-            car.idCar = tk.StringVar()
-            car.idCusto = tk.StringVar()
-            car.isRentDeal = tk.StringVar()
-            car.dateStartRentDeal = tk.StringVar()
-            car.durationDaysRentDeal = tk.StringVar()
+            deal = Deal()
+            deal.idCar = tk.StringVar()
+            deal.idCusto = tk.StringVar()
+            deal.isRentDeal = 1
+            deal.dateStartRentDeal = tk.StringVar()
+            deal.durationDaysRentDeal = tk.StringVar()
             
 
             labelCarId = tk.Label(self.frameDisplay, text = "Car id : ")
             labelCarId.grid(column = 0, row = 0, sticky = "wesn")
-            dropdownCarId = tk.OptionMenu(self.frameDisplay, car.idCar, *map(lambda idCar: idCar.idCar, self.dealList))
+            dropdownCarId = tk.OptionMenu(self.frameDisplay, deal.idCar, *map(lambda car: car.idCar, self.carListStock))
             dropdownCarId.grid(column = 1, row = 0, sticky = "wesn")
 
             labelIdCusto = tk.Label(self.frameDisplay, text = "Customer id : ")
             labelIdCusto.grid(column = 0, row = 1, sticky = "wesn")
-            dropdownIdCusto = tk.OptionMenu(self.frameDisplay, car.idCusto, *map(lambda idCusto: idCusto.idCusto, self.dealList))
+            dropdownIdCusto = tk.OptionMenu(self.frameDisplay, deal.idCusto, *map(lambda custo: custo.idCusto, self.custoList))
             dropdownIdCusto.grid(column = 1, row = 1, sticky = "wesn")
 
-            labelIsRentDeal = tk.Label(self.frameDisplay, text = "Rent ? ")
-            labelIsRentDeal.grid(column = 0, row = 2, sticky = "wesn")
-            dropdownIsRentDeal = tk.OptionMenu(self.frameDisplay, car.isRentDeal, *map(lambda isRentDeal: isRentDeal.isRentDeal, self.dealList))
-            dropdownIsRentDeal.grid(column = 1, row = 2, sticky = "wesn")
-
-            labelDateStartRentDeal = tk.Label(self.frameDisplay, text = "Date start of the rent : ")
-            labelDateStartRentDeal.grid(column = 0, row = 3, sticky = "wesn")
-            entryDateStartRentDeal = tkCal(self.frameDisplay, textvariable = car.dateStartRentDeal, locale='fr_BE', date_pattern = "dd/mm/yyyy")
-            entryDateStartRentDeal.grid(column = 1, row = 3, sticky = "wesn")
+            labelDateStartRentDeal = tk.Label(self.frameDisplay, text = "Date of the rent : ")
+            labelDateStartRentDeal.grid(column = 0, row = 2, sticky = "wesn")
+            entryDateStartRentDeal = tkCal(self.frameDisplay, textvariable = deal.dateStartRentDeal, locale='fr_BE', date_pattern = "dd/mm/yyyy")
+            entryDateStartRentDeal.grid(column = 1, row = 2, sticky = "wesn")
 
             labelDurationDaysRentDeal = tk.Label(self.frameDisplay, text = "Duration days of the rent : ")
-            labelDurationDaysRentDeal.grid(column = 0, row = 4, sticky = "wesn")
-            entryDurationDaysRentDeal = tk.Entry(self.frameDisplay, textvariable = car.durationDaysRentDeal)
-            entryDurationDaysRentDeal.grid(column = 1, row = 4, sticky = "wesn")
+            labelDurationDaysRentDeal.grid(column = 0, row = 3, sticky = "wesn")
+            entryDurationDaysRentDeal = tk.Entry(self.frameDisplay, textvariable = deal.durationDaysRentDeal)
+            entryDurationDaysRentDeal.grid(column = 1, row = 3, sticky = "wesn")
 
 
-            buttonRentACar = tk.Button(self.frameDisplay, text = "Rent", command = lambda : Car.InsertDB(vars))
-            buttonRentACar.grid(column = 1, row = 6, sticky = "wesn")
+            buttonRentACar = tk.Button(self.frameDisplay, text = "Rent", command = lambda : self.VerifyRent(deal))
+            buttonRentACar.grid(column = 1, row = 4, sticky = "wesn")
 
         else: 
             labelNoFreePlaces = tk.Label(self.frameDisplay, text = "No free places")
