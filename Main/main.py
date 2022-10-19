@@ -90,7 +90,7 @@ class Application:
         frameExit.grid(column = 2, row = 0, sticky = "wesn")
         frameExit.rowconfigure(0, weight = 1)
         frameExit.columnconfigure(0, weight = 1)
-        buttonExit = tk.Button(frameExit, text = "Exit", command = self.window.destroy, relief='raised', font=font.Font(family='Helvetica', size=15, weight='bold'), width = frameExit.winfo_width())
+        buttonExit = tk.Button(frameExit, text = "Exit", command = self.window.destroy, font=font.Font(family='Helvetica', size=15, weight='bold'))
         buttonExit.grid(column = 0, row = 0, sticky = "wesn")
 
         self.DisplayWindowStock()
@@ -119,11 +119,9 @@ class Application:
         titleColumn = "Id" + " " * 4  + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price"
         labelColumn = tk.Label(self.frameDisplay, text = titleColumn, anchor = "w")
         labelColumn.grid(column = 0, row = 0, sticky = "wen")
-        labelColumn.configure(width = self.frameDisplay.winfo_width())
         
         frameListBoxScroll = tk.Frame(self.frameDisplay)
         frameListBoxScroll.grid(column = 0, row = 1, rowspan = 5, sticky = "wesn")
-        frameListBoxScroll.configure(width = self.frameDisplay.winfo_width())
 
         scrollbar = Scrollbar(frameListBoxScroll)
         scrollbar.pack(side="right", fill="y")
