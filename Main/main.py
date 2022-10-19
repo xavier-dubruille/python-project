@@ -51,7 +51,7 @@ class Application:
         self.buttonStock.grid(column = 0, row = 0, sticky = "wesn")
         self.buttonHistory = tk.Button(self.frameButtons, text = "Display History", command = self.DisplayWindowHistory)
         self.buttonHistory.grid(column = 0, row = 1, sticky = "wesn")
-        self.buttonReservation = tk.Button(self.frameButtons, text = "Rent a cor", command = self.DisplayWindowRent)
+        self.buttonReservation = tk.Button(self.frameButtons, text = "Rent a car", command = self.DisplayWindowRent)
         self.buttonReservation.grid(column = 0, row = 2, sticky = "wesn")
         self.buttonDeal = tk.Button(self.frameButtons, text = "Make a deal", command = self.DisplayWindowDeal)
         self.buttonDeal.grid(column = 0, row = 3, sticky = "wesn")
