@@ -63,6 +63,8 @@ class Application():
         for car in self.carListHistory:
             print(f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}")
 
+        Application.menuChoice(self)
+
     def rentACar(self):
         if Car.CarFreePlacesStock() <= 40:
             deal = Deal()     
