@@ -18,9 +18,9 @@ class Application():
         self.showMainMenu()
 
     def showMainMenu(self):
-        wichMenu = input("Welcome to bambooConcess \nWhere do you want to go ?\n 1 : Show your stock.\n 2 : Show your transaction history.\n 3 : Rent a car.\n 4 : Make a deal.\n 5 : Add a new car to your stock.\n ->")
+        wichMenu = int(input("Welcome to bambooConcess \nWhere do you want to go ?\n 1 : Show your stock.\n 2 : Show your transaction history.\n 3 : Rent a car.\n 4 : Make a deal.\n 5 : Add a new car to your stock.\n -> "))
         if wichMenu == 1:
-            Application.displayStock()
+            Application.displayStock(self)
         elif wichMenu == 2:
             Application.displayHistory()
         elif wichMenu == 3:
@@ -32,10 +32,18 @@ class Application():
         spaceBrand = len(max(self.carListStock, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(self.carListStock, key=lambda x:len(x.nameType)).nameType) + 4
         spaceIdCar = len("Id") + 4
-
-        print("Id" + " " * 4  + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price")
+        print("Id" + " " * 4  + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price\n")
         for car in self.carListStock:
             print(f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}") 
+
+        nextStep = int(input("\nWhat do you want to do next ?\n 1 : Return to the main menu.\n 2 : See a car's details.\n -> "))
+        if nextStep == 1:
+            Application.showMainMenu()
+        elif nextStep == 2:
+            carId = int(input("\nWhich car do you want to see details from ?\n-> "))
+            for car in self.carListStock:
+                if carId == car.idCar:
+                    print("\nBrand : " + car.nameBrand + "\nType : " + car.nameType + "\nMotor : " + car.nameMotor + "\nPrice : " + str(car.priceCar) + "€\nPromo : " + str(car.promoCar) + "%\nIn stock since : " + car.dateStockCar + "\nNext control : " + car.dateTechControlCar)
 
     def displayHistory(self):
         spaceBrand = len(max(self.carListHistory, key=lambda car:len(car.nameBrand)).nameBrand) + 4
@@ -43,7 +51,7 @@ class Application():
         spacePrice = len(max(self.carListHistory, key=lambda x:len(x.priceCar)).priceCar) + 4
         spaceIdCar = len("Id") + 4
 
-        print("Id" + " "*4 + "Brand" +" "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price" + " "*(spacePrice-len("Price")) + "Customer")
+        print("Id" + " "*4 + "Brand" +" "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price (€)" + " "*(spacePrice-len("Price")) + "Customer")
 
         for car in self.carListHistory:
             f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}"
