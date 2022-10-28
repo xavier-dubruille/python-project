@@ -31,16 +31,18 @@ class Application():
             Application.rentACar(self)
         elif wichMenu == 4:
             Application.makeADeal(self)
+        elif wichMenu == 5:
+            Application.addACar(self)
         
     def displayStock(self):
         spaceBrand = len(max(self.carListStock, key=lambda car:len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(self.carListStock, key=lambda x:len(x.nameType)).nameType) + 4
         spaceIdCar = len("Id") + 4
-        print("Id" + " " * 4  + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price\n")
+        print("\nId" + " " * 4  + "Brand" + " "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price")
         for car in self.carListStock:
             print(f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}") 
 
-        nextStep = int(input("\nWhat do you want to do next ?\n 1 : Return to the choice menu.\n 2 : See a car's details.\n 3 : Exit\n -> "))
+        nextStep = int(input("\nWhat do you want to do next ?\n 1 : Return to the choice menu.\n 2 : See a car's details.\n -> "))
         if nextStep == 1:
             Application.menuChoice(self)
         elif nextStep == 2:
@@ -48,8 +50,7 @@ class Application():
             for car in self.carListStock:
                 if carId == car.idCar:
                     print("\nBrand : " + car.nameBrand + "\nType : " + car.nameType + "\nMotor : " + car.nameMotor + "\nPrice : " + str(car.priceCar) + "€\nPromo : " + str(car.promoCar) + "%\nIn stock since : " + car.dateStockCar + "\nNext control : " + car.dateTechControlCar)
-        elif nextStep == 3:
-            print("You're exiting the program.")
+            Application.menuChoice(self)
 
     def displayHistory(self):
         spaceBrand = len(max(self.carListHistory, key=lambda car:len(car.nameBrand)).nameBrand) + 4
@@ -57,10 +58,10 @@ class Application():
         spacePrice = len(max(self.carListHistory, key=lambda x:len(x.priceCar)).priceCar) + 4
         spaceIdCar = len("Id") + 4
 
-        print("Id" + " "*4 + "Brand" +" "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price (€)" + " "*(spacePrice-len("Price")) + "Customer")
+        print("\nId" + " "*4 + "Brand" +" "*(spaceBrand-len("Brand")) + "Type" + " "*(spaceType-len("Type")) +  "Price (€)" + " "*(spacePrice-len("Price")) + "Customer")
 
         for car in self.carListHistory:
-            f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}"
+            print(f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}")
 
     def rentACar(self):
         if Car.CarFreePlacesStock() <= 40:
@@ -79,6 +80,14 @@ class Application():
             deal.idCar = input("What is the car's id ?")
             deal.idCusto = input("What is the customer's id ? ")
 
+    def addACar(self):
+        car = Car()
+        car.nameBrand = input("\nWhat is the name of the brand ?\n")
+        car.nameType = input("\nWhat is the type ?\n")
+        car.nameMotor = input("\nWhat is the motor's name ?\n")
+        car.priceCar = input("\nWhat is the price ?\n")
+        car.promoCar = input("\nAny promotion ?(put the number)\n")
+        car.dateTechControlCar = input("\nWhat is the date of the tech control ?\n")
 
 
     def VerifyCarInsert(self, carRawData): 
