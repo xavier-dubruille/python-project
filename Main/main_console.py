@@ -22,7 +22,7 @@ class Application():
         Application.menuChoice(self)
     
     def menuChoice(self):
-        wichMenu = int(input("Where do you want to go now ?\n 1 : Show your stock.\n 2 : Show your transaction history.\n 3 : Rent a car.\n 4 : Make a deal.\n 5 : Add a new car to your stock.\n -> "))
+        wichMenu = int(input("\nWhere do you want to go now ?\n 1 : Show your stock.\n 2 : Show your transaction history.\n 3 : Rent a car.\n 4 : Make a deal.\n 5 : Add a new car to your stock.\n -> "))
         if wichMenu == 1:
             Application.displayStock(self)
         elif wichMenu == 2:
@@ -92,31 +92,31 @@ class Application():
         car.dateTechControlCar = input("\nWhat is the date of the tech control ?\n")
 
 
-    def VerifyCarInsert(self, carRawData): 
-        car = Car()
-        counter = 0
-        #Get the id for the motor
-        while counter < len(self.motorList) or car.idMotor == None:
-            if self.motorList[counter].nameMotor == carRawData.nameMotor.get():
-                car.idMotor = self.motorList[counter].idMotor
-            counter += 1
+    # def VerifyCarInsert(self, carRawData): 
+    #     car = Car()
+    #     counter = 0
+    #     #Get the id for the motor
+    #     while counter < len(self.motorList) or car.idMotor == None:
+    #         if self.motorList[counter].nameMotor == carRawData.nameMotor.get():
+    #             car.idMotor = self.motorList[counter].idMotor
+    #         counter += 1
         
-        counter = 0
-        while counter < len(self.brandList) or car.idBrand == None:
-            if self.brandList[counter].nameBrand == carRawData.nameBrand.get():
-                car.idBrand = self.brandList[counter].idBrand
-            counter += 1
+    #     counter = 0
+    #     while counter < len(self.brandList) or car.idBrand == None:
+    #         if self.brandList[counter].nameBrand == carRawData.nameBrand.get():
+    #             car.idBrand = self.brandList[counter].idBrand
+    #         counter += 1
         
-        counter = 0
-        while counter < len(self.typeList) or car.idType == None:
-            if self.typeList[counter].nameType == carRawData.nameType.get():
-                car.idType = self.typeList[counter].idType
-            counter += 1
+    #     counter = 0
+    #     while counter < len(self.typeList) or car.idType == None:
+    #         if self.typeList[counter].nameType == carRawData.nameType.get():
+    #             car.idType = self.typeList[counter].idType
+    #         counter += 1
         
-        car.dateTechControlCar = carRawData.dateTechControlCar.get()
-        car.priceCar = float(carRawData.priceCar.get())
-        car.promoCar = carRawData.promoCar.get()
-        car.InsertDB()        
-        self.carListStock = Car.CarListStock()
+    #     car.dateTechControlCar = carRawData.dateTechControlCar.get()
+    #     car.priceCar = float(carRawData.priceCar.get())
+    #     car.promoCar = carRawData.promoCar.get()
+    #     car.InsertDB()        
+    #     self.carListStock = Car.CarListStock()
 
 Application() 
