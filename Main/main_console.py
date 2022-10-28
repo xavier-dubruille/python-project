@@ -18,15 +18,19 @@ class Application():
         self.showMainMenu()
 
     def showMainMenu(self):
-        wichMenu = int(input("Welcome to bambooConcess \nWhere do you want to go ?\n 1 : Show your stock.\n 2 : Show your transaction history.\n 3 : Rent a car.\n 4 : Make a deal.\n 5 : Add a new car to your stock.\n -> "))
+        print("Welcome to Bamboo Concess")
+        Application.menuChoice(self)
+    
+    def menuChoice(self):
+        wichMenu = int(input("Where do you want to go now ?\n 1 : Show your stock.\n 2 : Show your transaction history.\n 3 : Rent a car.\n 4 : Make a deal.\n 5 : Add a new car to your stock.\n -> "))
         if wichMenu == 1:
             Application.displayStock(self)
         elif wichMenu == 2:
-            Application.displayHistory()
+            Application.displayHistory(self)
         elif wichMenu == 3:
-            Application.rentACar()
+            Application.rentACar(self)
         elif wichMenu == 4:
-            Application.makeADeal()
+            Application.makeADeal(self)
         
     def displayStock(self):
         spaceBrand = len(max(self.carListStock, key=lambda car:len(car.nameBrand)).nameBrand) + 4
@@ -36,14 +40,16 @@ class Application():
         for car in self.carListStock:
             print(f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}") 
 
-        nextStep = int(input("\nWhat do you want to do next ?\n 1 : Return to the main menu.\n 2 : See a car's details.\n -> "))
+        nextStep = int(input("\nWhat do you want to do next ?\n 1 : Return to the choice menu.\n 2 : See a car's details.\n 3 : Exit\n -> "))
         if nextStep == 1:
-            Application.showMainMenu()
+            Application.menuChoice(self)
         elif nextStep == 2:
             carId = int(input("\nWhich car do you want to see details from ?\n-> "))
             for car in self.carListStock:
                 if carId == car.idCar:
                     print("\nBrand : " + car.nameBrand + "\nType : " + car.nameType + "\nMotor : " + car.nameMotor + "\nPrice : " + str(car.priceCar) + "€\nPromo : " + str(car.promoCar) + "%\nIn stock since : " + car.dateStockCar + "\nNext control : " + car.dateTechControlCar)
+        elif nextStep == 3:
+            print("You're exiting the program.")
 
     def displayHistory(self):
         spaceBrand = len(max(self.carListHistory, key=lambda car:len(car.nameBrand)).nameBrand) + 4
