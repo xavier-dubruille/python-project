@@ -69,7 +69,7 @@ class Application():
         if Car.CarFreePlacesStock() <= 40:
             deal = Deal()     
             deal.idCar = input("What is the car's id ?")
-            deal.idCusto = input("What is the customer's id")
+            deal.idCusto = input("What is the customer's id ?")
             deal.isRentDeal = 1
             deal.dateStartRentDeal = input("When does the rent start ?")
             deal.durationDaysRentDeal = input("How many days will the rent spend ?")
