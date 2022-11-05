@@ -92,7 +92,6 @@ class Application():
         car.dateTechControlCar = input("\nWhat is the date of the tech control ?\n")
 
 
-    # test
     # def VerifyCarInsert(self, carRawData): 
     #     car = Car()
     #     counter = 0
