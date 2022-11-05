@@ -91,7 +91,7 @@ class Application():
         car.promoCar = input("\nAny promotion ?(put the number)\n")
         car.dateTechControlCar = input("\nWhat is the date of the tech control ?\n")
 
-
+    # test
     # def VerifyCarInsert(self, carRawData): 
     #     car = Car()
     #     counter = 0
