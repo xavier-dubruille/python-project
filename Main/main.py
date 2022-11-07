@@ -15,6 +15,19 @@ from Class.Type import Type
 
 class Application:
     def __init__(self):
+<<<<<<< HEAD
+=======
+        self.buttonAddCar = None
+        self.labelDetails = None
+        self.frameDetails = None
+        self.frameDisplay = None
+        self.buttonDeal = None
+        self.buttonReservation = None
+        self.buttonHistory = None
+        self.buttonStock = None
+        self.window = None
+        self.frameButtons = None
+>>>>>>> 6468e0060cd37b8772e8d24480838965ff331088
         self.police = "courier 15"
         self.title = "Bamboo Concess"
         self.printDetails = ""
@@ -147,7 +160,11 @@ class Application:
         self.frameDetails.columnconfigure(0, weight=1)
 
         car = self.carListStock[event.widget.curselection()[0]]
+<<<<<<< HEAD
         self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar} "
+=======
+        self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
+>>>>>>> 6468e0060cd37b8772e8d24480838965ff331088
         self.labelDetails.configure(text=self.printDetails)
 
     # It will show you which car you sell.
