@@ -34,7 +34,7 @@ class Application:
         self.motorList = Motor.GetAll()
         self.typeList = Type.GetAll()
         self.dealList = Deal.GetAll()
-        self.custoList = Customer.GetAll()
+        self.customerList = Customer.GetAll()
         self.CreateBasicWindow()
 
     # The main display function for the application.
@@ -123,12 +123,12 @@ class Application:
             self.frameDisplay.rowconfigure(i, weight=i)
         self.frameDisplay.columnconfigure(0, weight=1)
 
-        spaceBrand = len(max(self.carListStock, key=lambda car: len(car.nameBrand)).nameBrand) + 4
+        spaceBrand = len(max(self.carListStock, key=lambda x: len(x.nameBrand)).nameBrand) + 4
         spaceType = len(max(self.carListStock, key=lambda x: len(x.nameType)).nameType) + 4
         spaceIdCar = len("Id") + 4
 
         titleColumn = "Id" + " " * 4 + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
-                    spaceType - len("Type")) + "Price"
+                spaceType - len("Type")) + "Price"
         labelColumn = tk.Label(self.frameDisplay, text=titleColumn, anchor="w")
         labelColumn.grid(column=0, row=0, sticky="wen")
 
@@ -143,7 +143,8 @@ class Application:
 
         for car in self.carListStock:
             listboxStock.insert(END,
-                                f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
+                                f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}"
+                                f"{car.nameType:{spaceType}}{car.priceCar}")
             listboxStock.bind('<<ListboxSelect>>', self.DisplayDetailsStock)
 
         listboxStock.configure(yscrollcommand=scrollbar.set)
@@ -156,7 +157,10 @@ class Application:
         self.frameDetails.columnconfigure(0, weight=1)
 
         car = self.carListStock[event.widget.curselection()[0]]
-        self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control : {car.dateTechControlCar}"
+        self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\n" \
+                            f"Price : {car.priceCar}€\n" \
+                            f"Promo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\n" \
+                            f"Next control : {car.dateTechControlCar}"
         self.labelDetails.configure(text=self.printDetails)
 
     # It will show you which car you sell.
@@ -173,13 +177,13 @@ class Application:
             self.frameDisplay.rowconfigure(i, weight=i)
         self.frameDisplay.columnconfigure(0, weight=1)
 
-        spaceBrand = len(max(self.carListHistory, key=lambda car: len(car.nameBrand)).nameBrand) + 4
+        spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.nameBrand)).nameBrand) + 4
         spaceType = len(max(self.carListHistory, key=lambda x: len(x.nameType)).nameType) + 4
         spacePrice = len(max(self.carListHistory, key=lambda x: len(x.priceCar)).priceCar) + 4
         spaceIdCar = len("Id") + 4
 
         titleColumn = "Id" + " " * 4 + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
-                    spaceType - len("Type")) + "Price" + " " * (spacePrice - len("Price")) + "Customer"
+                spaceType - len("Type")) + "Price" + " " * (spacePrice - len("Price")) + "Customer"
         labelTitle = tk.Label(self.frameDisplay, text=titleColumn, anchor="w")
         labelTitle.grid(column=0, row=0, sticky="wen")
 
@@ -194,7 +198,8 @@ class Application:
 
         for car in self.carListHistory:
             listboxHistory.insert(END,
-                                  f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}")
+                                  f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}"
+                                  f"{car.priceCar:{spacePrice}}{car.nameCusto}")
             listboxHistory.bind('<<ListboxSelect>>', self.DisplayDetailsHistory)
 
         listboxHistory.configure(yscrollcommand=scrollbar.set)
@@ -207,10 +212,12 @@ class Application:
         self.frameDetails.columnconfigure(0, weight=1)
 
         car = self.carListHistory[event.widget.curselection()[0]]
-        self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\nPrice : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\nNext control {car.dateTechControlCar}\nThe customer is : {car.nameCusto}"
+        self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\n" \
+                            f"Price : {car.priceCar}€\nPromo : {car.promoCar}%\nIn stock since : {car.dateStockCar}\n" \
+                            f"Next control {car.dateTechControlCar}\nThe customer is : {car.nameCusto}"
         self.labelDetails.configure(text=self.printDetails)
 
-    # It will help you to change the reservation's statut for a particular car.
+    # It will help you to change the reservation's status for a particular car.
     def DisplayWindowRent(self):
         for widget in self.frameButtons.winfo_children():
             if widget.widgetName == "button":
@@ -238,11 +245,11 @@ class Application:
             dropdownCarId = tk.OptionMenu(self.frameDisplay, deal.idCar, *map(lambda car: car.idCar, self.carListStock))
             dropdownCarId.grid(column=1, row=0, sticky="wesn")
 
-            labelIdCusto = tk.Label(self.frameDisplay, text="Customer id : ")
-            labelIdCusto.grid(column=0, row=1, sticky="wesn")
-            dropdownIdCusto = tk.OptionMenu(self.frameDisplay, deal.idCustomer,
-                                            *map(lambda custo: custo.idCustomer, self.custoList))
-            dropdownIdCusto.grid(column=1, row=1, sticky="wesn")
+            labelIdCustomer = tk.Label(self.frameDisplay, text="Customer id : ")
+            labelIdCustomer.grid(column=0, row=1, sticky="wesn")
+            dropdownIdCustomer = tk.OptionMenu(self.frameDisplay, deal.idCustomer,
+                                               *map(lambda x: x.idCustomer, self.customerList))
+            dropdownIdCustomer.grid(column=1, row=1, sticky="wesn")
 
             labelDateStartRentDeal = tk.Label(self.frameDisplay, text="Date of the rent : ")
             labelDateStartRentDeal.grid(column=0, row=2, sticky="wesn")
@@ -278,24 +285,24 @@ class Application:
             self.frameDisplay.rowconfigure(i, weight=1)
 
         if Car.CarFreePlacesStock() <= 40:
-            vars = {
+            idSell = {
                 "idCar": tk.StringVar(),
-                "idCusto": tk.StringVar()
+                "idCustomer": tk.StringVar()
             }
 
             labelCarId = tk.Label(self.frameDisplay, text="Car id : ")
             labelCarId.grid(column=0, row=0, sticky="wesn")
-            dropdownCarId = tk.OptionMenu(self.frameDisplay, vars['idCar'],
+            dropdownCarId = tk.OptionMenu(self.frameDisplay, idSell['idCar'],
                                           *map(lambda idCar: idCar.idCar, self.dealList))
             dropdownCarId.grid(column=1, row=0, sticky="wesn")
 
-            labelIdCusto = tk.Label(self.frameDisplay, text="Customer id : ")
-            labelIdCusto.grid(column=0, row=1, sticky="wesn")
-            dropdownIdCusto = tk.OptionMenu(self.frameDisplay, vars['idCusto'],
-                                            *map(lambda idCusto: idCusto.idCustomer, self.dealList))
-            dropdownIdCusto.grid(column=1, row=1, sticky="wesn")
+            labelIdCustomer = tk.Label(self.frameDisplay, text="Customer id : ")
+            labelIdCustomer.grid(column=0, row=1, sticky="wesn")
+            dropdownIdCustomer = tk.OptionMenu(self.frameDisplay, idSell['idCustomer'],
+                                               *map(lambda x: x.idCustomer, self.dealList))
+            dropdownIdCustomer.grid(column=1, row=1, sticky="wesn")
 
-            buttonMakeDeal = tk.Button(self.frameDisplay, text="Make the deal", command=lambda: Car.InsertDB(vars))
+            buttonMakeDeal = tk.Button(self.frameDisplay, text="Make the deal", command=lambda: Car.InsertDB(idSell))
             buttonMakeDeal.grid(column=1, row=6, sticky="wesn")
 
         else:
@@ -319,8 +326,8 @@ class Application:
             self.frameDisplay.rowconfigure(i, weight=1)
 
         if Car.CarFreePlacesStock() <= 40:
-            # vars = {"nameBrand" : tk.StringVar(), "nameType" : tk.StringVar(), "nameMotor" : tk.StringVar(), "priceCar" : tk.StringVar(),
-            # "promoCar" : tk.StringVar(),"dateTechControlCar" : tk.StringVar()}
+            # vars = {"nameBrand" : tk.StringVar(), "nameType" : tk.StringVar(), "nameMotor" : tk.StringVar(),
+            # "priceCar" : tk.StringVar(), "promoCar" : tk.StringVar(),"dateTechControlCar" : tk.StringVar()}
 
             car = Car()
             car.nameBrand = tk.StringVar()
@@ -339,7 +346,7 @@ class Application:
             labelType = tk.Label(self.frameDisplay, text="Type : ")
             labelType.grid(column=0, row=1, sticky="wesn")
             dropdownType = tk.OptionMenu(self.frameDisplay, car.nameType,
-                                         *map(lambda type: type.nameType, self.typeList))
+                                         *map(lambda x: x.nameType, self.typeList))
             dropdownType.grid(column=1, row=1, sticky="wesn")
 
             labelMotor = tk.Label(self.frameDisplay, text="Motor : ")
@@ -376,19 +383,19 @@ class Application:
         car = Car()
         counter = 0
         # Get the id for the motor
-        while counter < len(self.motorList) or car.idMotor == None:
+        while counter < len(self.motorList) or car.idMotor is None:
             if self.motorList[counter].nameMotor == carRawData.nameMotor.get():
                 car.idMotor = self.motorList[counter].idMotor
             counter += 1
 
         counter = 0
-        while counter < len(self.brandList) or car.idBrand == None:
+        while counter < len(self.brandList) or car.idBrand is None:
             if self.brandList[counter].nameBrand == carRawData.nameBrand.get():
                 car.idBrand = self.brandList[counter].idBrand
             counter += 1
 
         counter = 0
-        while counter < len(self.typeList) or car.idType == None:
+        while counter < len(self.typeList) or car.idType is None:
             if self.typeList[counter].nameType == carRawData.nameType.get():
                 car.idType = self.typeList[counter].idType
             counter += 1
@@ -398,6 +405,9 @@ class Application:
         car.promoCar = carRawData.promoCar.get()
         car.InsertDB()
         self.carListStock = Car.CarListStock()
+
+    def VerifyRent(self, deal):
+        pass
 
 
 # It will launch the application
