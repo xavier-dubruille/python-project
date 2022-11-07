@@ -216,7 +216,7 @@ class Application:
         if Car.CarFreePlacesStock() <= 40:
             deal = Deal()
             deal.idCar = tk.StringVar()
-            deal.idCusto = tk.StringVar()
+            deal.idCustomer = tk.StringVar()
             deal.isRentDeal = 1
             deal.dateStartRentDeal = tk.StringVar()
             deal.durationDaysRentDeal = tk.StringVar()
@@ -229,7 +229,7 @@ class Application:
 
             labelIdCusto = tk.Label(self.frameDisplay, text = "Customer id : ")
             labelIdCusto.grid(column = 0, row = 1, sticky = "wesn")
-            dropdownIdCusto = tk.OptionMenu(self.frameDisplay, deal.idCusto, *map(lambda custo: custo.idCusto, self.custoList))
+            dropdownIdCusto = tk.OptionMenu(self.frameDisplay, deal.idCustomer, *map(lambda custo: custo.idCustomer, self.custoList))
             dropdownIdCusto.grid(column = 1, row = 1, sticky = "wesn")
 
             labelDateStartRentDeal = tk.Label(self.frameDisplay, text = "Date of the rent : ")
@@ -279,7 +279,7 @@ class Application:
 
             labelIdCusto = tk.Label(self.frameDisplay, text = "Customer id : ")
             labelIdCusto.grid(column = 0, row = 1, sticky = "wesn")
-            dropdownIdCusto = tk.OptionMenu(self.frameDisplay, vars['idCusto'], *map(lambda idCusto: idCusto.idCusto, self.dealList))
+            dropdownIdCusto = tk.OptionMenu(self.frameDisplay, vars['idCusto'], *map(lambda idCusto: idCusto.idCustomer, self.dealList))
             dropdownIdCusto.grid(column = 1, row = 1, sticky = "wesn")
 
             buttonMakeDeal = tk.Button(self.frameDisplay, text = "Make the deal", command = lambda : Car.InsertDB(vars))

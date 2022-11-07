@@ -1,14 +1,15 @@
 import sqlite3 as sql
 import sys
 
-class DBAccess():
+
+class DBAccess:
 
     @staticmethod
     def DBCursor():
-        try: 
+        try:
             dbConnection = sql.connect("./Db/bambooConcess.db")
             return dbConnection.cursor(), dbConnection
-        except: 
+        except:
             print("Db Could not be resolved")
             print(sys.exc_info())
             return None
@@ -18,59 +19,59 @@ class DBAccess():
         cursor.close()
 
     @classmethod
-    def LoadWithId(clss, id):
-        cursor = clss.DBCursor()[0]
-        if cursor != None:
-            try: 
-                cursor.execute("SELECT * FROM %s WHERE %s = %s" % (clss.NameTable(), clss.IdColumn(), id))
+    def LoadWithId(cls, idNumber):
+        cursor = cls.DBCursor()[0]
+        if cursor is not None:
+            try:
+                cursor.execute("SELECT * FROM %s WHERE %s = %s" % (cls.NameTable(), cls.IdColumn(), idNumber))
                 result = cursor.fetchone()
-                return clss.LoadResults(cursor, result)
+                return cls.LoadResults(cursor, result)
 
-            except: 
+            except:
                 print("Error in LoadWithId")
                 print(sys.exc_info())
                 return None
-                
+
             finally:
-                clss.DBClose(cursor)
-    
+                cls.DBClose(cursor)
+
     @classmethod
-    def LoadResults(clss, cursor, data): 
-        newInstance = clss()
+    def LoadResults(cls, cursor, data):
+        newInstance = cls()
         counter = 0
         for columnName in cursor.description:
             setattr(newInstance, columnName[0], data[counter])
             counter += 1
         return newInstance
-    
+
     @classmethod
-    def GetAll(clss):
-        cursor = clss.DBCursor()[0]
+    def GetAll(cls):
+        cursor = cls.DBCursor()[0]
         instancesList = []
-        if cursor != None: 
-            try: 
-                cursor.execute("SELECT * FROM %s" % (clss.NameTable()))
+        if cursor is not None:
+            try:
+                cursor.execute("SELECT * FROM %s" % (cls.NameTable()))
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
-                    newInstance = clss.LoadResults(cursor, row)
+                    newInstance = cls.LoadResults(cursor, row)
                     instancesList.append(newInstance)
                 return instancesList
-            except: 
+            except:
                 print("Error in GetAll")
                 print(sys.exc_info()[0])
                 return None
 
-            finally: 
-                clss.DBClose(cursor)
+            finally:
+                cls.DBClose(cursor)
 
     @classmethod
-    def IsStockedWithId(clss, id): 
-        cursor = clss.DBCursor()[0]
-        if cursor != None:
+    def IsStockedWithId(cls, idNumber):
+        cursor = cls.DBCursor()[0]
+        if cursor is not None:
             try:
-                cursor.execute("SELECT * FROM %s WHERE %s = %s" % (clss.NameTable(), clss.IdColumn(), id))
+                cursor.execute("SELECT * FROM %s WHERE %s = %s" % (cls.NameTable(), cls.IdColumn(), idNumber))
                 result = cursor.fetchone()
-                if result: 
+                if result:
                     return True
                 return False
             except:
@@ -78,4 +79,4 @@ class DBAccess():
                 print(sys.exc_info())
                 return None
             finally:
-                clss.DBClose(cursor)
+                cls.DBClose(cursor)

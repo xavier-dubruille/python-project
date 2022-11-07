@@ -4,7 +4,7 @@ import sys
 class Deal(DB):
     def __init__(self): 
         self.idCar = None
-        self.idCusto = None
+        self.idCustomer = None
     
     @staticmethod
     def NameTable():

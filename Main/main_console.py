@@ -14,7 +14,7 @@ class Application:
         self.motorList = Motor.GetAll()
         self.typeList = Type.GetAll()
         self.dealList = Deal.GetAll()
-        self.custoList = Customer.GetAll()
+        self.customerList = Customer.GetAll()
         self.showMainMenu()
 
     def showMainMenu(self):
@@ -78,7 +78,7 @@ class Application:
         if Car.CarFreePlacesStock() <= 40:
             deal = Deal()
             deal.idCar = input("What is the car's id ?")
-            deal.idCusto = input("What is the customer's id ?")
+            deal.idCustomer = input("What is the customer's id ?")
             deal.isRentDeal = 1
             deal.dateStartRentDeal = input("When does the rent start ?")
             deal.durationDaysRentDeal = input("How many days will the rent spend ?")
@@ -89,7 +89,7 @@ class Application:
         if Car.CarFreePlacesStock() <= 40:
             deal = Deal()
             deal.idCar = input("What is the car's id ?")
-            deal.idCusto = input("What is the customer's id ? ")
+            deal.idCustomer = input("What is the customer's id ? ")
 
     def addACar(self):
         car = Car()
