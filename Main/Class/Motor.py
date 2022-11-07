@@ -1,11 +1,11 @@
 from Class.DB import DBAccess as DB
-import sys
+
 
 class Motor(DB):
-    def __init__(self): 
+    def __init__(self):
         self.idMotor = None
         self.nameMotor = None
-    
+
     @staticmethod
     def NameTable():
         # Return the name table

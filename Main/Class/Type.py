@@ -1,8 +1,8 @@
 from Class.DB import DBAccess as DB
-import sys
+
 
 class Type(DB):
-    def __init__(self): 
+    def __init__(self):
         self.idType = None
         self.nameType = None
 

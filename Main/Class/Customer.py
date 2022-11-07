@@ -1,12 +1,14 @@
 from Class.DB import DBAccess as DB
-import sys
+
 
 class Customer(DB):
     def __init__(self):
         self.idCusto = None
-    
+
+    @staticmethod
     def NameTable():
         return "Customer"
 
+    @staticmethod
     def IdColumn():
         return "isCusto"

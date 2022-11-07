@@ -1,5 +1,5 @@
 from Class.DB import DBAccess as DB
-import sys
+
 
 class Brand(DB):
     def __init__(self): 

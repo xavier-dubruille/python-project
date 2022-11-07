@@ -1,11 +1,11 @@
 from Class.DB import DBAccess as DB
-import sys
+
 
 class Deal(DB):
-    def __init__(self): 
+    def __init__(self):
         self.idCar = None
         self.idCustomer = None
-    
+
     @staticmethod
     def NameTable():
         # Return the name table
