@@ -1,15 +1,16 @@
-from Class.DB import DBAccess as DB
-from Class.Car import Car
-from Class.Brand import Brand
-from Class.Type import Type
-from Class.Motor import Motor
-from Class.Deal import Deal
-from Class.Customer import Customer
-from tkinter import *
 import tkinter as tk
 import tkinter.font as font
+from tkinter import *
+
 from tkcalendar import DateEntry as tkCal
-import sys
+
+from Class.Brand import Brand
+from Class.Car import Car
+from Class.Customer import Customer
+from Class.Deal import Deal
+from Class.Motor import Motor
+from Class.Type import Type
+
 
 class Application:
     def __init__(self): 
