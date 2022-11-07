@@ -60,7 +60,7 @@ class Application:
             Application.menuChoice(self)
 
     def displayHistory(self):
-        spaceBrand = len(max(self.carListHistory, key=lambda car: len(car.nameBrand)).nameBrand) + 4
+        spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.nameBrand)).nameBrand) + 4
         spaceType = len(max(self.carListHistory, key=lambda x: len(x.nameType)).nameType) + 4
         spacePrice = len(max(self.carListHistory, key=lambda x: len(x.priceCar)).priceCar) + 4
         spaceIdCar = len("Id") + 4
