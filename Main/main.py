@@ -12,8 +12,11 @@ from Class.Motor import Motor
 from Class.Type import Type
 
 
+
 class Application:
     def __init__(self):
+<<<<<<< HEAD
+=======
         self.buttonAddCar = None
         self.labelDetails = None
         self.frameDetails = None
@@ -24,6 +27,7 @@ class Application:
         self.buttonStock = None
         self.window = None
         self.frameButtons = None
+>>>>>>> 6468e0060cd37b8772e8d24480838965ff331088
         self.police = "courier 15"
         self.title = "Bamboo Concess"
         self.printDetails = ""
