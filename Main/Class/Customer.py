@@ -3,7 +3,7 @@ from Class.DB import DBAccess as DB
 
 class Customer(DB):
     def __init__(self):
-        self.idCusto = None
+        self.idCustomer = None
 
     @staticmethod
     def NameTable():

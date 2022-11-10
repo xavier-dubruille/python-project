@@ -1,4 +1,3 @@
-import sqlite3
 import sqlite3 as sql
 import sys
 
@@ -8,9 +7,9 @@ class DBAccess:
     @staticmethod
     def DBCursor():
         try:
-            dbConnection = sql.connect("./Db/bambooConcess.db")
+            dbConnection = sql.connect("../Db/bambooConcess.db")
             return dbConnection.cursor(), dbConnection
-        except sqlite3.OperationalError:
+        except sql.OperationalError:
             print(f"Db was not resolved {sys.exc_info()}")
             return None
 
@@ -27,9 +26,8 @@ class DBAccess:
                 result = cursor.fetchone()
                 return cls.LoadResults(cursor, result)
 
-            except:
-                print("Error in LoadWithId")
-                print(sys.exc_info())
+            except sql.OperationalError:
+                print(f"Error in LoadWithId {sys.exc_info()}")
                 return None
 
             finally:
@@ -56,9 +54,8 @@ class DBAccess:
                     newInstance = cls.LoadResults(cursor, row)
                     instancesList.append(newInstance)
                 return instancesList
-            except:
-                print("Error in GetAll")
-                print(sys.exc_info()[0])
+            except sql.OperationalError:
+                print(f"Error in GetAll {sys.exc_info()}")
                 return None
 
             finally:
@@ -74,9 +71,8 @@ class DBAccess:
                 if result:
                     return True
                 return False
-            except:
-                print("Error in IsStocked")
-                print(sys.exc_info())
+            except sql.OperationalError:
+                print(f"Error in IsStocked {sys.exc_info()}")
                 return None
             finally:
                 cls.DBClose(cursor)

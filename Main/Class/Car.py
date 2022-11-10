@@ -1,5 +1,6 @@
 from Class.DB import DBAccess as DB
 import sys
+import sqlite3 as sql
 
 
 class Car(DB):
@@ -41,9 +42,8 @@ class Car(DB):
                     car = cls.LoadResults(cursor, row)
                     carList.append(car)
                 return carList
-            except:
-                print("Error in CarListStock")
-                print(sys.exc_info())
+            except sql.OperationalError:
+                print(f"Error in CarListStock {sys.exc_info()}")
                 return None
             finally:
                 DB.DBClose(cursor)
@@ -65,9 +65,8 @@ class Car(DB):
                     carList.append(car)
                 return carList
 
-            except:
-                print("Error in CarListHistory")
-                print(sys.exc_info())
+            except sql.OperationalError:
+                print(f"Error in CarListHistory {sys.exc_info()}")
                 return None
             finally:
                 DB.DBClose(cursor)
@@ -80,9 +79,8 @@ class Car(DB):
                 cursor.execute("SELECT count(*) FROM Car NATURAL JOIN Brand NATURAL JOIN Motor NATURAL JOIN Type "
                                "WHERE idCar NOT IN (select idCar FROM deal WHERE isRentDeal = 0)")
                 return cursor.fetchone()[0]
-            except:
-                print("Error in CarFreePlacesStock")
-                print(sys.exc_info())
+            except sql.OperationalError:
+                print(f"Error in CarFreePlacesStock {sys.exc_info()}")
                 return None
             finally:
                 DB.DBClose(cursor)
@@ -97,8 +95,9 @@ class Car(DB):
                     (self.dateTechControlCar, self.priceCar, self.idBrand, self.idType, self.idMotor,
                      self.promoCar))
                 dbConnection.commit()
-            except:
-                print("Error in InsertDB")
-                print(sys.exc_info())
+                return True
+            except sql.OperationalError:
+                print(f"Error in InsertDB {sys.exc_info()}")
+                return False
             finally:
                 DB.DBClose(cursor)
