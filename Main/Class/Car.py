@@ -90,10 +90,9 @@ class Car(DB):
         if cursor is not None:
             try:
                 cursor.execute(
-                    "INSERT INTO Car (dateTechControlCar, priceCar, idBrand, idType, idMotor, promoCar) "
-                    "VALUES (?, ?, ?, ?, ?, ?)",
-                    (self.dateTechControlCar, self.priceCar, self.idBrand, self.idType, self.idMotor,
-                     self.promoCar))
+                    f"INSERT INTO Car (dateTechControlCar, priceCar, idBrand, idType, idMotor, promoCar) "
+                    f"VALUES ({self.dateTechControlCar}, {self.priceCar}, {self.idBrand},"
+                    f"{self.idType}, {self.idMotor},{self.promoCar})")
                 dbConnection.commit()
                 return True
             except sql.OperationalError:
