@@ -4,7 +4,7 @@ import sys
 
 class Car(DB):
     def __init__(self):
-        self.idCard = None
+        self.idCar = None
         self.dateStockCar = None
         self.dateTechControlCar = None
         self.priceCar = None
