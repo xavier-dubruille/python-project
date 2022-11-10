@@ -7,10 +7,12 @@ from Class.Customer import Customer
 import re
 
 
-def checkNumberInput(string):
-    if re.search('[^0-9]', str(string)) or string == "":
+def checkNumberInput(string, minimum, maximum):
+    if not string.isdigit():
         return False
-    return True
+    if maximum >= int(string) >= minimum:
+        return True
+    return False
 
 
 class ApplicationConsole:
@@ -30,13 +32,11 @@ class ApplicationConsole:
 
     def menuChoice(self):
         menuInput = ""
-        while type(menuInput) == str and 6 < int(menuInput) < 0:
+        while not checkNumberInput(menuInput, 1, 5):
             menuInput = input(
                 "\nWhere do you want to go now ?\n 1 : Show your stock."
                 "\n 2 : Show your transaction history.\n 3 : Rent a "
                 "car.\n 4 : Make a deal.\n 5 : Add a new car to your stock.\n -> ")
-            if checkNumberInput(menuInput):
-                menuInput = int(menuInput)
         menuInput = int(menuInput)
         if menuInput == 1:
             ApplicationConsole.displayStock(self)

@@ -2,9 +2,11 @@ import re
 
 
 def checkNumberInput(string, minimum, maximum):
-    if re.search('[^0-9]', str(string)) and string != "" and maximum <= int(string) <= minimum:
+    if not string.isdigit():
         return False
-    return True
+    if maximum > int(string) > minimum:
+        return True
+    return False
 
 
 inp = " "
