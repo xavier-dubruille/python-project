@@ -4,7 +4,6 @@ from Class.Type import Type
 from Class.Motor import Motor
 from Class.Deal import Deal
 from Class.Customer import Customer
-import re
 
 
 def checkNumberInput(string, minimum, maximum):
@@ -58,12 +57,17 @@ class ApplicationConsole:
         for car in self.carListStock:
             print(f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
 
-        nextStep = int(
-            input("\nWhat do you want to do next ?\n 1 : Return to the choice menu.\n 2 : See a car's details.\n -> "))
+        nextStep = ""
+        while not checkNumberInput(nextStep, 1, 2):
+            nextStep = input("\nWhat do you want to do next ?\n 1 : Return to the choice menu."
+                             "\n 2 : See a car's details.\n -> ")
+        nextStep = int(nextStep)
         if nextStep == 1:
             ApplicationConsole.menuChoice(self)
         elif nextStep == 2:
-            carId = int(input("\nWhich car do you want to see details from ?\n-> "))
+            carId = ""
+            while not carId.isdigit() and int(carId) not in self.carListStock:
+                carId = input("\nWhich car do you want to see details from ?\n-> ")
             for car in self.carListStock:
                 if carId == car.idCar:
                     print(f"\nBrand : {car.nameBrand}\nType : {car.nameType}"
@@ -85,7 +89,6 @@ class ApplicationConsole:
             print(
                 f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}"
                 f"{car.nameType:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}")
-
         ApplicationConsole.menuChoice(self)
 
     @staticmethod
