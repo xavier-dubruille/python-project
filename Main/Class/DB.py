@@ -1,3 +1,4 @@
+import sqlite3
 import sqlite3 as sql
 import sys
 
@@ -9,9 +10,8 @@ class DBAccess:
         try:
             dbConnection = sql.connect("./Db/bambooConcess.db")
             return dbConnection.cursor(), dbConnection
-        except:
-            print("Db Could not be resolved")
-            print(sys.exc_info())
+        except sqlite3.OperationalError:
+            print(f"Db was not resolved {sys.exc_info()}")
             return None
 
     @staticmethod
