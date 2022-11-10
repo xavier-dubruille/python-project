@@ -22,7 +22,7 @@ class DBAccess:
         cursor = cls.DBCursor()[0]
         if cursor is not None:
             try:
-                cursor.execute("SELECT * FROM %s WHERE %s = %s" % (cls.NameTable(), cls.IdColumn(), idNumber))
+                cursor.execute(f"SELECT * FROM {cls.NameTable()} WHERE {cls.IdColumn()} = {idNumber}")
                 result = cursor.fetchone()
                 return cls.LoadResults(cursor, result)
 
@@ -48,7 +48,7 @@ class DBAccess:
         instancesList = []
         if cursor is not None:
             try:
-                cursor.execute("SELECT * FROM %s" % (cls.NameTable()))
+                cursor.execute(f"SELECT * FROM {cls.NameTable()}")
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
                     newInstance = cls.LoadResults(cursor, row)
@@ -66,7 +66,7 @@ class DBAccess:
         cursor = cls.DBCursor()[0]
         if cursor is not None:
             try:
-                cursor.execute("SELECT * FROM %s WHERE %s = %s" % (cls.NameTable(), cls.IdColumn(), idNumber))
+                cursor.execute(f"SELECT * FROM {cls.NameTable()} WHERE {cls.IdColumn()} = {idNumber}")
                 result = cursor.fetchone()
                 if result:
                     return True

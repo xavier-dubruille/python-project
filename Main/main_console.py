@@ -4,9 +4,16 @@ from Class.Type import Type
 from Class.Motor import Motor
 from Class.Deal import Deal
 from Class.Customer import Customer
+import re
 
 
-class Application:
+def checkNumberInput(string):
+    if re.search('[^0-9]', str(string)) or string == "":
+        return False
+    return True
+
+
+class ApplicationConsole:
     def __init__(self):
         self.carListStock = Car.CarListStock()
         self.carListHistory = Car.CarListHistory()
@@ -19,22 +26,28 @@ class Application:
 
     def showMainMenu(self):
         print("Welcome to Bamboo Concess")
-        Application.menuChoice(self)
+        ApplicationConsole.menuChoice(self)
 
     def menuChoice(self):
-        menuInput = int(input(
-            "\nWhere do you want to go now ?\n 1 : Show your stock.\n 2 : Show your transaction history.\n 3 : Rent a "
-            "car.\n 4 : Make a deal.\n 5 : Add a new car to your stock.\n -> "))
+        menuInput = ""
+        while type(menuInput) == str and 6 < int(menuInput) < 0:
+            menuInput = input(
+                "\nWhere do you want to go now ?\n 1 : Show your stock."
+                "\n 2 : Show your transaction history.\n 3 : Rent a "
+                "car.\n 4 : Make a deal.\n 5 : Add a new car to your stock.\n -> ")
+            if checkNumberInput(menuInput):
+                menuInput = int(menuInput)
+        menuInput = int(menuInput)
         if menuInput == 1:
-            Application.displayStock(self)
+            ApplicationConsole.displayStock(self)
         elif menuInput == 2:
-            Application.displayHistory(self)
+            ApplicationConsole.displayHistory(self)
         elif menuInput == 3:
-            Application.rentACar()
+            ApplicationConsole.rentACar()
         elif menuInput == 4:
-            Application.makeADeal()
+            ApplicationConsole.makeADeal()
         elif menuInput == 5:
-            Application.addACar()
+            ApplicationConsole.addACar()
 
     def displayStock(self):
         spaceBrand = len(max(self.carListStock, key=lambda x: len(x.nameBrand)).nameBrand) + 4
@@ -48,7 +61,7 @@ class Application:
         nextStep = int(
             input("\nWhat do you want to do next ?\n 1 : Return to the choice menu.\n 2 : See a car's details.\n -> "))
         if nextStep == 1:
-            Application.menuChoice(self)
+            ApplicationConsole.menuChoice(self)
         elif nextStep == 2:
             carId = int(input("\nWhich car do you want to see details from ?\n-> "))
             for car in self.carListStock:
@@ -57,7 +70,7 @@ class Application:
                           f"\nMotor : {car.nameMotor}\nPrice : {str(car.priceCar)}€"
                           f"\nPromo : {str(car.promoCar)}%\nIn stock since : {str(car.dateStockCar)}"
                           f"\nNext control : {str(car.dateTechControlCar)}")
-            Application.menuChoice(self)
+            ApplicationConsole.menuChoice(self)
 
     def displayHistory(self):
         spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.nameBrand)).nameBrand) + 4
@@ -73,7 +86,7 @@ class Application:
                 f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}"
                 f"{car.nameType:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}")
 
-        Application.menuChoice(self)
+        ApplicationConsole.menuChoice(self)
 
     @staticmethod
     def rentACar():
@@ -133,4 +146,4 @@ class Application:
     #     self.carListStock = Car.CarListStock()
 
 
-Application()
+ApplicationConsole()
