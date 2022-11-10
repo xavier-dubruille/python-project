@@ -39,7 +39,8 @@ class Application:
     def displayStock(self):
         spaceBrand = len(max(self.carListStock, key=lambda car: len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(self.carListStock, key=lambda x: len(x.nameType)).nameType) + 4
-        spaceIdCar = len("Id") + 4
+        spaceIdCar = len("Id") + 41
+        
         print("\nId" + " " * 4 + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
                     spaceType - len("Type")) + "Price")
         for car in self.carListStock:
