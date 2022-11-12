@@ -61,33 +61,29 @@ class DBAccess:
                 cls.DBClose(cursor)
 
     @classmethod
+    def IsStockedWithId(cls, idNumber):
+        cursor = cls.DBCursor()[0]
+        if cursor is not None:
+            try:
+                cursor.execute(f"SELECT * FROM {cls.NameTable()} WHERE {cls.IdColumn()} = {idNumber}")
+                result = cursor.fetchone()
+                if result:
+                    return True
+                return False
+            except sql.OperationalError:
+                print(f"Error in IsStocked {sys.exc_info()}")
+                return None
+            finally:
+                cls.DBClose(cursor)
+
+    @classmethod
     def Get(cls, idCar):
         cursor, dbConnection = cls.DBCursor()
         try:
-            cursor.execute(f"SELECT id, name FROM {cls.NameTable()} JOIN Car "
-                           f"ON {cls.NameTable()}.{cls.IdColumn()} = Car.id{cls.NameTable()} WHERE idCar = {idCar}")
+            cursor.execute(f"SELECT * FROM {cls.NameTable()} LEFT JOIN Cars WHERE idCar = {idCar}")
             return cls.LoadResults(cursor, cursor.fetchone())
         except sql.OperationalError:
             print(f"Error in Get {sys.exc_info()}")
-            return None
-        finally:
-            cls.DBClose(cursor)
-
-    @classmethod
-    def GetId(cls, name):
-        cursor, dbConnection = cls.DBCursor()
-        try:
-            cursor.execute(f"SELECT {cls.IdColumn} FROM {cls.NameTable()} WHERE name = '{name}'")
-            result = cursor.fetchone()
-            if not result:
-                cursor.execute(
-                    f"INSERT INTO {cls.NameTable()} (name) VALUES ('{name}')")
-                dbConnection.commit()
-                cursor.execute("SELECT last_insert_rowid()")
-                result = cursor.fetchone()[0]
-            return result
-        except sql.OperationalError:
-            print(f"Error in GetIdFromName {sys.exc_info()}")
             return None
         finally:
             cls.DBClose(cursor)

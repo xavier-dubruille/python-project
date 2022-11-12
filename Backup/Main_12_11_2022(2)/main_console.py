@@ -18,8 +18,8 @@ def CheckNumberInput(string, minimum, maximum):
 
 class ApplicationConsole:
     def __init__(self):
-        self.carListStock = Car.GetCarList(True)
-        self.carListHistory = Car.GetCarList(False)
+        self.carListStock = Car.CarListStock()
+        self.carListHistory = Car.CarListHistory()
         self.brandList = Brand.GetAll()
         self.motorList = Motor.GetAll()
         self.typeList = Type.GetAll()
@@ -29,7 +29,7 @@ class ApplicationConsole:
 
     def ShowMainMenu(self):
         print("Welcome to Bamboo Concess")
-        self.MenuChoice()
+        ApplicationConsole.MenuChoice(self)
 
     def MenuChoice(self):
         menuInput = ""
@@ -40,25 +40,24 @@ class ApplicationConsole:
                 "car.\n 4 : Make a deal.\n 5 : Add a new car to your stock.\n -> ")
         menuInput = int(menuInput)
         if menuInput == 1:
-            self.DisplayStock()
+            ApplicationConsole.DisplayStock(self)
         elif menuInput == 2:
-            self.DisplayHistory()
+            ApplicationConsole.DisplayHistory(self)
         elif menuInput == 3:
-            self.RentACar()
+            ApplicationConsole.RentACar()
         elif menuInput == 4:
-            self.MakeADeal()
+            ApplicationConsole.MakeADeal()
         elif menuInput == 5:
-            self.AddACar()
+            ApplicationConsole.AddACar()
 
     def DisplayStock(self):
-        spaceBrand = len(max(self.carListStock, key=lambda x: len(x.brand.name)).brand.name) + 4
-        spaceType = len(max(self.carListStock, key=lambda x: len(x.type.name)).type.name) + 4
+        spaceBrand = len(max(self.carListStock, key=lambda x: len(x.nameBrand)).nameBrand) + 4
+        spaceType = len(max(self.carListStock, key=lambda x: len(x.nameType)).nameType) + 4
         spaceIdCar = len("Id") + 4
         print("\nId" + " " * 4 + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
-                spaceType - len("Type")) + "Price (€)")
+                spaceType - len("Type")) + "Price")
         for car in self.carListStock:
-            print(
-                f"{str(car.idCar):{spaceIdCar}}{car.brand.name:{spaceBrand}}{car.type.name:{spaceType}}{car.priceCar}")
+            print(f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}{car.priceCar}")
 
         nextStep = ""
         while not CheckNumberInput(nextStep, 1, 2):
@@ -66,7 +65,7 @@ class ApplicationConsole:
                              "\n 2 : See a car's details.\n -> ")
         nextStep = int(nextStep)
         if nextStep == 1:
-            self.MenuChoice()
+            ApplicationConsole.MenuChoice(self)
         elif nextStep == 2:
             goodChoice = False
             while not goodChoice:
@@ -75,67 +74,50 @@ class ApplicationConsole:
                     carId = int(carId)
                     for car in self.carListStock:
                         if carId == car.idCar:
-                            print(f"\nBrand : {car.brand.name}\nType : {car.type.name}"
-                                  f"\nMotor : {car.motor.name}\nPrice : {str(car.priceCar)}€"
+                            print(f"\nBrand : {car.nameBrand}\nType : {car.nameType}"
+                                  f"\nMotor : {car.nameMotor}\nPrice : {str(car.priceCar)}€"
                                   f"\nPromo : {str(car.promoCar)}%\nIn stock since : {str(car.dateStockCar)}"
                                   f"\nNext control : {str(car.dateTechControlCar)}")
                             goodChoice = True
                             break
-            self.MenuChoice()
+            ApplicationConsole.MenuChoice(self)
 
     def DisplayHistory(self):
-        spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.brand.name)).brand.name) + 4
-        spaceType = len(max(self.carListHistory, key=lambda x: len(x.type.name)).type.name) + 4
-        spacePrice = len(str(max(self.carListHistory, key=lambda x: len(str(x.priceCar))).priceCar)) + 4
-        spaceId = len("Id") + 4
+        spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.nameBrand)).nameBrand) + 4
+        spaceType = len(max(self.carListHistory, key=lambda x: len(x.nameType)).nameType) + 4
+        spacePrice = len(max(self.carListHistory, key=lambda x: len(x.priceCar)).priceCar) + 4
+        spaceIdCar = len("Id") + 4
 
-        print("\nId" + " " * (spaceId - len("Id")) + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
-                spaceType - len("Type")) + "Price (€)" + " " * (spacePrice - len("Price (€)")) + "Customer")
+        print("\nId" + " " * 4 + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
+                spaceType - len("Type")) + "Price (€)" + " " * (spacePrice - len("Price")) + "Customer")
 
         for car in self.carListHistory:
             print(
-                f"{str(car.idCar):{spaceId}}{car.brand.name:{spaceBrand}}"
-                f"{car.type.name:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}")
-        self.MenuChoice()
+                f"{str(car.idCar):{spaceIdCar}}{car.nameBrand:{spaceBrand}}"
+                f"{car.nameType:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}")
+        ApplicationConsole.MenuChoice(self)
 
-    def RentACar(self):
+    @staticmethod
+    def RentACar():
         if Car.CarFreePlacesStock() <= 40:
             deal = Deal()
-            goodChoice = False
-            idCar = None
-            while not goodChoice:
-                idCar = input("What is the car's id ?\n-> ")
-                if idCar.isdigit():
-                    idCar = int(idCar)
-                    for car in self.carListStock:
-                        if car.idCar == idCar:
-                            goodChoice = True
-            deal.idCar = int(idCar)
-            spaceId = len(str(max(self.customerList, key=lambda x: len(str(x.id))).id)) + 4
-            longestCustomer = max(self.customerList, key=lambda x: len(x.lastName))
-            spaceName = len(f"{longestCustomer.firstName[0]}.{longestCustomer.lastName}") + 4
-            print("List of customers : ")
-            print("Id" + " " * (spaceId - len("Id")) + "Name" + " " * (spaceName - len("Name")) + "Phone")
-            for customer in self.customerList:
-                print(
-                    f"{str(customer.id):{spaceId}}{f'{customer.firstName[0]}.{customer.lastName}':{spaceName}}"
-                    f"{customer.phone}")
+            deal.idCar = input("What is the car's id ?")
             deal.idCustomer = input("What is the customer's id ?")
             deal.isRentDeal = 1
             deal.dateStartRentDeal = input("When does the rent start ?")
             deal.durationDaysRentDeal = input("How many days will the rent spend ?")
         else:
-            print("\nNo Free places.")
-        self.MenuChoice()
+            print("No Free places.")
 
-    def MakeADeal(self):
+    @staticmethod
+    def MakeADeal():
         if Car.CarFreePlacesStock() <= 40:
             deal = Deal()
             deal.idCar = input("What is the car's id ?")
             deal.idCustomer = input("What is the customer's id ? ")
-        self.MenuChoice()
 
-    def AddACar(self):
+    @staticmethod
+    def AddACar():
         if Car.CarFreePlacesStock() <= 40:
             car = Car()
             nameBrand = ""
@@ -161,13 +143,12 @@ class ApplicationConsole:
                 car.dateTechControlCar = input("\nWhat is the date of the tech control ?\n-> ")
                 if re.search("[0-9/]", car.dateTechControlCar):
                     goodDate = True
-            car.brand.id = Brand.GetId(nameBrand)
-            car.type.id = Type.GetId(nameType)
-            car.motor.id = Motor.GetId(nameMotor)
+            car.idBrand = Brand.GetId(nameBrand)
+            car.idType = Type.GetId(nameType)
+            car.idMotor = Motor.GetId(nameMotor)
             print("Executed") if (car.InsertDB()) else print("Not executed")
         else:
             print("No free places in stock.")
-        self.MenuChoice()
 
     # def VerifyCarInsert(self, carRawData):
     #     car = Car()
@@ -193,7 +174,7 @@ class ApplicationConsole:
     #     car.dateTechControlCar = carRawData.dateTechControlCar.get()
     #     car.priceCar = float(carRawData.priceCar.get())
     #     car.promoCar = carRawData.promoCar.get()
-    #     car.InsertDB()
+    #     car.InsertDB()        
     #     self.carListStock = Car.CarListStock()
 
 
