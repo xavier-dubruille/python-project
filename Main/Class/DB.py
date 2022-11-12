@@ -61,11 +61,12 @@ class DBAccess:
                 cls.DBClose(cursor)
 
     @classmethod
-    def Get(cls, idCar):
+    def GetComponent(cls, idCar):
         cursor, dbConnection = cls.DBCursor()
         try:
-            cursor.execute(f"SELECT id, name FROM {cls.NameTable()} JOIN Car "
-                           f"ON {cls.NameTable()}.{cls.IdColumn()} = Car.id{cls.NameTable()} WHERE idCar = {idCar}")
+            query = f"SELECT id, name FROM {cls.NameTable()} JOIN Car " \
+                    f"ON {cls.NameTable()}.{cls.IdColumn()} = Car.id{cls.NameTable()} WHERE idCar = {idCar}"
+            cursor.execute(query)
             return cls.LoadResults(cursor, cursor.fetchone())
         except sql.OperationalError:
             print(f"Error in Get {sys.exc_info()}")
@@ -77,11 +78,12 @@ class DBAccess:
     def GetId(cls, name):
         cursor, dbConnection = cls.DBCursor()
         try:
-            cursor.execute(f"SELECT {cls.IdColumn} FROM {cls.NameTable()} WHERE name = '{name}'")
+            query = f"SELECT {cls.IdColumn} FROM {cls.NameTable()} WHERE name = '{name}'"
+            cursor.execute(query)
             result = cursor.fetchone()
             if not result:
-                cursor.execute(
-                    f"INSERT INTO {cls.NameTable()} (name) VALUES ('{name}')")
+                query = f"INSERT INTO {cls.NameTable()} (name) VALUES ('{name}')"
+                cursor.execute(query)
                 dbConnection.commit()
                 cursor.execute("SELECT last_insert_rowid()")
                 result = cursor.fetchone()[0]

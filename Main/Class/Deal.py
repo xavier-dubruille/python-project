@@ -5,6 +5,9 @@ class Deal(DB):
     def __init__(self):
         self.idCar = None
         self.idCustomer = None
+        self.isRent = None
+        self.dateStartRent = None
+        self.durationDaysRent = None
 
     @staticmethod
     def NameTable():
@@ -14,5 +17,4 @@ class Deal(DB):
     @staticmethod
     def IdColumn():
         # Return the id column
-        return "idDeal"
-
+        return "id"

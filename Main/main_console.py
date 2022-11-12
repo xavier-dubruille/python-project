@@ -8,12 +8,22 @@ from Class.Customer import Customer
 import re
 
 
-def CheckNumberInput(string, minimum, maximum):
+def CheckNumberInput(string, minimum=None, maximum=None):
     if not string.isdigit():
         return False
-    if maximum >= int(string) >= minimum:
-        return True
-    return False
+    if maximum is not None and minimum is not None:
+        if maximum >= int(string) >= minimum:
+            return True
+        return False
+    elif maximum is not None:
+        if maximum >= int(string):
+            return True
+        return False
+    elif minimum is not None:
+        if int(string) >= minimum:
+            return True
+        return False
+    return True
 
 
 class ApplicationConsole:
@@ -36,18 +46,15 @@ class ApplicationConsole:
         while not CheckNumberInput(menuInput, 1, 5):
             menuInput = input(
                 "\nWhere do you want to go now ?\n 1 : Show your stock."
-                "\n 2 : Show your transaction history.\n 3 : Rent a "
-                "car.\n 4 : Make a deal.\n 5 : Add a new car to your stock.\n -> ")
+                "\n 2 : Show your transaction history.\n 3 : Make a deal.\n 4 : Add a new car to your stock.\n -> ")
         menuInput = int(menuInput)
         if menuInput == 1:
             self.DisplayStock()
         elif menuInput == 2:
             self.DisplayHistory()
         elif menuInput == 3:
-            self.RentACar()
-        elif menuInput == 4:
             self.MakeADeal()
-        elif menuInput == 5:
+        elif menuInput == 4:
             self.AddACar()
 
     def DisplayStock(self):
@@ -61,9 +68,9 @@ class ApplicationConsole:
                 f"{str(car.idCar):{spaceIdCar}}{car.brand.name:{spaceBrand}}{car.type.name:{spaceType}}{car.priceCar}")
 
         nextStep = ""
-        while not CheckNumberInput(nextStep, 1, 2):
+        while not CheckNumberInput(nextStep, 1, 3):
             nextStep = input("\nWhat do you want to do next ?\n 1 : Return to the choice menu."
-                             "\n 2 : See a car's details.\n -> ")
+                             "\n 2 : See a car's details.\n 3 : Rent a car.\n-> ")
         nextStep = int(nextStep)
         if nextStep == 1:
             self.MenuChoice()
@@ -81,7 +88,9 @@ class ApplicationConsole:
                                   f"\nNext control : {str(car.dateTechControlCar)}")
                             goodChoice = True
                             break
-            self.MenuChoice()
+        elif nextStep == 3:
+            self.RentACar()
+        self.MenuChoice()
 
     def DisplayHistory(self):
         spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.brand.name)).brand.name) + 4
@@ -111,7 +120,7 @@ class ApplicationConsole:
                         if car.idCar == idCar:
                             goodChoice = True
                             break
-            deal.idCar = int(idCar)
+            deal.idCar = idCar
             spaceId = len(str(max(self.customerList, key=lambda x: len(str(x.id))).id)) + 4
             longestCustomer = max(self.customerList, key=lambda x: len(x.lastName))
             spaceName = len(f"{longestCustomer.firstName[0]}.{longestCustomer.lastName}") + 4
@@ -124,17 +133,26 @@ class ApplicationConsole:
             goodChoice = False
             idCustomer = None
             while not goodChoice:
-                idCustomer = input("What is the customer's id ?")
-                if idCar.isdigit():
+                idCustomer = input("What is the customer's id ?\n-> ")
+                if idCustomer.isdigit():
                     idCustomer = int(idCustomer)
                     for customer in self.customerList:
                         if customer.id == idCustomer:
                             goodChoice = True
                             break
-            deal.idCustomer = int(idCustomer)
-            deal.isRentDeal = 1
-            deal.dateStartRentDeal = input("When does the rent start ?")
-            deal.durationDaysRentDeal = input("How many days will the rent spend ?")
+            deal.idCustomer = idCustomer
+            deal.isRent = True
+            goodChoice = False
+            dateStart = None
+            while not goodChoice:
+                dateStart = input("When does the rent start ?\n-> ")
+                if re.search('[0-9/]', dateStart):
+                    goodChoice = True
+            deal.dateStartRent = dateStart
+            durationDays = ""
+            while not CheckNumberInput(durationDays, minimum=1):
+                durationDays = input("How many days will the rent spend ?\n-> ")
+            deal.durationDaysRent = int(durationDays)
         else:
             print("\nNo Free places.")
         self.MenuChoice()

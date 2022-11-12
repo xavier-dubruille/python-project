@@ -37,21 +37,21 @@ class Car(DB):
                     query = "SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, " \
                             "dateTechControlCar, priceCar || '0' as priceCar, " \
                             "promoCar FROM Car WHERE idCar " \
-                            "NOT IN (select idCar FROM Deal WHERE isRentDeal = 0)"
+                            "NOT IN (select idCar FROM Deal WHERE isRent = 0)"
 
                 else:
                     query = "SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, " \
                             "dateTechControlCar, priceCar || '0' as priceCar, promoCar, " \
                             "SUBSTR(firstName, 1, 1) || '.'  ||  lastName as nameCusto " \
                             "FROM Car NATURAL JOIN Deal NATURAL JOIN Customer " \
-                            "WHERE idCar  IN (select idCar FROM Deal WHERE isRentDeal = 0)"
+                            "WHERE idCar  IN (select idCar FROM Deal WHERE isRent = 0)"
                 cursor.execute(query)
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
                     car = Car.LoadResults(cursor, row)
-                    car.brand = Brand.Get(car.idCar)
-                    car.motor = Motor.Get(car.idCar)
-                    car.type = Type.Get(car.idCar)
+                    car.brand = Brand.GetComponent(car.idCar)
+                    car.motor = Motor.GetComponent(car.idCar)
+                    car.type = Type.GetComponent(car.idCar)
                     carList.append(car)
                 return carList
             except sql.OperationalError:
@@ -65,9 +65,9 @@ class Car(DB):
         cursor = DB.DBCursor()[0]
         if cursor is not None:
             try:
-                cursor.execute("SELECT count(*) "
-                               "FROM Car "
-                               "WHERE idCar NOT IN (SELECT idCar FROM Deal WHERE isRentDeal = 0)")
+                query = "SELECT count(*) FROM Car " \
+                        "WHERE idCar NOT IN (SELECT idCar FROM Deal WHERE isRent = 0)"
+                cursor.execute(query)
                 return cursor.fetchone()[0]
             except sql.OperationalError:
                 print(f"Error in CarFreePlacesStock {sys.exc_info()}")
