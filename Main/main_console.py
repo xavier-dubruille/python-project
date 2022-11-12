@@ -110,6 +110,7 @@ class ApplicationConsole:
                     for car in self.carListStock:
                         if car.idCar == idCar:
                             goodChoice = True
+                            break
             deal.idCar = int(idCar)
             spaceId = len(str(max(self.customerList, key=lambda x: len(str(x.id))).id)) + 4
             longestCustomer = max(self.customerList, key=lambda x: len(x.lastName))
@@ -120,7 +121,17 @@ class ApplicationConsole:
                 print(
                     f"{str(customer.id):{spaceId}}{f'{customer.firstName[0]}.{customer.lastName}':{spaceName}}"
                     f"{customer.phone}")
-            deal.idCustomer = input("What is the customer's id ?")
+            goodChoice = False
+            idCustomer = None
+            while not goodChoice:
+                idCustomer = input("What is the customer's id ?")
+                if idCar.isdigit():
+                    idCustomer = int(idCustomer)
+                    for customer in self.customerList:
+                        if customer.id == idCustomer:
+                            goodChoice = True
+                            break
+            deal.idCustomer = int(idCustomer)
             deal.isRentDeal = 1
             deal.dateStartRentDeal = input("When does the rent start ?")
             deal.durationDaysRentDeal = input("How many days will the rent spend ?")
