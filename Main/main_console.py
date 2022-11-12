@@ -57,7 +57,7 @@ class ApplicationConsole:
         elif menuInput == 4:
             self.AddACar()
 
-    def displayStock(self):
+    def DisplayStock(self):
         spaceBrand = len(max(self.carListStock, key=lambda car: len(car.nameBrand)).nameBrand) + 4
         spaceType = len(max(self.carListStock, key=lambda x: len(x.nameType)).nameType) + 4
         spaceIdCar = len("Id") + 4
