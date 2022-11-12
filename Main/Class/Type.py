@@ -9,7 +9,7 @@ class Type(DB):
     @staticmethod
     def NameTable():
         # Return the name table
-        return "Type"
+        return "Types"
 
     @staticmethod
     def IdColumn():

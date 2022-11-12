@@ -9,7 +9,7 @@ class Deal(DB):
     @staticmethod
     def NameTable():
         # Return the name table
-        return "Deals"
+        return "Deal"
 
     @staticmethod
     def IdColumn():

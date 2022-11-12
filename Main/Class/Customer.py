@@ -7,7 +7,7 @@ class Customer(DB):
 
     @staticmethod
     def NameTable():
-        return "Customer"
+        return "Customers"
 
     @staticmethod
     def IdColumn():

@@ -11,21 +11,21 @@ class Brand(DB):
     @staticmethod
     def NameTable():
         # Return the name table
-        return "Brands"
+        return "Brand"
 
     @staticmethod
     def IdColumn():
         # Return the id column
-        return "idBrand"
+        return "idDeal"
 
     @staticmethod
     def GetIdFromName(name):
         cursor, dbConnection = DB.DBCursor()
         try:
-            cursor.execute(f"SELECT {Brand.IdColumn()} FROM {Brand.NameTable()} WHERE nameBrand = '{name}'")
+            cursor.execute(f"SELECT idBrand FROM Brand WHERE nameBrand = '{name}'")
             if cursor.fetchone() is None:
                 cursor.execute(
-                    f"INSERT INTO {Brand.NameTable()} (nameBrand) VALUES ('{name}')" )
+                    f"INSERT INTO Brand (nameBrand) VALUES ('{name}')")
                 dbConnection.commit()
                 cursor.execute("SELECT last_insert_rowid()")
                 return cursor.fetchone()

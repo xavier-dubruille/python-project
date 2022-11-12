@@ -35,9 +35,8 @@ class Car(DB):
             try:
                 cursor.execute(
                     "SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, priceCar, "
-                    "nameBrand, nameMotor, nameType, promoCar FROM Cars "
-                    "NATURAL JOIN Brands NATURAL JOIN Motors NATURAL "
-                    "JOIN Types WHERE idCar NOT IN (select idCar FROM Deals WHERE isRentDeal = 0)")
+                    "nameBrand, nameMotor, nameType, promoCar FROM Car NATURAL JOIN Brand NATURAL JOIN Motor NATURAL "
+                    "JOIN Type WHERE idCar NOT IN (select idCar FROM deal WHERE isRentDeal = 0)")
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
                     car = cls.LoadResults(cursor, row)
@@ -56,10 +55,10 @@ class Car(DB):
         if cursor is not None:
             try:
                 cursor.execute("SELECT idCar, STRFTIME('%d/%m/%Y', dateStockCar) as dateStockCar, dateTechControlCar, "
-                               "priceCar || '0' as priceCar, nameMotor, nameMotor, nameType, promoCar, "
-                               "SUBSTR(firstNameCusto, 1, 1) || '.'  ||  lastNameCusto as nameCusto FROM Cars NATURAL "
-                               "JOIN Brands NATURAL JOIN Motors NATURAL JOIN Types NATURAL JOIN Deals NATURAL JOIN "
-                               "Customers WHERE idCar  IN (select idCar FROM Deals WHERE isRentDeal = 0)")
+                               "priceCar || '0' as priceCar, nameBrand, nameMotor, nameType, promoCar, "
+                               "SUBSTR(firstNameCusto, 1, 1) || '.'  ||  lastNameCusto as nameCusto FROM Car NATURAL "
+                               "JOIN Brand NATURAL JOIN Motor NATURAL JOIN Type NATURAL JOIN Deal NATURAL JOIN "
+                               "Customer WHERE idCar  IN (select idCar FROM deal WHERE isRentDeal = 0)")
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
                     car = cls.LoadResults(cursor, row)
@@ -77,8 +76,8 @@ class Car(DB):
         cursor = DB.DBCursor()[0]
         if cursor is not None:
             try:
-                cursor.execute("SELECT count(*) FROM Cars NATURAL JOIN Brands NATURAL JOIN Motors NATURAL JOIN Types "
-                               "WHERE idCar NOT IN (select idCar FROM Deals WHERE isRentDeal = 0)")
+                cursor.execute("SELECT count(*) FROM Car NATURAL JOIN Brand NATURAL JOIN Motor NATURAL JOIN Type "
+                               "WHERE idCar NOT IN (select idCar FROM deal WHERE isRentDeal = 0)")
                 return cursor.fetchone()[0]
             except sql.OperationalError:
                 print(f"Error in CarFreePlacesStock {sys.exc_info()}")
@@ -91,7 +90,7 @@ class Car(DB):
         if cursor is not None:
             try:
                 cursor.execute(
-                    f"INSERT INTO Cars (dateTechControlCar, priceCar, idBrand, idType, idMotor, promoCar) "
+                    f"INSERT INTO Car (dateTechControlCar, priceCar, idBrand, idType, idMotor, promoCar) "
                     f"VALUES ({self.dateTechControlCar}, {self.priceCar}, {self.idBrand},"
                     f"{self.idType}, {self.idMotor},{self.promoCar})")
                 dbConnection.commit()

@@ -3,6 +3,7 @@ import sys
 
 
 class DBAccess:
+
     @staticmethod
     def DBCursor():
         try:
