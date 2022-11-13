@@ -61,7 +61,7 @@ class DBAccess:
                 cls.DBClose(cursor)
 
     @classmethod
-    def GetComponent(cls, idCar):
+    def GetCarComponent(cls, idCar):
         cursor, dbConnection = cls.DBCursor()
         try:
             query = f"SELECT id, name FROM {cls.NameTable()} JOIN Car " \
@@ -78,7 +78,7 @@ class DBAccess:
     def GetId(cls, name):
         cursor, dbConnection = cls.DBCursor()
         try:
-            query = f"SELECT {cls.IdColumn} FROM {cls.NameTable()} WHERE name = '{name}'"
+            query = f"SELECT {cls.IdColumn()} FROM {cls.NameTable()} WHERE name = '{name}'"
             cursor.execute(query)
             result = cursor.fetchone()
             if not result:
@@ -89,7 +89,7 @@ class DBAccess:
                 result = cursor.fetchone()[0]
             return result
         except sql.OperationalError:
-            print(f"Error in GetIdFromName {sys.exc_info()}")
+            print(f"Error in GetId {sys.exc_info()}")
             return None
         finally:
             cls.DBClose(cursor)

@@ -6,6 +6,7 @@ from Class.Deal import Deal
 from Class.Customer import Customer
 
 import re
+from datetime import datetime
 
 
 def CheckNumberInput(string, minimum=None, maximum=None):
@@ -33,7 +34,14 @@ class ApplicationConsole:
         self.brandList = Brand.GetAll()
         self.motorList = Motor.GetAll()
         self.typeList = Type.GetAll()
-        self.dealList = Deal.GetAll()
+        dealList = Deal.GetAll()
+        self.rentList = []
+        self.soldList = []
+        for deal in dealList:
+            if deal.isRent:
+                self.rentList.append(deal)
+            else:
+                self.soldList.append(deal)
         self.customerList = Customer.GetAll()
         self.ShowMainMenu()
 
@@ -93,6 +101,10 @@ class ApplicationConsole:
         self.MenuChoice()
 
     def DisplayHistory(self):
+        # spaceId = len(str(max(self.rentList, key=lambda x: len(str(x.id))).id)) + 4
+        # spaceDateStart = len(max(self.rentList, key=lambda x: len(x.dateStartRent)).dateStartRent) + 4
+        # spaceDuration = len(max(self.rentList, key=lambda x: len(x.durationDaysRent)).durationDaysRent) + 4
+        # space
         spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.brand.name)).brand.name) + 4
         spaceType = len(max(self.carListHistory, key=lambda x: len(x.type.name)).type.name) + 4
         spacePrice = len(str(max(self.carListHistory, key=lambda x: len(str(x.priceCar))).priceCar)) + 4
@@ -113,7 +125,7 @@ class ApplicationConsole:
             goodChoice = False
             idCar = None
             while not goodChoice:
-                idCar = input("What is the car's id ?\n-> ")
+                idCar = input("What is the car id ?\n-> ")
                 if idCar.isdigit():
                     idCar = int(idCar)
                     for car in self.carListStock:
@@ -143,16 +155,20 @@ class ApplicationConsole:
             deal.idCustomer = idCustomer
             deal.isRent = True
             goodChoice = False
-            dateStart = None
+            dateStart = 1
             while not goodChoice:
-                dateStart = input("When does the rent start ?\n-> ")
-                if re.search('[0-9/]', dateStart):
+                dateStrStart = input("When does the rent start ?\n-> ")
+                try:
+                    dateStart = datetime.strptime(dateStrStart, '%d/%m/%Y').strftime("%d/%m/%Y")
                     goodChoice = True
+                except ValueError:
+                    pass
             deal.dateStartRent = dateStart
             durationDays = ""
             while not CheckNumberInput(durationDays, minimum=1):
                 durationDays = input("How many days will the rent spend ?\n-> ")
             deal.durationDaysRent = int(durationDays)
+            deal.InsertDB()
         else:
             print("\nNo Free places.")
         self.MenuChoice()
@@ -190,9 +206,9 @@ class ApplicationConsole:
                 car.dateTechControlCar = input("\nWhat is the date of the tech control ?\n-> ")
                 if re.search("[0-9/]", car.dateTechControlCar):
                     goodDate = True
-            car.brand.id = Brand.GetId(nameBrand)
-            car.type.id = Type.GetId(nameType)
-            car.motor.id = Motor.GetId(nameMotor)
+            car.idBrand = Brand.GetId(nameBrand)
+            car.idType = Type.GetId(nameType)
+            car.idMotor = Motor.GetId(nameMotor)
             print("Executed") if (car.InsertDB()) else print("Not executed")
         else:
             print("No free places in stock.")

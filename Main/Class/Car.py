@@ -8,14 +8,17 @@ import sqlite3 as sql
 
 class Car(DB):
     def __init__(self):
-        self.idCar = None
-        self.dateStockCar = None
-        self.dateTechControlCar = None
-        self.priceCar = None
-        self.promoCar = None
-        self.brand = None
-        self.motor = None
-        self.type = None
+        self.idCar = 0
+        self.dateStockCar = ""
+        self.dateTechControlCar = ""
+        self.priceCar = 0
+        self.promoCar = 0
+        self.idBrand = 0
+        self.idType = 0
+        self.idMotor = 0
+        self.brand = {}
+        self.motor = {}
+        self.type = {}
 
     @staticmethod
     def NameTable():
@@ -49,9 +52,9 @@ class Car(DB):
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
                     car = Car.LoadResults(cursor, row)
-                    car.brand = Brand.GetComponent(car.idCar)
-                    car.motor = Motor.GetComponent(car.idCar)
-                    car.type = Type.GetComponent(car.idCar)
+                    car.brand = Brand.GetCarComponent(car.idCar)
+                    car.motor = Motor.GetCarComponent(car.idCar)
+                    car.type = Type.GetCarComponent(car.idCar)
                     carList.append(car)
                 return carList
             except sql.OperationalError:
