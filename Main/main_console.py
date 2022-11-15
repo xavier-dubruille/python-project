@@ -71,12 +71,9 @@ class ApplicationConsole:
             strList[1]: len(max(self.carListStock, key=lambda x: len(x.brand.name)).brand.name) + self.spaceDisplay,
             strList[2]: len(max(self.carListStock, key=lambda x: len(x.type.name)).type.name) + self.spaceDisplay
         }
-        if spaceDict[strList[0]] < len(strList[0]):
-            spaceDict[strList[0]] = len(strList[0]) + self.spaceDisplay
-        if spaceDict[strList[1]] < len(strList[1]):
-            spaceDict[strList[1]] = len(strList[1]) + self.spaceDisplay
-        if spaceDict[strList[2]] < len(strList[2]):
-            spaceDict[strList[2]] = len(strList[2]) + self.spaceDisplay
+        for i in range(len(strList)-1):
+            if spaceDict[strList[i]] < len(strList[i]):
+                spaceDict[strList[i]] = len(strList[i]) + self.spaceDisplay
 
         print(f"\n{strList[0]}" + " " * self.spaceDisplay +
               f"{strList[1]}" + " " * (spaceDict[strList[1]] - len(f"{strList[1]}")) +
@@ -135,22 +132,17 @@ class ApplicationConsole:
             spaceDict[strList[4]] = len(
                 max(self.rentList, key=lambda x: len(x.car.type.name)).car.type.name) + self.spaceDisplay
 
-        if spaceDict[strList[0]] < len(strList[0]):
-            spaceDict[strList[0]] = len(strList[0]) + self.spaceDisplay
-        if spaceDict[strList[1]] < len(strList[1]):
-            spaceDict[strList[1]] = len(strList[1]) + self.spaceDisplay
-        if spaceDict[strList[2]] < len(strList[2]):
-            spaceDict[strList[2]] = len(strList[2]) + self.spaceDisplay
-        if spaceDict[strList[3]] < len(strList[3]):
-            spaceDict[strList[3]] = len(strList[3]) + self.spaceDisplay
-        if spaceDict[strList[4]] < len(strList[4]):
-            spaceDict[strList[4]] = len(strList[4]) + self.spaceDisplay
+        for i in range(len(strList)-1):
+            if spaceDict[strList[i]] < len(strList[i]):
+                spaceDict[strList[i]] = len(strList[i]) + self.spaceDisplay
+
         print(f"\n{strList[0]}" + " " * (spaceDict[strList[0]] - len(f"{strList[0]}")) +
               f"{strList[1]}" + " " * (spaceDict[strList[1]] - len(f"{strList[1]}")) +
               f"{strList[2]}" + " " * (spaceDict[strList[2]] - len(f"{strList[2]}")) +
               f"{strList[3]}" + " " * (spaceDict[strList[3]] - len(f"{strList[3]}")) +
               f"{strList[4]}" + " " * (spaceDict[strList[4]] - len(f"{strList[4]}")) +
               f"{strList[5]}")
+
         for deal in self.rentList:
             print(
                 f"{str(deal.id):{spaceDict[strList[0]]}}"
