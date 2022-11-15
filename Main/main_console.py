@@ -38,11 +38,9 @@ class ApplicationConsole:
         self.rentList = []
         self.soldList = []
         for deal in dealList:
-            if deal.isRent:
-                self.rentList.append(deal)
-            else:
-                self.soldList.append(deal)
+            self.rentList.append(deal) if deal.isRent else self.soldList.append(deal)
         self.customerList = Customer.GetAll()
+        self.spaceDisplay = 4
         self.ShowMainMenu()
 
     def ShowMainMenu(self):
@@ -67,10 +65,10 @@ class ApplicationConsole:
         self.MenuChoice()
 
     def DisplayStock(self):
-        spaceBrand = len(max(self.carListStock, key=lambda x: len(x.brand.name)).brand.name) + 4
-        spaceType = len(max(self.carListStock, key=lambda x: len(x.type.name)).type.name) + 4
-        spaceIdCar = len("Id") + 4
-        print("\nId" + " " * 4 + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
+        spaceBrand = len(max(self.carListStock, key=lambda x: len(x.brand.name)).brand.name) + self.spaceDisplay
+        spaceType = len(max(self.carListStock, key=lambda x: len(x.type.name)).type.name) + self.spaceDisplay
+        spaceIdCar = len("Id") + self.spaceDisplay
+        print("\nId" + " " * self.spaceDisplay + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
                 spaceType - len("Type")) + "Price (€)")
         for car in self.carListStock:
             print(
@@ -106,43 +104,51 @@ class ApplicationConsole:
         while not CheckNumberInput(choiceHistory, 1, 2):
             choiceHistory = input(" 1 : Rent history display.\n 2 : Transaction history display.\n-> ")
         choiceHistory = int(choiceHistory)
+        idStr = "Id"
+        dateStr = "Date"
+        durationStart = "Duration"
+        brandStr = "Brand"
+        typeStr = "Type"
+        priceStr = "Price (€)"
+        spaceDict = {}
         if choiceHistory == 1:
-            idStr = "Id"
-            dateStr = "Date"
-            durationStart = "Duration"
-            brandStr = "Brand"
-            typeStr = "Type"
-            priceStr = "Price (€)"
-            spaceId = len(str(max(self.rentList, key=lambda x: len(str(x.id))).id)) + 4
-            if spaceId < len(idStr):
-                spaceId = len(idStr) + 4
-            spaceDateStart = len(max(self.rentList, key=lambda x: len(x.dateStartRent)).dateStartRent) + 4
-            if spaceDateStart < len(dateStr):
-                spaceDateStart = len(dateStr) + 4
-            spaceDuration = len(
-                str(max(self.rentList, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + 4
-            if spaceDuration < len(durationStart):
-                spaceDuration = len(durationStart) + 4
-            spaceBrandCar = len(max(self.rentList, key=lambda x: len(x.car.brand.name)).car.brand.name) + 4
-            if spaceBrandCar < len(brandStr):
-                spaceBrandCar = len(brandStr) + 4
-            spaceTypeCar = len(max(self.rentList, key=lambda x: len(x.car.type.name)).car.type.name) + 4
-            if spaceTypeCar < len(typeStr):
-                spaceTypeCar = len(typeStr) + 4
-            print(f"\n{idStr}" + " " * (spaceId - len(f"{idStr}")) +
-                  f"{dateStr}" + " " * (spaceDateStart - len(f"{dateStr}")) +
-                  f"{durationStart}" + " " * (spaceDuration - len(f"{durationStart}")) +
-                  f"{brandStr}" + " " * (spaceBrandCar - len(f"{brandStr}")) +
-                  f"{typeStr}" + " " * (spaceTypeCar - len(f"{typeStr}")) +
-                  f"{priceStr}")
-            for deal in self.rentList:
-                print(
-                    f"{str(deal.id):{spaceId}}"
-                    f"{deal.dateStartRent:{spaceDateStart}}"
-                    f"{str(deal.durationDaysRent):{spaceDuration}}"
-                    f"{deal.car.brand.name:{spaceBrandCar}}"
-                    f"{deal.car.type.name:{spaceTypeCar}}"
-                    f"{str(deal.car.price)}")
+            spaceDict[idStr] = len(str(
+                max(self.rentList, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
+            spaceDict[dateStr] = len(
+                max(self.rentList, key=lambda x: len(x.dateStartRent)).dateStartRent) + self.spaceDisplay
+            spaceDict[durationStart] = len(
+                str(
+                    max(self.rentList, key=lambda x:
+                        len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
+            spaceDict[brandStr] = len(
+                max(self.rentList, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.spaceDisplay
+            spaceDict[typeStr] = len(
+                max(self.rentList, key=lambda x: len(x.car.type.name)).car.type.name) + self.spaceDisplay
+
+        if spaceDict[idStr] < len(idStr):
+            spaceDict[idStr] = len(idStr) + self.spaceDisplay
+        if spaceDict[dateStr] < len(dateStr):
+            spaceDict[dateStr] = len(dateStr) + self.spaceDisplay
+        if spaceDict[durationStart] < len(durationStart):
+            spaceDict[durationStart] = len(durationStart) + self.spaceDisplay
+        if spaceDict[brandStr] < len(brandStr):
+            spaceDict[brandStr] = len(brandStr) + self.spaceDisplay
+        if spaceDict[typeStr] < len(typeStr):
+            spaceDict[typeStr] = len(typeStr) + self.spaceDisplay
+        print(f"\n{idStr}" + " " * (spaceDict[idStr] - len(f"{idStr}")) +
+              f"{dateStr}" + " " * (spaceDict[dateStr] - len(f"{dateStr}")) +
+              f"{durationStart}" + " " * (spaceDict[durationStart] - len(f"{durationStart}")) +
+              f"{brandStr}" + " " * (spaceDict[brandStr] - len(f"{brandStr}")) +
+              f"{typeStr}" + " " * (spaceDict[typeStr] - len(f"{typeStr}")) +
+              f"{priceStr}")
+        for deal in self.rentList:
+            print(
+                f"{str(deal.id):{spaceDict[idStr]}}"
+                f"{deal.dateStartRent:{spaceDict[dateStr]}}"
+                f"{str(deal.durationDaysRent):{spaceDict[durationStart]}}"
+                f"{deal.car.brand.name:{spaceDict[brandStr]}}"
+                f"{deal.car.type.name:{spaceDict[typeStr]}}"
+                f"{str(deal.car.price)}")
 
         # spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.brand.name)).brand.name) + 4
         # spaceType = len(max(self.carListHistory, key=lambda x: len(x.type.name)).type.name) + 4
@@ -172,14 +178,24 @@ class ApplicationConsole:
                             goodChoice = True
                             break
             deal.idCar = idCar
-            spaceId = len(str(max(self.customerList, key=lambda x: len(str(x.id))).id)) + 4
+            idStr = "Id"
+            nameStr = "Name"
+            phoneStr = "Phone"
+            spaceId = len(str(max(self.customerList, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
+            if spaceId < len(idStr):
+                spaceId = len(idStr)
             longestCustomer = max(self.customerList, key=lambda x: len(x.lastName))
-            spaceName = len(f"{longestCustomer.firstName[0]}.{longestCustomer.lastName}") + 4
+            spaceName = len(f"{longestCustomer.firstName[0]}.{longestCustomer.lastName}") + self.spaceDisplay
+            if spaceName < len(nameStr):
+                spaceName = len(nameStr)
             print("List of customers : ")
-            print("Id" + " " * (spaceId - len("Id")) + "Name" + " " * (spaceName - len("Name")) + "Phone")
+            print(f"{idStr}" + " " * (spaceId - len(f"{idStr}")) +
+                  f"{nameStr}" + " " * (spaceName - len(f"{nameStr}"))
+                  + f"{phoneStr}")
             for customer in self.customerList:
                 print(
-                    f"{str(customer.id):{spaceId}}{f'{customer.firstName[0]}.{customer.lastName}':{spaceName}}"
+                    f"{str(customer.id):{spaceId}}"
+                    f"{f'{customer.firstName[0]}.{customer.lastName}':{spaceName}}"
                     f"{customer.phone}")
             goodChoice = False
             idCustomer = None

@@ -124,9 +124,9 @@ class Application:
             self.frameDisplay.rowconfigure(i, weight=i)
         self.frameDisplay.columnconfigure(0, weight=1)
 
-        spaceBrand = len(max(self.carListStock, key=lambda x: len(x.nameBrand)).nameBrand) + 4
-        spaceType = len(max(self.carListStock, key=lambda x: len(x.nameType)).nameType) + 4
-        spaceIdCar = len("Id") + 4
+        spaceBrand = len(max(self.carListStock, key=lambda x: len(x.nameBrand)).nameBrand) + self.spaceDisplay
+        spaceType = len(max(self.carListStock, key=lambda x: len(x.nameType)).nameType) + self.spaceDisplay
+        spaceIdCar = len("Id") + self.spaceDisplay
 
         titleColumn = "Id" + " " * 4 + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
                 spaceType - len("Type")) + "Price"
@@ -178,10 +178,10 @@ class Application:
             self.frameDisplay.rowconfigure(i, weight=i)
         self.frameDisplay.columnconfigure(0, weight=1)
 
-        spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.nameBrand)).nameBrand) + 4
-        spaceType = len(max(self.carListHistory, key=lambda x: len(x.nameType)).nameType) + 4
-        spacePrice = len(max(self.carListHistory, key=lambda x: len(x.price)).price) + 4
-        spaceIdCar = len("Id") + 4
+        spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.nameBrand)).nameBrand) + self.spaceDisplay
+        spaceType = len(max(self.carListHistory, key=lambda x: len(x.nameType)).nameType) + self.spaceDisplay
+        spacePrice = len(max(self.carListHistory, key=lambda x: len(x.price)).price) + self.spaceDisplay
+        spaceIdCar = len("Id") + self.spaceDisplay
 
         titleColumn = "Id" + " " * 4 + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
                 spaceType - len("Type")) + "Price" + " " * (spacePrice - len("Price")) + "Customer"
