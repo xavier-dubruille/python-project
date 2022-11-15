@@ -12,7 +12,6 @@ from Class.Motor import Motor
 from Class.Type import Type
 
 
-
 class Application:
     def __init__(self):
         self.buttonAddCar = None
@@ -29,8 +28,8 @@ class Application:
         self.title = "Bamboo Concess"
         self.printDetails = ""
         self.labelColumn = 0
-        self.carListStock = Car.CarListStock()
-        self.carListHistory = Car.CarListHistory()
+        self.carListStock = Car.GetCarList(1)
+        self.carListHistory = Car.GetCarList(0)
         self.brandList = Brand.GetAll()
         self.motorList = Motor.GetAll()
         self.typeList = Type.GetAll()
