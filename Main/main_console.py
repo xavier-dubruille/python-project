@@ -7,8 +7,8 @@ from Class.Motor import Motor
 from Class.Deal import Deal
 from Class.Customer import Customer
 
-import re
 from datetime import datetime
+import re
 
 
 def CheckNumberInput(string, minimum=None, maximum=None):
@@ -52,27 +52,51 @@ class ApplicationConsole:
     def MenuChoice(self):
         try:
             menuInput = ""
-            while not CheckNumberInput(menuInput, 1, 5):
+            while not CheckNumberInput(menuInput, 1, 6):
                 menuInput = input(
                     "\nWhere do you want to go now ?\n"
                     " 1 : Show your stock.\n"
                     " 2 : Show your transaction history.\n"
                     " 3 : Make a deal.\n"
                     " 4 : Add a new car to your stock.\n"
-                    " 5 : Exit the program.\n-> ")
+                    " 5 : Add a customer\n"
+                    " 6 : Exit the program.\n-> ")
             menuInput = int(menuInput)
             if menuInput == 1:
                 self.DisplayStock()
             elif menuInput == 2:
                 self.DisplayHistory()
             elif menuInput == 3:
-                self.MakeADeal()
+                self.DoTransaction(False)
             elif menuInput == 4:
-                self.AddACar()
+                self.AddCar()
             elif menuInput == 5:
+                self.AddCustomer()
+            else:
                 sys.exit()
         except KeyboardInterrupt:
             self.MenuChoice()
+
+    def AddCustomer(self):
+        newCustomer = Customer()
+        newCustomer.firstName = ""
+        newCustomer.lastName = ""
+        newCustomer.phone = ""
+        newCustomer.mail = ""
+        newCustomer.address = ""
+        while not newCustomer.firstName.isalpha():
+            newCustomer.firstName = input("What's the first name ?\n-> ")
+        while not newCustomer.lastName.isalpha():
+            newCustomer.lastName = input("What's the last name ?\n-> ")
+        while not newCustomer.phone.isdigit() and len(newCustomer.phone) == 10:
+            newCustomer.phone = input("What's the phone number \n-> ")
+        newCustomer.phone = int(newCustomer.phone)
+        while not (re.fullmatch(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', newCustomer.mail)):
+            newCustomer.mail = input("What's the email address ?\n-> ")
+        while not newCustomer.address.isalpha():
+            newCustomer.address = input("What's the address ?\n-> ")
+
+
 
     def DisplayStock(self):
         strList = ["Id", "Brand", "Type", "Price (€)"]
@@ -118,7 +142,7 @@ class ApplicationConsole:
                             goodChoice = True
                             break
         elif nextStep == 3:
-            self.RentACar()
+            self.DoTransaction(True)
         self.MenuChoice()
 
     def DisplayHistory(self):
@@ -135,7 +159,7 @@ class ApplicationConsole:
                 max(self.rentList, key=lambda x: len(x.dateStartRent)).dateStartRent) + self.spaceDisplay
             spaceDict[strList[2]] = len(str(
                 max(self.rentList, key=lambda x:
-                    len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
+                len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
             spaceDict[strList[3]] = len(
                 max(self.rentList, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.spaceDisplay
             spaceDict[strList[4]] = len(
@@ -162,7 +186,7 @@ class ApplicationConsole:
 
         self.MenuChoice()
 
-    def RentACar(self):
+    def DoTransaction(self, boolRent):
         deal = Deal()
         goodStartDate = None
         goodCustomerId = None
@@ -171,7 +195,7 @@ class ApplicationConsole:
         deal.idCustomer = None
         deal.durationDays = None
         deal.dateStart = None
-        deal.isRent = True
+        deal.isRent = bool(boolRent)
         spaceDict = {}
         strList = ["Id", "Name", "Phone"]
 
@@ -189,18 +213,18 @@ class ApplicationConsole:
         spaceDict[strList[1]] = len(
             f"{longestCustomer.firstName[0]}.{longestCustomer.lastName}") + self.spaceDisplay
 
-        for i in range(len(strList)-1):
+        for i in range(len(strList) - 1):
             if spaceDict[strList[i]] < len(strList[i]):
                 spaceDict[strList[i]] = len(strList[i])
 
         print(f"List of customers : \n{strList[0]}" + " " * (spaceDict[strList[0]] - len(f"{strList[0]}")) +
               f"{strList[1]}" + " " * (spaceDict[strList[1]] - len(f"{strList[0]}")) +
               f"{strList[2]}")
+
         for customer in self.customerList:
-            print(
-                f"{str(customer.id):{spaceDict[strList[0]]}}"
-                f"{f'{customer.firstName[0]}.{customer.lastName}':{spaceDict[strList[1]]}}"
-                f"{customer.phone}")
+            print(f"{str(customer.id):{spaceDict[strList[0]]}}"
+                  f"{f'{customer.firstName[0]}.{customer.lastName}':{spaceDict[strList[1]]}}"
+                  f"{customer.phone}")
 
         while not goodCustomerId:
             deal.idCustomer = input("What is the customer's id ?\n-> ")
@@ -210,27 +234,21 @@ class ApplicationConsole:
                     if customer.id == deal.idCustomer:
                         goodCustomerId = True
                         break
+        if deal.isRent:
+            while not goodStartDate:
+                deal.dateStart = input("When does the rent start ?\n-> ")
+                try:
+                    deal.dateStart = datetime.strptime(deal.dateStart, '%d/%m/%Y').strftime("%d/%m/%Y")
+                    goodStartDate = True
+                except ValueError:
+                    pass
 
-        while not goodStartDate:
-            deal.dateStart = input("When does the rent start ?\n-> ")
-            try:
-                deal.dateStart = datetime.strptime(deal.dateStart, '%d/%m/%Y').strftime("%d/%m/%Y")
-                goodStartDate = True
-            except ValueError:
-                pass
-
-        while not CheckNumberInput(deal.durationDays, minimum=1):
-            deal.durationDays = input("\nHow many days will the rent spend ?\n-> ")
+            while not CheckNumberInput(deal.durationDays, minimum=1):
+                deal.durationDays = input("\nHow many days will the rent spend ?\n-> ")
         deal.InsertDB()
         self.MenuChoice()
 
-    def MakeADeal(self):
-        deal = Deal()
-        deal.idCar = input("What is the car's id ?")
-        deal.idCustomer = input("What is the customer's id ? ")
-        self.MenuChoice()
-
-    def AddACar(self):
+    def AddCar(self):
         if Car.CarFreePlacesStock() <= 40:
             car = Car()
             nameBrand = None
@@ -259,7 +277,7 @@ class ApplicationConsole:
                     car.dateTechControl = datetime.strptime(car.dateTechControl, '%d/%m/%Y').strftime("%d/%m/%Y")
                     goodDate = True
                 except ValueError:
-                    pass
+                    continue
             car.idBrand = Brand.GetId(nameBrand)
             car.idType = Type.GetId(nameType)
             car.idMotor = Motor.GetId(nameMotor)

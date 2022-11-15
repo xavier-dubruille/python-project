@@ -29,6 +29,20 @@ class Customer(DB):
                 Customer.DBClose(cursor)
         return None
 
+    def InsertDB(self):
+        cursor, dbConnection = self.DBCursor()
+        if cursor is not None:
+            try:
+                query = f"INSERT INTO Customer (firstName, lastName, phone, mail, address) " \
+                        f"VALUES ({self.firstName}, {self.lastName}, {self.phone}, {self.mail}, {self.address})"
+                cursor.execute(query)
+                dbConnection.commit()
+            except sql.OperationalError:
+                print(f"Error in InsertDB Customer {sys.exc_info()}")
+            finally:
+                self.DBClose(cursor)
+        return None
+
     @staticmethod
     def NameTable():
         return "Customer"
