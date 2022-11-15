@@ -3,8 +3,8 @@ from Class.DB import DBAccess as DB
 
 class Motor(DB):
     def __init__(self):
-        self.id = None
-        self.name = None
+        self.id = 0
+        self.name = ""
 
     @staticmethod
     def NameTable():

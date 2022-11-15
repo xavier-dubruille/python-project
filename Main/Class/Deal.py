@@ -1,15 +1,19 @@
 from Class.DB import DBAccess as DB
+from Class.Car import Car
+from Class.Customer import Customer
 import sqlite3 as sql
 import sys
 
 
 class Deal(DB):
     def __init__(self):
-        self.idCar = None
-        self.idCustomer = None
-        self.isRent = None
-        self.dateStartRent = None
-        self.durationDaysRent = None
+        self.idCar = 0
+        self.idCustomer = 0
+        self.isRent = 0
+        self.dateStartRent = ""
+        self.durationDaysRent = 0
+        self.car = {}
+        self.customer = {}
 
     @staticmethod
     def NameTable():
@@ -32,7 +36,28 @@ class Deal(DB):
                 dbConnection.commit()
                 return True
             except sql.OperationalError:
-                print(f"Error in InsertDB {sys.exc_info()}")
+                print(f"Error in InsertDBDeal {sys.exc_info()}")
                 return False
             finally:
                 DB.DBClose(cursor)
+
+    @staticmethod
+    def GetAll():
+        cursor = Deal.DBCursor()[0]
+        dealList = []
+        if cursor is not None:
+            try:
+                cursor.execute(f"SELECT * FROM {Deal.NameTable()}")
+                resultsQuery = cursor.fetchall()
+                for row in resultsQuery:
+                    newDeal = Deal.LoadResults(cursor, row)
+                    newDeal.car = Car.GetCar(newDeal.idCar)
+                    newDeal.customer = Customer.GetCustomer(newDeal.idCustomer)
+                    dealList.append(newDeal)
+                return dealList
+            except sql.OperationalError:
+                print(f"Error in GetAllDeal {sys.exc_info()}")
+                return None
+            finally:
+                Deal.DBClose(cursor)
+        return None

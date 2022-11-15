@@ -9,7 +9,7 @@ class DBAccess:
             dbConnection = sql.connect("../Db/bambooConcess.db")
             return dbConnection.cursor(), dbConnection
         except sql.OperationalError:
-            print(f"Db was not resolved {sys.exc_info()}")
+            print(f"Error in DBCursor {sys.exc_info()}")
             return None
 
     @staticmethod
@@ -54,25 +54,11 @@ class DBAccess:
                     instancesList.append(newInstance)
                 return instancesList
             except sql.OperationalError:
-                print(f"Error in GetAll {sys.exc_info()}")
+                print(f"Error in GetAllDB {sys.exc_info()}")
                 return None
 
             finally:
                 cls.DBClose(cursor)
-
-    @classmethod
-    def GetCarComponent(cls, idCar):
-        cursor, dbConnection = cls.DBCursor()
-        try:
-            query = f"SELECT id, name FROM {cls.NameTable()} JOIN Car " \
-                    f"ON {cls.NameTable()}.{cls.IdColumn()} = Car.id{cls.NameTable()} WHERE idCar = {idCar}"
-            cursor.execute(query)
-            return cls.LoadResults(cursor, cursor.fetchone())
-        except sql.OperationalError:
-            print(f"Error in Get {sys.exc_info()}")
-            return None
-        finally:
-            cls.DBClose(cursor)
 
     @classmethod
     def GetId(cls, name):
@@ -90,6 +76,20 @@ class DBAccess:
             return result
         except sql.OperationalError:
             print(f"Error in GetId {sys.exc_info()}")
+            return None
+        finally:
+            cls.DBClose(cursor)
+
+    @classmethod
+    def GetCarComponent(cls, idCar):
+        cursor, dbConnection = cls.DBCursor()
+        try:
+            query = f"SELECT {cls.NameTable()}.id, {cls.NameTable()}.name FROM {cls.NameTable()} JOIN Car " \
+                    f"ON {cls.NameTable()}.{cls.IdColumn()} = Car.id{cls.NameTable()} WHERE Car.id = {idCar}"
+            cursor.execute(query)
+            return cls.LoadResults(cursor, cursor.fetchone())
+        except sql.OperationalError:
+            print(f"Error in GetCarComponent {sys.exc_info()}")
             return None
         finally:
             cls.DBClose(cursor)

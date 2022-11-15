@@ -51,7 +51,7 @@ class ApplicationConsole:
 
     def MenuChoice(self):
         menuInput = ""
-        while not CheckNumberInput(menuInput, 1, 5):
+        while not CheckNumberInput(menuInput, 1, 4):
             menuInput = input(
                 "\nWhere do you want to go now ?\n 1 : Show your stock."
                 "\n 2 : Show your transaction history.\n 3 : Make a deal.\n 4 : Add a new car to your stock.\n -> ")
@@ -64,6 +64,7 @@ class ApplicationConsole:
             self.MakeADeal()
         elif menuInput == 4:
             self.AddACar()
+        self.MenuChoice()
 
     def DisplayStock(self):
         spaceBrand = len(max(self.carListStock, key=lambda x: len(x.brand.name)).brand.name) + 4
@@ -73,7 +74,7 @@ class ApplicationConsole:
                 spaceType - len("Type")) + "Price (€)")
         for car in self.carListStock:
             print(
-                f"{str(car.idCar):{spaceIdCar}}{car.brand.name:{spaceBrand}}{car.type.name:{spaceType}}{car.priceCar}")
+                f"{str(car.id):{spaceIdCar}}{car.brand.name:{spaceBrand}}{car.type.name:{spaceType}}{car.price}")
 
         nextStep = ""
         while not CheckNumberInput(nextStep, 1, 3):
@@ -89,11 +90,11 @@ class ApplicationConsole:
                 if carId.isdigit():
                     carId = int(carId)
                     for car in self.carListStock:
-                        if carId == car.idCar:
+                        if carId == car.id:
                             print(f"\nBrand : {car.brand.name}\nType : {car.type.name}"
-                                  f"\nMotor : {car.motor.name}\nPrice : {str(car.priceCar)}€"
-                                  f"\nPromo : {str(car.promoCar)}%\nIn stock since : {str(car.dateStockCar)}"
-                                  f"\nNext control : {str(car.dateTechControlCar)}")
+                                  f"\nMotor : {car.motor.name}\nPrice : {str(car.price)}€"
+                                  f"\nPromo : {str(car.promo)}%\nIn stock since : {str(car.dateStock)}"
+                                  f"\nNext control : {str(car.dateTechControl)}")
                             goodChoice = True
                             break
         elif nextStep == 3:
@@ -101,22 +102,43 @@ class ApplicationConsole:
         self.MenuChoice()
 
     def DisplayHistory(self):
-        # spaceId = len(str(max(self.rentList, key=lambda x: len(str(x.id))).id)) + 4
-        # spaceDateStart = len(max(self.rentList, key=lambda x: len(x.dateStartRent)).dateStartRent) + 4
-        # spaceDuration = len(max(self.rentList, key=lambda x: len(x.durationDaysRent)).durationDaysRent) + 4
-        # space
-        spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.brand.name)).brand.name) + 4
-        spaceType = len(max(self.carListHistory, key=lambda x: len(x.type.name)).type.name) + 4
-        spacePrice = len(str(max(self.carListHistory, key=lambda x: len(str(x.priceCar))).priceCar)) + 4
-        spaceId = len("Id") + 4
+        choiceHistory = ""
+        while not CheckNumberInput(choiceHistory, 1, 2):
+            choiceHistory = input(" 1 : Rent history display.\n 2 : Transaction history display.\n-> ")
+        choiceHistory = int(choiceHistory)
+        if choiceHistory == 1:
+            spaceId = len(str(max(self.rentList, key=lambda x: len(str(x.id))).id)) + 4
+            spaceDateStart = len(max(self.rentList, key=lambda x: len(x.dateStartRent)).dateStartRent) + 4
+            spaceDuration = len(str(max(self.rentList, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + 4
+            spaceBrandCar = len(max(self.rentList, key=lambda x: len(x.car.brand.name)).car.brand.name) + 4
+            spaceTypeCar = len(max(self.rentList, key=lambda x: len(x.car.type.name)).car.type.name) + 4
+            print("\nId" + " " * (spaceId - len("Id")) +
+                  "Date" + " " * (spaceDateStart - len("Date")) +
+                  "Days" + " " * (spaceDuration - len("Days")) +
+                  "Brand" + " " * (spaceBrandCar - len("Brand")) +
+                  "Type" + " " * (spaceTypeCar - len("Type")) +
+                  "Price (€)")
+            for deal in self.rentList:
+                print(
+                    f"{str(deal.id):{spaceId}}"
+                    f"{deal.dateStartRent:{spaceDateStart}}"
+                    f"{str(deal.durationDaysRent):{spaceDuration}}"
+                    f"{deal.car.brand.name:{spaceBrandCar}}"
+                    f"{deal.car.type.name:{spaceTypeCar}}"
+                    f"{str(deal.car.price)}")
 
-        print("\nId" + " " * (spaceId - len("Id")) + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
-                spaceType - len("Type")) + "Price (€)" + " " * (spacePrice - len("Price (€)")) + "Customer")
-
-        for car in self.carListHistory:
-            print(
-                f"{str(car.idCar):{spaceId}}{car.brand.name:{spaceBrand}}"
-                f"{car.type.name:{spaceType}}{car.priceCar:{spacePrice}}{car.nameCusto}")
+        # spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.brand.name)).brand.name) + 4
+        # spaceType = len(max(self.carListHistory, key=lambda x: len(x.type.name)).type.name) + 4
+        # spacePrice = len(str(max(self.carListHistory, key=lambda x: len(str(x.price))).price)) + 4
+        # spaceId = len("Id") + 4
+        #
+        # print("\nId" + " " * (spaceId - len("Id")) + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
+        #         spaceType - len("Type")) + "Price (€)" + " " * (spacePrice - len("Price (€)")) + "Customer")
+        #
+        # for car in self.carListHistory:
+        #     print(
+        #         f"{str(car.id):{spaceId}}{car.brand.name:{spaceBrand}}"
+        #         f"{car.type.name:{spaceType}}{car.price:{spacePrice}}{car.nameCusto}")
         self.MenuChoice()
 
     def RentACar(self):
@@ -129,7 +151,7 @@ class ApplicationConsole:
                 if idCar.isdigit():
                     idCar = int(idCar)
                     for car in self.carListStock:
-                        if car.idCar == idCar:
+                        if car.id == idCar:
                             goodChoice = True
                             break
             deal.idCar = idCar
@@ -192,19 +214,19 @@ class ApplicationConsole:
             nameMotor = ""
             while not nameMotor:
                 nameMotor = input("What is the motor's name ?\n-> ")
-            car.priceCar = ""
-            while not car.priceCar.isdigit():
-                car.priceCar = input("What is the price ?\n-> ")
-            car.priceCar = int(car.priceCar)
-            car.promoCar = ""
-            while not car.promoCar.isdigit():
-                car.promoCar = input("Any promotion ?(put the number)\n-> ")
-            car.promoCar = int(car.promoCar)
-            car.dateTechControlCar = ""
+            car.price = ""
+            while not car.price.isdigit():
+                car.price = input("What is the price ?\n-> ")
+            car.price = int(car.price)
+            car.promo = ""
+            while not car.promo.isdigit():
+                car.promo = input("Any promotion ?(put the number)\n-> ")
+            car.promo = int(car.promo)
+            car.dateTechControl = ""
             goodDate = False
             while not goodDate:
-                car.dateTechControlCar = input("\nWhat is the date of the tech control ?\n-> ")
-                if re.search("[0-9/]", car.dateTechControlCar):
+                car.dateTechControl = input("\nWhat is the date of the tech control ?\n-> ")
+                if re.search("[0-9/]", car.dateTechControl):
                     goodDate = True
             car.idBrand = Brand.GetId(nameBrand)
             car.idType = Type.GetId(nameType)
