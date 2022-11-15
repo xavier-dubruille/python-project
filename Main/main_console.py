@@ -65,14 +65,29 @@ class ApplicationConsole:
         self.MenuChoice()
 
     def DisplayStock(self):
-        spaceBrand = len(max(self.carListStock, key=lambda x: len(x.brand.name)).brand.name) + self.spaceDisplay
-        spaceType = len(max(self.carListStock, key=lambda x: len(x.type.name)).type.name) + self.spaceDisplay
-        spaceIdCar = len("Id") + self.spaceDisplay
-        print("\nId" + " " * self.spaceDisplay + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
-                spaceType - len("Type")) + "Price (€)")
+        strList = ["Id", "Brand", "Type", "Price (€)"]
+        spaceDict = {
+            strList[0]: len(strList[0]) + self.spaceDisplay,
+            strList[1]: len(max(self.carListStock, key=lambda x: len(x.brand.name)).brand.name) + self.spaceDisplay,
+            strList[2]: len(max(self.carListStock, key=lambda x: len(x.type.name)).type.name) + self.spaceDisplay
+        }
+        if spaceDict[strList[0]] < len(strList[0]):
+            spaceDict[strList[0]] = len(strList[0]) + self.spaceDisplay
+        if spaceDict[strList[1]] < len(strList[1]):
+            spaceDict[strList[1]] = len(strList[1]) + self.spaceDisplay
+        if spaceDict[strList[2]] < len(strList[2]):
+            spaceDict[strList[2]] = len(strList[2]) + self.spaceDisplay
+
+        print(f"\n{strList[0]}" + " " * self.spaceDisplay +
+              f"{strList[1]}" + " " * (spaceDict[strList[1]] - len(f"{strList[1]}")) +
+              f"{strList[2]}" + " " * (spaceDict[strList[2]] - len(f"{strList[2]}")) +
+              f"{strList[3]}")
         for car in self.carListStock:
             print(
-                f"{str(car.id):{spaceIdCar}}{car.brand.name:{spaceBrand}}{car.type.name:{spaceType}}{car.price}")
+                f"{str(car.id):{spaceDict[strList[0]]}}"
+                f"{car.brand.name:{spaceDict[strList[1]]}}"
+                f"{car.type.name:{spaceDict[strList[2]]}}"
+                f"{str(car.price)}")
 
         nextStep = ""
         while not CheckNumberInput(nextStep, 1, 3):
@@ -104,50 +119,45 @@ class ApplicationConsole:
         while not CheckNumberInput(choiceHistory, 1, 2):
             choiceHistory = input(" 1 : Rent history display.\n 2 : Transaction history display.\n-> ")
         choiceHistory = int(choiceHistory)
-        idStr = "Id"
-        dateStr = "Date"
-        durationStart = "Duration"
-        brandStr = "Brand"
-        typeStr = "Type"
-        priceStr = "Price (€)"
+        strList = ["Id", "Date", "Duration", "Brand", "Type", "Price (€)"]
         spaceDict = {}
         if choiceHistory == 1:
-            spaceDict[idStr] = len(str(
+            spaceDict[strList[0]] = len(str(
                 max(self.rentList, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
-            spaceDict[dateStr] = len(
+            spaceDict[strList[1]] = len(
                 max(self.rentList, key=lambda x: len(x.dateStartRent)).dateStartRent) + self.spaceDisplay
-            spaceDict[durationStart] = len(
+            spaceDict[strList[2]] = len(
                 str(
                     max(self.rentList, key=lambda x:
                         len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
-            spaceDict[brandStr] = len(
+            spaceDict[strList[3]] = len(
                 max(self.rentList, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.spaceDisplay
-            spaceDict[typeStr] = len(
+            spaceDict[strList[4]] = len(
                 max(self.rentList, key=lambda x: len(x.car.type.name)).car.type.name) + self.spaceDisplay
 
-        if spaceDict[idStr] < len(idStr):
-            spaceDict[idStr] = len(idStr) + self.spaceDisplay
-        if spaceDict[dateStr] < len(dateStr):
-            spaceDict[dateStr] = len(dateStr) + self.spaceDisplay
-        if spaceDict[durationStart] < len(durationStart):
-            spaceDict[durationStart] = len(durationStart) + self.spaceDisplay
-        if spaceDict[brandStr] < len(brandStr):
-            spaceDict[brandStr] = len(brandStr) + self.spaceDisplay
-        if spaceDict[typeStr] < len(typeStr):
-            spaceDict[typeStr] = len(typeStr) + self.spaceDisplay
-        print(f"\n{idStr}" + " " * (spaceDict[idStr] - len(f"{idStr}")) +
-              f"{dateStr}" + " " * (spaceDict[dateStr] - len(f"{dateStr}")) +
-              f"{durationStart}" + " " * (spaceDict[durationStart] - len(f"{durationStart}")) +
-              f"{brandStr}" + " " * (spaceDict[brandStr] - len(f"{brandStr}")) +
-              f"{typeStr}" + " " * (spaceDict[typeStr] - len(f"{typeStr}")) +
-              f"{priceStr}")
+        if spaceDict[strList[0]] < len(strList[0]):
+            spaceDict[strList[0]] = len(strList[0]) + self.spaceDisplay
+        if spaceDict[strList[1]] < len(strList[1]):
+            spaceDict[strList[1]] = len(strList[1]) + self.spaceDisplay
+        if spaceDict[strList[2]] < len(strList[2]):
+            spaceDict[strList[2]] = len(strList[2]) + self.spaceDisplay
+        if spaceDict[strList[3]] < len(strList[3]):
+            spaceDict[strList[3]] = len(strList[3]) + self.spaceDisplay
+        if spaceDict[strList[4]] < len(strList[4]):
+            spaceDict[strList[4]] = len(strList[4]) + self.spaceDisplay
+        print(f"\n{strList[0]}" + " " * (spaceDict[strList[0]] - len(f"{strList[0]}")) +
+              f"{strList[1]}" + " " * (spaceDict[strList[1]] - len(f"{strList[1]}")) +
+              f"{strList[2]}" + " " * (spaceDict[strList[2]] - len(f"{strList[2]}")) +
+              f"{strList[3]}" + " " * (spaceDict[strList[3]] - len(f"{strList[3]}")) +
+              f"{strList[4]}" + " " * (spaceDict[strList[4]] - len(f"{strList[4]}")) +
+              f"{strList[5]}")
         for deal in self.rentList:
             print(
-                f"{str(deal.id):{spaceDict[idStr]}}"
-                f"{deal.dateStartRent:{spaceDict[dateStr]}}"
-                f"{str(deal.durationDaysRent):{spaceDict[durationStart]}}"
-                f"{deal.car.brand.name:{spaceDict[brandStr]}}"
-                f"{deal.car.type.name:{spaceDict[typeStr]}}"
+                f"{str(deal.id):{spaceDict[strList[0]]}}"
+                f"{deal.dateStartRent:{spaceDict[strList[1]]}}"
+                f"{str(deal.durationDaysRent):{spaceDict[strList[2]]}}"
+                f"{deal.car.brand.name:{spaceDict[strList[3]]}}"
+                f"{deal.car.type.name:{spaceDict[strList[4]]}}"
                 f"{str(deal.car.price)}")
 
         # spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.brand.name)).brand.name) + 4
