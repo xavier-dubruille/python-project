@@ -79,7 +79,7 @@ class Car(DB):
         return None
 
     def InsertDB(self):
-        cursor, dbConnection = DB.DBCursor()
+        cursor, dbConnection = self.DBCursor()
         if cursor is not None:
             try:
                 query = f"INSERT INTO Car (dateTechControl, price, idBrand, idType, idMotor, promo) " \
@@ -90,9 +90,24 @@ class Car(DB):
                 return True
             except sql.OperationalError:
                 print(f"Error in InsertDBCar {sys.exc_info()}")
-                return False
+            finally:
+                self.DBClose(cursor)
+        return None
+
+    def RemoveDb(self):
+        cursor, dbConnection = self.DBCursor()
+        if cursor is not None:
+            try:
+                query = f"DELETE FROM Car WHERE id = {self.id}"
+                cursor.execute(query)
+                dbConnection.commit()
+                del self
+                return True
+            except sql.OperationalError:
+                print(f"Error in RemoveCarDB {sys.exc_info()}")
             finally:
                 DB.DBClose(cursor)
+        return None
 
     @staticmethod
     def GetCar(idCar):

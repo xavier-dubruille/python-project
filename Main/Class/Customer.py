@@ -34,9 +34,10 @@ class Customer(DB):
         if cursor is not None:
             try:
                 query = f"INSERT INTO Customer (firstName, lastName, phone, mail, address) " \
-                        f"VALUES ({self.firstName}, {self.lastName}, {self.phone}, {self.mail}, {self.address})"
+                        f"VALUES ('{self.firstName}', '{self.lastName}', {self.phone}, '{self.mail}', '{self.address}')"
                 cursor.execute(query)
                 dbConnection.commit()
+                return True
             except sql.OperationalError:
                 print(f"Error in InsertDB Customer {sys.exc_info()}")
             finally:
