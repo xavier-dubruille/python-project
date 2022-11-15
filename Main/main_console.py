@@ -167,8 +167,7 @@ class ApplicationConsole:
             spaceDict[strList[1]] = len(
                 max(self.rentList, key=lambda x: len(x.dateStartRent)).dateStartRent) + self.spaceDisplay
             spaceDict[strList[2]] = len(str(
-                max(self.rentList, key=lambda x:
-                len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
+                max(self.rentList, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
             spaceDict[strList[3]] = len(
                 max(self.rentList, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.spaceDisplay
             spaceDict[strList[4]] = len(
@@ -292,9 +291,9 @@ class ApplicationConsole:
             car.idBrand = Brand.GetId(nameBrand)
             car.idType = Type.GetId(nameType)
             car.idMotor = Motor.GetId(nameMotor)
-            print("Executed") if (car.InsertDB()) else print("Not executed")
+            print("Executed\n") if (car.InsertDB()) else print("Not executed\n")
         else:
-            print("\nNo free places in stock.")
+            print("No free places in stock.\n")
         self.MenuChoice()
 
 
