@@ -107,17 +107,34 @@ class ApplicationConsole:
             choiceHistory = input(" 1 : Rent history display.\n 2 : Transaction history display.\n-> ")
         choiceHistory = int(choiceHistory)
         if choiceHistory == 1:
+            idStr = "Id"
+            dateStr = "Date"
+            durationStart = "Duration"
+            brandStr = "Brand"
+            typeStr = "Type"
+            priceStr = "Price (€)"
             spaceId = len(str(max(self.rentList, key=lambda x: len(str(x.id))).id)) + 4
+            if spaceId < len(idStr):
+                spaceId = len(idStr) + 4
             spaceDateStart = len(max(self.rentList, key=lambda x: len(x.dateStartRent)).dateStartRent) + 4
-            spaceDuration = len(str(max(self.rentList, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + 4
+            if spaceDateStart < len(dateStr):
+                spaceDateStart = len(dateStr) + 4
+            spaceDuration = len(
+                str(max(self.rentList, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + 4
+            if spaceDuration < len(durationStart):
+                spaceDuration = len(durationStart) + 4
             spaceBrandCar = len(max(self.rentList, key=lambda x: len(x.car.brand.name)).car.brand.name) + 4
+            if spaceBrandCar < len(brandStr):
+                spaceBrandCar = len(brandStr) + 4
             spaceTypeCar = len(max(self.rentList, key=lambda x: len(x.car.type.name)).car.type.name) + 4
-            print("\nId" + " " * (spaceId - len("Id")) +
-                  "Date" + " " * (spaceDateStart - len("Date")) +
-                  "Days" + " " * (spaceDuration - len("Days")) +
-                  "Brand" + " " * (spaceBrandCar - len("Brand")) +
-                  "Type" + " " * (spaceTypeCar - len("Type")) +
-                  "Price (€)")
+            if spaceTypeCar < len(typeStr):
+                spaceTypeCar = len(typeStr) + 4
+            print(f"\n{idStr}" + " " * (spaceId - len(f"{idStr}")) +
+                  f"{dateStr}" + " " * (spaceDateStart - len(f"{dateStr}")) +
+                  f"{durationStart}" + " " * (spaceDuration - len(f"{durationStart}")) +
+                  f"{brandStr}" + " " * (spaceBrandCar - len(f"{brandStr}")) +
+                  f"{typeStr}" + " " * (spaceTypeCar - len(f"{typeStr}")) +
+                  f"{priceStr}")
             for deal in self.rentList:
                 print(
                     f"{str(deal.id):{spaceId}}"
