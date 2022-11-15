@@ -135,8 +135,8 @@ class ApplicationConsole:
                                   f"Motor : {car.motor.name}\n"
                                   f"Price : {str(car.price)}€\n"
                                   f"Promo : {str(car.promo)}%\n"
-                                  f"In stock since : {str(car.dateStock)}\n"
-                                  f"Next control : {str(car.dateTechControl)}\n")
+                                  f"In stock since : {car.dateStock}\n"
+                                  f"Next control : {car.dateTechControl}\n")
                             goodChoice = True
                             choiceRemove = input("Do you want to remove the car from your stock Y/[n]?\n-> ")
                             if choiceRemove.lower() == "y":
@@ -254,7 +254,7 @@ class ApplicationConsole:
                     pass
 
             while not CheckNumberInput(deal.durationDays, minimum=1):
-                deal.durationDays = input("\nHow many days will the rent spend ?\n-> ")
+                deal.durationDays = input("How many days will the rent spend ?\n-> ")
         deal.InsertDB()
         self.MenuChoice()
 
@@ -270,19 +270,19 @@ class ApplicationConsole:
             goodDate = None
 
             while not nameBrand:
-                nameBrand = input("\nWhat is the name of the brand ?\n-> ")
+                nameBrand = input("What is the name of the brand ?\n-> ")
             while not nameType:
-                nameType = input("\nWhat is the type ?\n-> ")
+                nameType = input("What is the type ?\n-> ")
             while not nameMotor:
-                nameMotor = input("\nWhat is the motor's name ?\n-> ")
+                nameMotor = input("What is the motor's name ?\n-> ")
             while not CheckNumberInput(car.price, minimum=0):
-                car.price = input("\nWhat is the price ?\n-> ")
+                car.price = input("What is the price ?\n-> ")
             car.price = int(car.price)
             while not CheckNumberInput(car.promo, 0, 100):
-                car.promo = input("\nAny promotion (%) ?\n-> ")
+                car.promo = input("Any promotion (%) ?\n-> ")
             car.promo = int(car.promo)
             while not goodDate:
-                car.dateTechControl = input("\nWhat is the date of the tech control ?\n-> ")
+                car.dateTechControl = input("What is the date of the tech control ?\n-> ")
                 try:
                     car.dateTechControl = datetime.strptime(car.dateTechControl, '%d/%m/%Y').strftime("%d/%m/%Y")
                     goodDate = True

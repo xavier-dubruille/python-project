@@ -37,9 +37,9 @@ class Deal(DB):
                 return True
             except sql.OperationalError:
                 print(f"Error in InsertDBDeal {sys.exc_info()}")
-                return False
             finally:
                 DB.DBClose(cursor)
+        return None
 
     @staticmethod
     def GetAll():
@@ -57,7 +57,6 @@ class Deal(DB):
                 return dealList
             except sql.OperationalError:
                 print(f"Error in GetAllDeal {sys.exc_info()}")
-                return None
             finally:
                 Deal.DBClose(cursor)
         return None

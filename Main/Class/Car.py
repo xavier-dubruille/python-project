@@ -37,13 +37,13 @@ class Car(DB):
         if cursor is not None:
             try:
                 if boolStock:
-                    query = "SELECT id, STRFTIME('%d/%m/%Y', dateStock) as dateStockCar, " \
+                    query = "SELECT id, STRFTIME('%d/%m/%Y', dateStock) as dateStock, " \
                             "dateTechControl, price || '0' as price, " \
                             "promo FROM Car WHERE id " \
                             "NOT IN (select id FROM Deal WHERE isRent = 0)"
 
                 else:
-                    query = "SELECT idCar, STRFTIME('%d/%m/%Y', dateStock) as dateStockCar, " \
+                    query = "SELECT idCar, STRFTIME('%d/%m/%Y', dateStock) as dateStock, " \
                             "dateTechControl, price || '0' as price, promo, " \
                             "SUBSTR(firstName, 1, 1) || '.'  ||  lastName as nameCusto " \
                             "FROM Car NATURAL JOIN Deal NATURAL JOIN Customer " \
@@ -57,7 +57,6 @@ class Car(DB):
                 return carList
             except sql.OperationalError:
                 print(f"Error in GetCarList {sys.exc_info()}")
-                return None
             finally:
                 DB.DBClose(cursor)
         return None
@@ -73,7 +72,6 @@ class Car(DB):
                 return cursor.fetchone()[0]
             except sql.OperationalError:
                 print(f"Error in CarFreePlacesStock {sys.exc_info()}")
-                return None
             finally:
                 DB.DBClose(cursor)
         return None
@@ -124,7 +122,9 @@ class Car(DB):
                 return newCar
             except sql.OperationalError:
                 print(f"Error in GetCar {sys.exc_info()}")
-                return None
+            finally:
+                Car.DBClose(cursor)
+        return None
 
     def GetComponents(self):
         self.brand = Brand.GetCarComponent(self.id)

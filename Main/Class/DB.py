@@ -55,10 +55,9 @@ class DBAccess:
                 return instancesList
             except sql.OperationalError:
                 print(f"Error in GetAllDB {sys.exc_info()}")
-                return None
-
             finally:
                 cls.DBClose(cursor)
+            return None
 
     @classmethod
     def GetId(cls, name):
@@ -76,9 +75,9 @@ class DBAccess:
             return result
         except sql.OperationalError:
             print(f"Error in GetId {sys.exc_info()}")
-            return None
         finally:
             cls.DBClose(cursor)
+        return None
 
     @classmethod
     def GetCarComponent(cls, idCar):
@@ -90,6 +89,6 @@ class DBAccess:
             return cls.LoadResults(cursor, cursor.fetchone())
         except sql.OperationalError:
             print(f"Error in GetCarComponent {sys.exc_info()}")
-            return None
         finally:
             cls.DBClose(cursor)
+        return None

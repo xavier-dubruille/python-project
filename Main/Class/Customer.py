@@ -24,7 +24,6 @@ class Customer(DB):
                 return newCustomer
             except sql.OperationalError:
                 print(f"Error in GetCustomer : {sys.exc_info()}")
-                return None
             finally:
                 Customer.DBClose(cursor)
         return None
