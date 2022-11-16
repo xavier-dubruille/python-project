@@ -138,17 +138,26 @@ class ApplicationConsole:
                                   f"In stock since : {car.dateStock}\n"
                                   f"Next control : {car.dateTechControl}\n")
                             goodChoice = True
-                            choiceRemove = input("Do you want to remove the car from your stock Y/[n]?\n-> ")
-                            if choiceRemove.lower() == "y":
-                                car.RemoveDb()
-                                self.carListStock(False)
-                                self.carListStock(True)
-                                print("Car removed\n")
                             break
         elif nextStep == 3:
             self.DoTransaction(True)
         elif nextStep == 4:
             self.DoTransaction(False)
+        elif nextStep == 5:
+            goodCarId = False
+            while not goodCarId:
+                carId = input("Which car do you want to remove (n for quit this operation)?\n-> ")
+                if carId.lower() == "n":
+                    goodCarId = True
+                    print("Operation abandoned.\n")
+                elif carId.isdigit():
+                    for car in self.carListStock:
+                        if car.id == int(carId):
+                            goodCarId = True
+                            car.RemoveDb()
+                            self.carListStock = Car.GetCarList(True)
+                            self.carListHistory = Car.GetCarList(False)
+                            print("Car removed\n")
         self.MenuChoice()
 
     def DisplayHistory(self):
