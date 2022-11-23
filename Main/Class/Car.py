@@ -8,23 +8,14 @@ import sqlite3 as sql
 
 class Car(DB):
     def __init__(self) -> None:
-        self.id = 0
-        self.dateStock = ""
-        self.dateTechControl = ""
-        self.price = 0
-        self.promo = 0
-        self.idBrand = 0
-        self.idType = 0
-        self.idMotor = 0
-        self.brand = {}
-        self.motor = {}
-        self.type = {}
+        self.id = self.dateStock = self.dateTechControl = self.price = self.promo = self.idBrand = None
+        self.idType = self.idMotor = self.brand = self.motor = self.type = None
 
     @staticmethod
     def NameTable() -> str:
         """
-        This function returns the name of the car table in the database.
-        :returns: The name of the car table in the database.
+        This function returns the name of the car table in the database
+        :returns: The name of the car table in the database
         :rtype: str
         """
         return "Car"
@@ -32,8 +23,8 @@ class Car(DB):
     @staticmethod
     def IdColumn() -> str:
         """
-        This function returns the primary key name in the car table in the database.
-        :returns: The name of the primary key in the car table in the database.
+        This function returns the primary key name in the car table in the database
+        :returns: The name of the primary key in the car table in the database
         :rtype: str
         """
         return "idCar"
@@ -41,10 +32,10 @@ class Car(DB):
     @staticmethod
     def GetCarList(boolStock: bool) -> list:
         """
-        This function get the cars in the database.
+        This function get the cars in the database
         :param boolStock: A boolean number
         :type boolStock: bool
-        :returns: A list of cars from the database.
+        :returns: A list of cars from the database
         :rtype: list
         """
         carList = []
@@ -74,16 +65,14 @@ class Car(DB):
                 print(f"Error in GetCarList {sys.exc_info()}")
             finally:
                 DB.DBClose(cursor)
-        return None
+        return []
 
-    @classmethod
-    def CarFreePlacesStock(cls) -> int:
+    @staticmethod
+    def CarFreePlacesStock() -> int:
         """
-        This function check the .
-        :param boolStock: A boolean number
-        :type boolStock: bool
-        :returns: A list of cars from the database.
-        :rtype: list
+        This function check if there is free places in the stock for another car
+        :returns: The number of free places in the stock
+        :rtype: int
         """
         cursor = DB.DBCursor()[0]
         if cursor is not None:
@@ -96,9 +85,14 @@ class Car(DB):
                 print(f"Error in CarFreePlacesStock {sys.exc_info()}")
             finally:
                 DB.DBClose(cursor)
-        return None
+        return 0
 
     def InsertDB(self) -> bool:
+        """
+        This function insert in the database a new car
+        :returns: True if the insert was correctly executed
+        :rtype: bool
+        """
         cursor, dbConnection = self.DBCursor()
         if cursor is not None:
             try:
@@ -112,9 +106,14 @@ class Car(DB):
                 print(f"Error in InsertDBCar {sys.exc_info()}")
             finally:
                 self.DBClose(cursor)
-        return None
+        return False
 
     def RemoveDb(self) -> bool:
+        """
+        This function delete the car
+        :returns: True if the deleting was correctly executed
+        :rtype: bool
+        """
         cursor, dbConnection = self.DBCursor()
         if cursor is not None:
             try:
@@ -127,10 +126,17 @@ class Car(DB):
                 print(f"Error in RemoveCarDB {sys.exc_info()}")
             finally:
                 DB.DBClose(cursor)
-        return None
+        return False
 
     @staticmethod
     def GetCar(idCar: int) -> object:
+        """
+        This function get a car in the database chosen by its id
+        :param idCar: A integer number
+        :type idCar: int
+        :returns: An object car with all its components
+        :rtype: object
+        """
         cursor = Car.DBCursor()[0]
         if cursor is not None:
             try:
@@ -149,6 +155,11 @@ class Car(DB):
         return None
 
     def GetComponents(self) -> None:
+        """
+        This function add to the car its components from the database
+        :returns: None
+        :rtype: None
+        """
         self.brand = Brand.GetCarComponent(self.id)
         self.motor = Motor.GetCarComponent(self.id)
         self.type = Type.GetCarComponent(self.id)

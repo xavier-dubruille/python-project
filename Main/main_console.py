@@ -11,7 +11,19 @@ from datetime import datetime
 import re
 
 
-def CheckNumberInput(string, minimum: int = None, maximum: int = None) -> bool:
+def CheckNumberInput(string: str, minimum: int = None, maximum: int = None) -> bool:
+    """
+    This function check if the string is convertible into integer
+    If minimum and/or maximum are given, check also if it's between them
+    :param string: A string that will be checked for a number
+    :type string: str
+    :param minimum: An integer number
+    :type string: int
+    :param maximum: An integer number
+    :type string: int
+    :returns: True if the string is convertible to digit and respect the minimum and the maximum
+    :rtype: bool
+    """
     if not string.isdigit():
         return False
     if maximum is not None and minimum is not None:
@@ -47,6 +59,11 @@ class ApplicationConsole:
         self.MenuChoice()
 
     def MenuChoice(self) -> None:
+        """
+        This function display the basic menu for the user
+        :returns: None
+        :rtype: None
+        """
         menuInput = ""
         while not CheckNumberInput(menuInput, 1, 5):
             menuInput = input("Where do you want to go now ?\n"
@@ -68,6 +85,11 @@ class ApplicationConsole:
             sys.exit()
 
     def AddCustomer(self) -> None:
+        """
+        This function asks the user to add a customer to the database with all his characteristics
+        :returns: None
+        :rtype: None
+        """
         newCustomer = Customer()
         newCustomer.firstName = newCustomer.lastName = newCustomer.phone = newCustomer.mail = newCustomer.address = ""
 
@@ -86,6 +108,11 @@ class ApplicationConsole:
         self.MenuChoice()
 
     def DisplayStock(self) -> None:
+        """
+        This function display the stock from the database
+        :returns: None
+        :rtype: None
+        """
         strList = ["Id", "Brand", "Type", "Price (€)"]
         spaceDict = {
             strList[0]: len(strList[0]) + self.spaceDisplay,
@@ -158,6 +185,11 @@ class ApplicationConsole:
         self.MenuChoice()
 
     def DisplayHistory(self) -> None:
+        """
+        This function display the history of the user transaction from the database
+        :returns: None
+        :rtype: None
+        """
         choiceHistory = ""
         while not CheckNumberInput(choiceHistory, 1, 2):
             choiceHistory = input("\n"
@@ -212,6 +244,11 @@ class ApplicationConsole:
         self.MenuChoice()
 
     def DoTransaction(self, boolRent: bool) -> None:
+        """
+        This function asks the user to make a deal between one car and one customer
+        :returns: None
+        :rtype: None
+        """
         deal = Deal()
         goodCarId = goodStartDate = goodCustomerId = deal.idCar = None
         deal.idCustomer = deal.durationDays = deal.dateStart = None
@@ -270,6 +307,11 @@ class ApplicationConsole:
         self.MenuChoice()
 
     def AddCar(self) -> None:
+        """
+        This function asks the user to add a car to the database with all the characteristics
+        :returns: None
+        :rtype: None
+        """
         if Car.CarFreePlacesStock() <= 40:
             car = Car()
             nameBrand = nameType = nameMotor = car.price = car.promo = car.dateTechControl = goodDate = None

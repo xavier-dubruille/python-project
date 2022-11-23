@@ -7,25 +7,33 @@ import sys
 
 class Deal(DB):
     def __init__(self) -> None:
-        self.idCar = 0
-        self.idCustomer = 0
-        self.isRent = 0
-        self.dateStartRent = ""
-        self.durationDaysRent = 0
-        self.car = {}
-        self.customer = {}
+        self.idCar = self.idCustomer = self.isRent = self.dateStartRent = None
+        self.durationDaysRent = self.car = self.customer = None
 
     @staticmethod
     def NameTable() -> str:
-        # Return the name table
+        """
+        This function returns the name of the deal table in the database
+        :returns: The name of the deal table in the database
+        :rtype: str
+        """
         return "Deal"
 
     @staticmethod
     def IdColumn() -> str:
-        # Return the id column
+        """
+        This function returns the primary key name in the deal table in the database
+        :returns: The name of the primary key in the deal table in the database
+        :rtype: str
+        """
         return "id"
 
     def InsertDB(self) -> bool:
+        """
+        This function insert in the database a new deal
+        :returns: True if the insert was correctly executed
+        :rtype: bool
+        """
         cursor, dbConnection = DB.DBCursor()
         if cursor is not None:
             try:
@@ -39,10 +47,15 @@ class Deal(DB):
                 print(f"Error in InsertDBDeal {sys.exc_info()}")
             finally:
                 DB.DBClose(cursor)
-        return None
+        return False
 
     @staticmethod
     def GetAll() -> list:
+        """
+        This function get all the cars from the database
+        :returns: A list of all the cars
+        :rtype: list
+        """
         cursor = Deal.DBCursor()[0]
         dealList = []
         if cursor is not None:
@@ -59,4 +72,4 @@ class Deal(DB):
                 print(f"Error in GetAllDeal {sys.exc_info()}")
             finally:
                 Deal.DBClose(cursor)
-        return None
+        return []

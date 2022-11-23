@@ -13,23 +13,15 @@ from Class.Type import Type
 
 
 class Application:
-    def __init__(self):
-        self.buttonAddCar = None
-        self.labelDetails = None
-        self.frameDetails = None
-        self.frameDisplay = None
-        self.buttonDeal = None
-        self.buttonReservation = None
-        self.buttonHistory = None
-        self.buttonStock = None
-        self.window = None
-        self.frameButtons = None
+    def __init__(self) -> None:
+        self.buttonAddCar = self.labelDetails = self.frameDetails = self.frameDisplay = self.buttonDeal = None
+        self.buttonReservation = self.buttonHistory = self.buttonStock = self.window = self.frameButtons = None
+        self.printDetails = self.labelColumn = None
+        self.spaceDisplay = 4
         self.police = "courier 15"
         self.title = "Bamboo Concess"
-        self.printDetails = ""
-        self.labelColumn = 0
-        self.carListStock = Car.GetCarList(1)
-        self.carListHistory = Car.GetCarList(0)
+        self.carListStock = Car.GetCarList(True)
+        self.carListHistory = Car.GetCarList(False)
         self.brandList = Brand.GetAll()
         self.motorList = Motor.GetAll()
         self.typeList = Type.GetAll()
@@ -38,7 +30,7 @@ class Application:
         self.CreateBasicWindow()
 
     # The main display function for the application.
-    def CreateBasicWindow(self):
+    def CreateBasicWindow(self) -> None:
 
         self.window = tk.Tk()
         self.window.title(self.title)
@@ -109,7 +101,7 @@ class Application:
         self.window.mainloop()
 
     # It shows you which car you have in your stock. It is displayed by default.
-    def DisplayWindowStock(self):
+    def DisplayWindowStock(self) -> None:
         for widget in self.frameButtons.winfo_children():
             if widget.widgetName == "button":
                 widget["state"] = "normal"
@@ -123,8 +115,8 @@ class Application:
             self.frameDisplay.rowconfigure(i, weight=i)
         self.frameDisplay.columnconfigure(0, weight=1)
 
-        spaceBrand = len(max(self.carListStock, key=lambda x: len(x.nameBrand)).nameBrand) + self.spaceDisplay
-        spaceType = len(max(self.carListStock, key=lambda x: len(x.nameType)).nameType) + self.spaceDisplay
+        spaceBrand = len(max(self.carListStock, key=lambda x: len(x.brand.name)).brand.name) + self.spaceDisplay
+        spaceType = len(max(self.carListStock, key=lambda x: len(x.type.name)).type.name) + self.spaceDisplay
         spaceIdCar = len("Id") + self.spaceDisplay
 
         titleColumn = "Id" + " " * 4 + "Brand" + " " * (spaceBrand - len("Brand")) + "Type" + " " * (
@@ -143,28 +135,28 @@ class Application:
 
         for car in self.carListStock:
             listboxStock.insert(END,
-                                f"{str(car.id):{spaceIdCar}}{car.nameBrand:{spaceBrand}}"
-                                f"{car.nameType:{spaceType}}{car.price}")
+                                f"{str(car.id):{spaceIdCar}}{car.brand.name:{spaceBrand}}"
+                                f"{car.type.name:{spaceType}}{car.price}")
             listboxStock.bind('<<ListboxSelect>>', self.DisplayDetailsStock)
 
         listboxStock.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listboxStock.yview)
 
     # When you click a row to show more information about the car you selected.
-    def DisplayDetailsStock(self, event):
+    def DisplayDetailsStock(self, event) -> None:
         for i in range(2):
             self.frameDetails.rowconfigure(i, weight=1)
         self.frameDetails.columnconfigure(0, weight=1)
 
         car = self.carListStock[event.widget.curselection()[0]]
-        self.printDetails = f"Brand : {car.nameBrand}\nType : {car.nameType}\nMotor : {car.nameMotor}\n" \
+        self.printDetails = f"Brand : {car.brand.name}\nType : {car.type.name}\nMotor : {car.motor.name}\n" \
                             f"Price : {car.price}€\n" \
                             f"Promo : {car.promo}%\nIn stock since : {car.dateStock}\n" \
                             f"Next control : {car.dateTechControl}"
         self.labelDetails.configure(text=self.printDetails)
 
     # It will show you which car you sell.
-    def DisplayWindowHistory(self):
+    def DisplayWindowHistory(self) -> None:
         for widget in self.frameButtons.winfo_children():
             if widget.widgetName == "button":
                 widget["state"] = "normal"
@@ -177,8 +169,8 @@ class Application:
             self.frameDisplay.rowconfigure(i, weight=i)
         self.frameDisplay.columnconfigure(0, weight=1)
 
-        spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.nameBrand)).nameBrand) + self.spaceDisplay
-        spaceType = len(max(self.carListHistory, key=lambda x: len(x.nameType)).nameType) + self.spaceDisplay
+        spaceBrand = len(max(self.carListHistory, key=lambda x: len(x.brand.name)).brand.name) + self.spaceDisplay
+        spaceType = len(max(self.carListHistory, key=lambda x: len(x.type.name)).type.name) + self.spaceDisplay
         spacePrice = len(max(self.carListHistory, key=lambda x: len(x.price)).price) + self.spaceDisplay
         spaceIdCar = len("Id") + self.spaceDisplay
 
@@ -198,7 +190,7 @@ class Application:
 
         for car in self.carListHistory:
             listboxHistory.insert(END,
-                                  f"{str(car.id):{spaceIdCar}}{car.nameBrand:{spaceBrand}}{car.nameType:{spaceType}}"
+                                  f"{str(car.id):{spaceIdCar}}{car.brand.name:{spaceBrand}}{car.type.name:{spaceType}}"
                                   f"{car.price:{spacePrice}}{car.nameCusto}")
             listboxHistory.bind('<<ListboxSelect>>', self.DisplayDetailsHistory)
 
@@ -206,7 +198,7 @@ class Application:
         scrollbar.configure(command=listboxHistory.yview)
 
     # When you click a row to show more information about the car you selected.
-    def DisplayDetailsHistory(self, event):
+    def DisplayDetailsHistory(self, event) -> None:
         for i in range(2):
             self.frameDetails.rowconfigure(i, weight=1)
         self.frameDetails.columnconfigure(0, weight=1)
@@ -218,7 +210,7 @@ class Application:
         self.labelDetails.configure(text=self.printDetails)
 
     # It will help you to change the reservation's status for a particular car.
-    def DisplayWindowRent(self):
+    def DisplayWindowRent(self) -> None:
         for widget in self.frameButtons.winfo_children():
             if widget.widgetName == "button":
                 widget["state"] = "normal"
@@ -270,7 +262,7 @@ class Application:
             labelNoFreePlaces.grid(column=0, row=0)
 
     # It will help you to sell a particular car.
-    def DisplayWindowDeal(self):
+    def DisplayWindowDeal(self) -> None:
         for widget in self.frameButtons.winfo_children():
             if widget.widgetName == "button":
                 widget["state"] = "normal"
@@ -310,7 +302,7 @@ class Application:
             labelNoFreePlaces.grid(column=0, row=0)
 
     # This menu will help you to add a new car in your stock with a form.
-    def DisplayWindowAddCar(self):
+    def DisplayWindowAddCar(self) -> None:
         for widget in self.frameButtons.winfo_children():
             if widget.widgetName == "button":
                 widget["state"] = "normal"
@@ -379,7 +371,7 @@ class Application:
             labelNoFreePlaces = tk.Label(self.frameDisplay, text="No free places")
             labelNoFreePlaces.grid(column=0, row=0)
 
-    def VerifyCarInsert(self, carRawData):
+    def VerifyCarInsert(self, carRawData) -> None:
         car = Car()
         counter = 0
         # Get the id for the motor
