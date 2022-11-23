@@ -173,22 +173,21 @@ class ApplicationConsole:
         else:
             listToDisplay = self.soldList
 
-        if listToDisplay:
-            spaceDict[strList[0]] = len(str(
-                max(listToDisplay, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
-            spaceDict[strList[1]] = len(
-                max(listToDisplay, key=lambda x: len(x.dateStartRent)).dateStartRent) + self.spaceDisplay
-            spaceDict[strList[2]] = len(str(
-                max(listToDisplay, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
-            spaceDict[strList[3]] = len(
-                max(listToDisplay, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.spaceDisplay
-            spaceDict[strList[4]] = len(
-                max(listToDisplay, key=lambda x: len(x.car.type.name)).car.type.name) + self.spaceDisplay
-
-        else:
+        if not listToDisplay:
             print("There isn't a deal in this categories\n")
             self.MenuChoice()
             return None
+
+        spaceDict[strList[0]] = len(str(
+            max(listToDisplay, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
+        spaceDict[strList[1]] = len(
+            max(listToDisplay, key=lambda x: len(x.dateStartRent)).dateStartRent) + self.spaceDisplay
+        spaceDict[strList[2]] = len(str(
+            max(listToDisplay, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
+        spaceDict[strList[3]] = len(
+            max(listToDisplay, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.spaceDisplay
+        spaceDict[strList[4]] = len(
+            max(listToDisplay, key=lambda x: len(x.car.type.name)).car.type.name) + self.spaceDisplay
 
         for i in range(len(strList) - 1):
             if spaceDict[strList[i]] < len(strList[i]):
