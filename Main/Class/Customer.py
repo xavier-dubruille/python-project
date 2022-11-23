@@ -1,7 +1,7 @@
 import sqlite3 as sql
 import sys
 
-from Class.DB import DBAccess as DB
+from Main.Class.DB import DBAccess as DB
 
 
 class Customer(DB):

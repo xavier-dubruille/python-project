@@ -1,7 +1,7 @@
-from Class.DB import DBAccess as DB
-from Class.Type import Type
-from Class.Motor import Motor
-from Class.Brand import Brand
+from Main.Class.DB import DBAccess as DB
+from Main.Class.Type import Type
+from Main.Class.Motor import Motor
+from Main.Class.Brand import Brand
 import sys
 import sqlite3 as sql
 

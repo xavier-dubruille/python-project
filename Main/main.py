@@ -3,12 +3,12 @@ from tkinter import *
 
 from tkcalendar import DateEntry as tkCal
 
-from Class.Brand import Brand
-from Class.Car import Car
-from Class.Customer import Customer
-from Class.Deal import Deal
-from Class.Motor import Motor
-from Class.Type import Type
+from Main.Class.Brand import Brand
+from Main.Class.Customer import Customer
+from Main.Class.Deal import Deal
+from Main.Class.Motor import Motor
+from Main.Class.Type import Type
+from Main.Class.Car import Car
 
 
 def CheckNumberInput(string: str, minimum: int = None, maximum: int = None) -> bool:
@@ -426,8 +426,13 @@ class Application:
             labelNoFreePlaces.grid(column=0, row=0)
 
     def VerifyCarInsert(self, carStringVar: dict) -> None:
-        textInfo = ""
-        car = Car()
+        """
+
+        :type carStringVar: object
+        :rtype: object
+        """
+        textInfo: str = ""
+        car: Car = Car()
         car.idBrand = Brand.GetId(carStringVar["nameBrand"].get())
         if not car.idBrand:
             textInfo += "- There is no brand name.\n"

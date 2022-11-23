@@ -1,11 +1,11 @@
 import sys
 
-from Class.Car import Car
-from Class.Brand import Brand
-from Class.Type import Type
-from Class.Motor import Motor
-from Class.Deal import Deal
-from Class.Customer import Customer
+from Main.Class.Car import Car
+from Main.Class.Brand import Brand
+from Main.Class.Type import Type
+from Main.Class.Motor import Motor
+from Main.Class.Deal import Deal
+from Main.Class.Customer import Customer
 
 from datetime import datetime
 import re
@@ -18,9 +18,9 @@ def CheckNumberInput(string: str, minimum: int = None, maximum: int = None) -> b
     :param string: A string that will be checked for a number
     :type string: str
     :param minimum: An integer number
-    :type string: int
+    :type minimum: int
     :param maximum: An integer number
-    :type string: int
+    :type maximum: int
     :returns: True if the string is convertible to digit and respect the minimum and the maximum
     :rtype: bool
     """

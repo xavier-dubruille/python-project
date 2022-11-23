@@ -1,6 +1,6 @@
-from Class.DB import DBAccess as DB
-from Class.Car import Car
-from Class.Customer import Customer
+from Main.Class.DB import DBAccess as DB
+from Main.Class.Car import Car
+from Main.Class.Customer import Customer
 import sqlite3 as sql
 import sys
 
