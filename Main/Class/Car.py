@@ -30,11 +30,9 @@ class Car(DB):
         return "idCar"
 
     @staticmethod
-    def GetCarList(boolStock: bool) -> list:
+    def GetCarList() -> list:
         """
         This function get the cars in the database
-        :param boolStock: A boolean number
-        :type boolStock: bool
         :returns: A list of cars from the database
         :rtype: list
         """
@@ -42,18 +40,10 @@ class Car(DB):
         cursor = DB.DBCursor()[0]
         if cursor is not None:
             try:
-                if boolStock:
-                    query = "SELECT id, STRFTIME('%d/%m/%Y', dateStock) as dateStock, " \
-                            "dateTechControl, price || '0' as price, " \
-                            "promo FROM Car WHERE id " \
-                            "NOT IN (select id FROM Deal WHERE isRent = 0)"
-
-                else:
-                    query = "SELECT idCar, STRFTIME('%d/%m/%Y', dateStock) as dateStock, " \
-                            "dateTechControl, price || '0' as price, promo, " \
-                            "SUBSTR(firstName, 1, 1) || '.'  ||  lastName as nameCusto " \
-                            "FROM Car NATURAL JOIN Deal NATURAL JOIN Customer " \
-                            "WHERE idCar  IN (select idCar FROM Deal WHERE isRent = 0)"
+                query = "SELECT id, STRFTIME('%d/%m/%Y', dateStock) as dateStock, " \
+                        "dateTechControl, price || '0' as price, " \
+                        "promo FROM Car WHERE id " \
+                        "NOT IN (select idCar FROM Deal WHERE isRent = 0)"
                 cursor.execute(query)
                 resultsQuery = cursor.fetchall()
                 for row in resultsQuery:
@@ -98,7 +88,7 @@ class Car(DB):
             try:
                 query = f"INSERT INTO Car (dateTechControl, price, idBrand, idType, idMotor, promo) " \
                         f"VALUES ('{self.dateTechControl}', {self.price}, {self.idBrand},{self.idType}, " \
-                        f"{self.idMotor}, {self.promo} )"
+                        f"{self.idMotor}, {self.promo})"
                 cursor.execute(query)
                 dbConnection.commit()
                 return True
@@ -140,7 +130,7 @@ class Car(DB):
         cursor = Car.DBCursor()[0]
         if cursor is not None:
             try:
-                query = f"SELECT id, STRFTIME('%d/%m/%Y', dateStock) as dateStockCar, dateTechControl, " \
+                query = f"SELECT id, STRFTIME('%d/%m/%Y', dateStock) as dateStock, dateTechControl, " \
                         f"price || '0' as price, promo " \
                         f"FROM Car " \
                         f"WHERE id = {idCar} "

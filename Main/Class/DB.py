@@ -100,7 +100,7 @@ class DBAccess:
         :rtype: int
         """
         cursor, dbConnection = cls.DBCursor()
-        if cursor is not None:
+        if cursor and name:
             try:
                 query = f"SELECT {cls.IdColumn()} FROM {cls.NameTable()} WHERE name = '{name}'"
                 cursor.execute(query)
@@ -110,8 +110,8 @@ class DBAccess:
                     cursor.execute(query)
                     dbConnection.commit()
                     cursor.execute("SELECT last_insert_rowid()")
-                    result = cursor.fetchone()[0]
-                return result
+                    result = cursor.fetchone()
+                return result[0]
             except sql.OperationalError:
                 print(f"Error in GetId {sys.exc_info()}")
             finally:

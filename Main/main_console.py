@@ -43,8 +43,7 @@ def CheckNumberInput(string: str, minimum: int = None, maximum: int = None) -> b
 
 class ApplicationConsole:
     def __init__(self) -> None:
-        self.carListStock = Car.GetCarList(True)
-        self.carListHistory = Car.GetCarList(False)
+        self.carListStock = Car.GetCarList()
         self.brandList = Brand.GetAll()
         self.motorList = Motor.GetAll()
         self.typeList = Type.GetAll()
@@ -179,8 +178,7 @@ class ApplicationConsole:
                         if car.id == int(carId):
                             goodCarId = True
                             car.RemoveDb()
-                            self.carListStock = Car.GetCarList(True)
-                            self.carListHistory = Car.GetCarList(False)
+                            self.carListStock = Car.GetCarList()
                             print("Car removed\n")
         self.MenuChoice()
 

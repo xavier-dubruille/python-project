@@ -37,9 +37,14 @@ class Deal(DB):
         cursor, dbConnection = DB.DBCursor()
         if cursor is not None:
             try:
-                query = f"INSERT INTO Deal (isRent, dateStartRent, durationDaysRent, idCar, idCustomer) " \
-                        f"VALUES ({self.isRent}, '{self.dateStartRent}', {self.durationDaysRent},{self.idCar}, " \
+                query = ""
+                if self.isRent:
+                    query = f"INSERT INTO Deal (isRent, dateStartRent, durationDaysRent, idCar, idCustomer) " \
+                        f"VALUES ({self.isRent}, {self.dateStartRent}, {self.durationDaysRent}, {self.idCar}, " \
                         f"{self.idCustomer})"
+                else:
+                    query = f"INSERT INTO Deal (isRent, idCar, idCustomer) " \
+                        f"VALUES ({self.isRent}, {self.idCar}, {self.idCustomer})"
                 cursor.execute(query)
                 dbConnection.commit()
                 return True
