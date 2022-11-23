@@ -167,17 +167,28 @@ class ApplicationConsole:
         choiceHistory = int(choiceHistory)
         strList = ["Id", "Date", "Duration", "Brand", "Type", "Price (€)"]
         spaceDict = {}
+        listToDisplay = None
         if choiceHistory == 1:
+            listToDisplay = self.rentList
+        else:
+            listToDisplay = self.soldList
+
+        if listToDisplay:
             spaceDict[strList[0]] = len(str(
-                max(self.rentList, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
+                max(listToDisplay, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
             spaceDict[strList[1]] = len(
-                max(self.rentList, key=lambda x: len(x.dateStartRent)).dateStartRent) + self.spaceDisplay
+                max(listToDisplay, key=lambda x: len(x.dateStartRent)).dateStartRent) + self.spaceDisplay
             spaceDict[strList[2]] = len(str(
-                max(self.rentList, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
+                max(listToDisplay, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
             spaceDict[strList[3]] = len(
-                max(self.rentList, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.spaceDisplay
+                max(listToDisplay, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.spaceDisplay
             spaceDict[strList[4]] = len(
-                max(self.rentList, key=lambda x: len(x.car.type.name)).car.type.name) + self.spaceDisplay
+                max(listToDisplay, key=lambda x: len(x.car.type.name)).car.type.name) + self.spaceDisplay
+
+        else:
+            print("There isn't a deal in this categories\n")
+            self.MenuChoice()
+            return None
 
         for i in range(len(strList) - 1):
             if spaceDict[strList[i]] < len(strList[i]):
