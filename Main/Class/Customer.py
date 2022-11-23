@@ -5,7 +5,7 @@ from Class.DB import DBAccess as DB
 
 
 class Customer(DB):
-    def __init__(self):
+    def __init__(self) -> None:
         self.id = 0
         self.firstName = ""
         self.lastName = ""
@@ -14,7 +14,7 @@ class Customer(DB):
         self.address = ""
 
     @staticmethod
-    def GetCustomer(idCustomer):
+    def GetCustomer(idCustomer: bool) -> object:
         cursor = Customer.DBCursor()[0]
         if cursor is not None:
             try:
@@ -28,7 +28,7 @@ class Customer(DB):
                 Customer.DBClose(cursor)
         return None
 
-    def InsertDB(self):
+    def InsertDB(self) -> bool:
         cursor, dbConnection = self.DBCursor()
         if cursor is not None:
             try:
@@ -44,9 +44,9 @@ class Customer(DB):
         return None
 
     @staticmethod
-    def NameTable():
+    def NameTable() -> str:
         return "Customer"
 
     @staticmethod
-    def IdColumn():
+    def IdColumn() -> str:
         return "id"

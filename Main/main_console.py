@@ -11,7 +11,7 @@ from datetime import datetime
 import re
 
 
-def CheckNumberInput(string, minimum=None, maximum=None):
+def CheckNumberInput(string, minimum: int = None, maximum: int = None) -> bool:
     if not string.isdigit():
         return False
     if maximum is not None and minimum is not None:
@@ -30,7 +30,7 @@ def CheckNumberInput(string, minimum=None, maximum=None):
 
 
 class ApplicationConsole:
-    def __init__(self):
+    def __init__(self) -> None:
         self.carListStock = Car.GetCarList(True)
         self.carListHistory = Car.GetCarList(False)
         self.brandList = Brand.GetAll()
@@ -46,7 +46,7 @@ class ApplicationConsole:
         print("Welcome to Bamboo Concess\n")
         self.MenuChoice()
 
-    def MenuChoice(self):
+    def MenuChoice(self) -> None:
         menuInput = ""
         while not CheckNumberInput(menuInput, 1, 5):
             menuInput = input("Where do you want to go now ?\n"
@@ -67,13 +67,10 @@ class ApplicationConsole:
         else:
             sys.exit()
 
-    def AddCustomer(self):
+    def AddCustomer(self) -> None:
         newCustomer = Customer()
-        newCustomer.firstName = ""
-        newCustomer.lastName = ""
-        newCustomer.phone = ""
-        newCustomer.mail = ""
-        newCustomer.address = ""
+        newCustomer.firstName = newCustomer.lastName = newCustomer.phone = newCustomer.mail = newCustomer.address = ""
+
         while not newCustomer.firstName.isalpha():
             newCustomer.firstName = input("What's the first name ?\n-> ")
         while not newCustomer.lastName.isalpha():
@@ -88,7 +85,7 @@ class ApplicationConsole:
         print("New customer added\n") if newCustomer.InsertDB() else print("The execution doesn't work\n")
         self.MenuChoice()
 
-    def DisplayStock(self):
+    def DisplayStock(self) -> None:
         strList = ["Id", "Brand", "Type", "Price (€)"]
         spaceDict = {
             strList[0]: len(strList[0]) + self.spaceDisplay,
@@ -102,7 +99,7 @@ class ApplicationConsole:
         print(f"{strList[0]}" + " " * self.spaceDisplay +
               f"{strList[1]}" + " " * (spaceDict[strList[1]] - len(f"{strList[1]}")) +
               f"{strList[2]}" + " " * (spaceDict[strList[2]] - len(f"{strList[2]}")) +
-              f"{strList[3]}\n")
+              f"{strList[3]}")
 
         for car in self.carListStock:
             print(f"{str(car.id):{spaceDict[strList[0]]}}"
@@ -160,7 +157,7 @@ class ApplicationConsole:
                             print("Car removed\n")
         self.MenuChoice()
 
-    def DisplayHistory(self):
+    def DisplayHistory(self) -> None:
         choiceHistory = ""
         while not CheckNumberInput(choiceHistory, 1, 2):
             choiceHistory = input("\n"
@@ -201,18 +198,13 @@ class ApplicationConsole:
                   f"{deal.car.brand.name:{spaceDict[strList[3]]}}"
                   f"{deal.car.type.name:{spaceDict[strList[4]]}}"
                   f"{str(deal.car.price)}")
-
+        print("")
         self.MenuChoice()
 
-    def DoTransaction(self, boolRent):
+    def DoTransaction(self, boolRent: bool) -> None:
         deal = Deal()
-        goodStartDate = None
-        goodCustomerId = None
-        goodCarId = None
-        deal.idCar = None
-        deal.idCustomer = None
-        deal.durationDays = None
-        deal.dateStart = None
+        goodCarId = goodStartDate = goodCustomerId = deal.idCar = None
+        deal.idCustomer = deal.durationDays = deal.dateStart = None
         deal.isRent = bool(boolRent)
         spaceDict = {}
         strList = ["Id", "Name", "Phone"]
@@ -260,23 +252,17 @@ class ApplicationConsole:
                     deal.dateStart = datetime.strptime(deal.dateStart, '%d/%m/%Y').strftime("%d/%m/%Y")
                     goodStartDate = True
                 except ValueError:
-                    pass
+                    continue
 
             while not CheckNumberInput(deal.durationDays, minimum=1):
                 deal.durationDays = input("How many days will the rent spend ?\n-> ")
         deal.InsertDB()
         self.MenuChoice()
 
-    def AddCar(self):
+    def AddCar(self) -> None:
         if Car.CarFreePlacesStock() <= 40:
             car = Car()
-            nameBrand = None
-            nameType = None
-            nameMotor = None
-            car.price = None
-            car.promo = None
-            car.dateTechControl = None
-            goodDate = None
+            nameBrand = nameType = nameMotor = car.price = car.promo = car.dateTechControl = goodDate = None
 
             while not nameBrand:
                 nameBrand = input("What is the name of the brand ?\n-> ")

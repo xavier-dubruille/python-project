@@ -6,7 +6,7 @@ import sys
 
 
 class Deal(DB):
-    def __init__(self):
+    def __init__(self) -> None:
         self.idCar = 0
         self.idCustomer = 0
         self.isRent = 0
@@ -16,16 +16,16 @@ class Deal(DB):
         self.customer = {}
 
     @staticmethod
-    def NameTable():
+    def NameTable() -> str:
         # Return the name table
         return "Deal"
 
     @staticmethod
-    def IdColumn():
+    def IdColumn() -> str:
         # Return the id column
         return "id"
 
-    def InsertDB(self):
+    def InsertDB(self) -> bool:
         cursor, dbConnection = DB.DBCursor()
         if cursor is not None:
             try:
@@ -42,7 +42,7 @@ class Deal(DB):
         return None
 
     @staticmethod
-    def GetAll():
+    def GetAll() -> list:
         cursor = Deal.DBCursor()[0]
         dealList = []
         if cursor is not None:

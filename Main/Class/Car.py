@@ -7,7 +7,7 @@ import sqlite3 as sql
 
 
 class Car(DB):
-    def __init__(self):
+    def __init__(self) -> None:
         self.id = 0
         self.dateStock = ""
         self.dateTechControl = ""
@@ -21,17 +21,17 @@ class Car(DB):
         self.type = {}
 
     @staticmethod
-    def NameTable():
+    def NameTable() -> str:
         # Return the name table
         return "Car"
 
     @staticmethod
-    def IdColumn():
+    def IdColumn() -> str:
         # Return the id column
         return "idCar"
 
     @staticmethod
-    def GetCarList(boolStock):
+    def GetCarList(boolStock: bool) -> list:
         carList = []
         cursor = DB.DBCursor()[0]
         if cursor is not None:
@@ -62,7 +62,7 @@ class Car(DB):
         return None
 
     @classmethod
-    def CarFreePlacesStock(cls):
+    def CarFreePlacesStock(cls) -> int:
         cursor = DB.DBCursor()[0]
         if cursor is not None:
             try:
@@ -76,7 +76,7 @@ class Car(DB):
                 DB.DBClose(cursor)
         return None
 
-    def InsertDB(self):
+    def InsertDB(self) -> bool:
         cursor, dbConnection = self.DBCursor()
         if cursor is not None:
             try:
@@ -92,7 +92,7 @@ class Car(DB):
                 self.DBClose(cursor)
         return None
 
-    def RemoveDb(self):
+    def RemoveDb(self) -> bool:
         cursor, dbConnection = self.DBCursor()
         if cursor is not None:
             try:
@@ -108,7 +108,7 @@ class Car(DB):
         return None
 
     @staticmethod
-    def GetCar(idCar):
+    def GetCar(idCar: int) -> object:
         cursor = Car.DBCursor()[0]
         if cursor is not None:
             try:
@@ -126,7 +126,7 @@ class Car(DB):
                 Car.DBClose(cursor)
         return None
 
-    def GetComponents(self):
+    def GetComponents(self) -> None:
         self.brand = Brand.GetCarComponent(self.id)
         self.motor = Motor.GetCarComponent(self.id)
         self.type = Type.GetCarComponent(self.id)
