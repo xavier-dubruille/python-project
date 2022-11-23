@@ -22,16 +22,31 @@ class Car(DB):
 
     @staticmethod
     def NameTable() -> str:
-        # Return the name table
+        """
+        This function returns the name of the car table in the database.
+        :returns: The name of the car table in the database.
+        :rtype: str
+        """
         return "Car"
 
     @staticmethod
     def IdColumn() -> str:
-        # Return the id column
+        """
+        This function returns the primary key name in the car table in the database.
+        :returns: The name of the primary key in the car table in the database.
+        :rtype: str
+        """
         return "idCar"
 
     @staticmethod
     def GetCarList(boolStock: bool) -> list:
+        """
+        This function get the cars in the database.
+        :param boolStock: A boolean number
+        :type boolStock: bool
+        :returns: A list of cars from the database.
+        :rtype: list
+        """
         carList = []
         cursor = DB.DBCursor()[0]
         if cursor is not None:
@@ -63,6 +78,13 @@ class Car(DB):
 
     @classmethod
     def CarFreePlacesStock(cls) -> int:
+        """
+        This function check the .
+        :param boolStock: A boolean number
+        :type boolStock: bool
+        :returns: A list of cars from the database.
+        :rtype: list
+        """
         cursor = DB.DBCursor()[0]
         if cursor is not None:
             try:

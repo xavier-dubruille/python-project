@@ -8,10 +8,18 @@ class Type(DB):
 
     @staticmethod
     def NameTable() -> str:
-        # Return the name table
+        """
+        This function returns the name of the type table in the database.
+        :returns: The name of the type table in the database.
+        :rtype: str
+        """
         return "Type"
 
     @staticmethod
     def IdColumn() -> str:
-        # Return the id column
+        """
+        This function returns the primary key name in the type table in the database.
+        :returns: The name of the primary key in the type table in the database.
+        :rtype: str
+        """
         return "id"

@@ -8,10 +8,18 @@ class Motor(DB):
 
     @staticmethod
     def NameTable() -> str:
-        # Return the name table
+        """
+        This function returns the name of the motor table in the database.
+        :returns: The name of the motor table in the database.
+        :rtype: str
+        """
         return "Motor"
 
     @staticmethod
     def IdColumn() -> str:
-        # Return the id column
+        """
+        This function returns the primary key name in the motor table in the database.
+        :returns: The name of the primary key in the motor table in the database.
+        :rtype: str
+        """
         return "id"
