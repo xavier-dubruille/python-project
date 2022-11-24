@@ -1,17 +1,23 @@
-from Main.Class.DB import DBAccess as DB
+from Main.Class.DB import DBAccess as Db
 from Main.Class.Car import Car
 from Main.Class.Customer import Customer
 import sqlite3 as sql
 import sys
 
 
-class Deal(DB):
+class Deal(Db):
     def __init__(self) -> None:
-        self.idCar = self.idCustomer = self.isRent = self.dateStartRent = None
-        self.durationDaysRent = self.car = self.customer = None
+        self.id: int = 0
+        self.idCar: any = None
+        self.idCustomer: any = None
+        self.isRent: bool = False
+        self.dateStartRent: any = None
+        self.durationDaysRent: any = None
+        self.car: Car = Car()
+        self.customer: Customer = Customer()
 
     @staticmethod
-    def NameTable() -> str:
+    def name_table() -> str:
         """
         This function returns the name of the deal table in the database
         :returns: The name of the deal table in the database
@@ -20,7 +26,7 @@ class Deal(DB):
         return "Deal"
 
     @staticmethod
-    def IdColumn() -> str:
+    def id_column() -> str:
         """
         This function returns the primary key name in the deal table in the database
         :returns: The name of the primary key in the deal table in the database
@@ -28,53 +34,55 @@ class Deal(DB):
         """
         return "id"
 
-    def InsertDB(self) -> bool:
+    def insert_db(self) -> bool:
         """
         This function insert in the database a new deal
         :returns: True if the insert was correctly executed
         :rtype: bool
         """
-        cursor, dbConnection = DB.DBCursor()
+        tuple_db: tuple = self.db_cursor()
+        cursor: sql.dbapi2.Cursor = tuple_db[0]
+        db_connection: sql.dbapi2.Connection = tuple_db[1]
         if cursor is not None:
             try:
-                query = ""
+                query: str = ""
                 if self.isRent:
-                    query = f"INSERT INTO Deal (isRent, dateStartRent, durationDaysRent, idCar, idCustomer) " \
+                    query: str = f"INSERT INTO Deal (isRent, dateStartRent, durationDaysRent, idCar, idCustomer) " \
                         f"VALUES ({self.isRent}, {self.dateStartRent}, {self.durationDaysRent}, {self.idCar}, " \
                         f"{self.idCustomer})"
                 else:
-                    query = f"INSERT INTO Deal (isRent, idCar, idCustomer) " \
+                    query: str = f"INSERT INTO Deal (isRent, idCar, idCustomer) " \
                         f"VALUES ({self.isRent}, {self.idCar}, {self.idCustomer})"
                 cursor.execute(query)
-                dbConnection.commit()
+                db_connection.commit()
                 return True
             except sql.OperationalError:
                 print(f"Error in InsertDBDeal {sys.exc_info()}")
             finally:
-                DB.DBClose(cursor)
+                self.db_close(cursor)
         return False
 
     @staticmethod
-    def GetAll() -> list:
+    def get_all() -> list | None:
         """
         This function get all the cars from the database
         :returns: A list of all the cars
         :rtype: list
         """
-        cursor = Deal.DBCursor()[0]
-        dealList = []
+        cursor: sql.dbapi2.Cursor = Deal.db_cursor()[0]
+        deal_list: list = []
         if cursor is not None:
             try:
-                cursor.execute(f"SELECT * FROM {Deal.NameTable()}")
-                resultsQuery = cursor.fetchall()
-                for row in resultsQuery:
-                    newDeal = Deal.LoadResults(cursor, row)
-                    newDeal.car = Car.GetCar(newDeal.idCar)
-                    newDeal.customer = Customer.GetCustomer(newDeal.idCustomer)
-                    dealList.append(newDeal)
-                return dealList
+                cursor.execute("SELECT * FROM Deal ORDER BY idCar")
+                results_query: list = cursor.fetchall()
+                for row in results_query:
+                    new_deal: Deal = Deal.load_results(cursor, row)
+                    new_deal.car = Car.get_car(new_deal.idCar)
+                    new_deal.customer = Customer.get_customer(new_deal.idCustomer)
+                    deal_list.append(new_deal)
+                return deal_list
             except sql.OperationalError:
                 print(f"Error in GetAllDeal {sys.exc_info()}")
             finally:
-                Deal.DBClose(cursor)
-        return []
+                Deal.db_close(cursor)
+        return None

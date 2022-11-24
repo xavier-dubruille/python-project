@@ -11,7 +11,7 @@ from datetime import datetime
 import re
 
 
-def CheckNumberInput(string: str, minimum: int = None, maximum: int = None) -> bool:
+def check_number_input(string: str, minimum: int = None, maximum: int = None) -> bool:
     """
     This function check if the string is convertible into integer
     If minimum and/or maximum are given, check also if it's between them
@@ -43,116 +43,121 @@ def CheckNumberInput(string: str, minimum: int = None, maximum: int = None) -> b
 
 class ApplicationConsole:
     def __init__(self) -> None:
-        self.carListStock = Car.GetCarList()
-        self.brandList = Brand.GetAll()
-        self.motorList = Motor.GetAll()
-        self.typeList = Type.GetAll()
-        dealList = Deal.GetAll()
-        self.rentList = []
-        self.soldList = []
-        for deal in dealList:
-            self.rentList.append(deal) if deal.isRent else self.soldList.append(deal)
-        self.customerList = Customer.GetAll()
-        self.spaceDisplay = 4
+        self.carListStock: list = Car.get_car_list()
+        self.brandList: list = Brand.get_all()
+        self.motorList: list = Motor.get_all()
+        self.typeList: list = Type.get_all()
+        deal_list: list = Deal.get_all()
+        self.rentList: list = []
+        self.soldList: list = []
+        for deal in deal_list:
+            if deal.isRent:
+                self.rentList.append(deal)
+            else:
+                self.soldList.append(deal)
+        self.customerList: list = Customer.get_all()
+        self.spaceDisplay: int = 4
         print("Welcome to Bamboo Concess\n")
-        self.MenuChoice()
+        self.menu_choice()
 
-    def MenuChoice(self) -> None:
+    def menu_choice(self) -> None:
         """
         This function display the basic menu for the user
         :returns: None
         :rtype: None
         """
-        menuInput = ""
-        while not CheckNumberInput(menuInput, 1, 5):
-            menuInput = input("Where do you want to go now ?\n"
-                              " 1 : Show your stock.\n"
-                              " 2 : Show your transaction history.\n"
-                              " 3 : Add a new car to your stock.\n"
-                              " 4 : Add a customer\n"
-                              " 5 : Exit the program.\n-> ")
-        menuInput = int(menuInput)
-        if menuInput == 1:
-            self.DisplayStock()
-        elif menuInput == 2:
-            self.DisplayHistory()
-        elif menuInput == 3:
-            self.AddCar()
-        elif menuInput == 4:
-            self.AddCustomer()
+        menu_input: str = ""
+        while not check_number_input(menu_input, 1, 5):
+            menu_input: str = input("Where do you want to go now ?\n 1 : Show your stock.\n"
+                                    " 2 : Show your transaction history.\n 3 : Add a new car to your stock.\n"
+                                    " 4 : Add a customer\n 5 : Exit the program.\n-> ")
+        menu_input: int = int(menu_input)
+        if menu_input == 1:
+            self.display_stock()
+        elif menu_input == 2:
+            self.display_history()
+        elif menu_input == 3:
+            self.add_car()
+        elif menu_input == 4:
+            self.add_customer()
         else:
             sys.exit()
 
-    def AddCustomer(self) -> None:
+    def add_customer(self) -> None:
         """
         This function asks the user to add a customer to the database with all his characteristics
         :returns: None
         :rtype: None
         """
-        newCustomer = Customer()
-        newCustomer.firstName = newCustomer.lastName = newCustomer.phone = newCustomer.mail = newCustomer.address = ""
+        new_customer: Customer = Customer()
 
-        while not newCustomer.firstName.isalpha():
-            newCustomer.firstName = input("What's the first name ?\n-> ")
-        while not newCustomer.lastName.isalpha():
-            newCustomer.lastName = input("What's the last name ?\n-> ")
-        while not (newCustomer.phone.isdigit() and len(newCustomer.phone) == 10):
-            newCustomer.phone = input("What's the phone number (10 numbers)\n-> ")
-        newCustomer.phone = int(newCustomer.phone)
-        while not (re.fullmatch(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]+\b', newCustomer.mail)):
-            newCustomer.mail = input("What's the email address ?\n-> ")
-        while not re.fullmatch(r"[a-zA-Z0-9\s._%+-]+, [a-zA-Z0-9\s._%+-]+\b", newCustomer.address):
-            newCustomer.address = input("What's the address ?\n-> ")
-        print("New customer added\n") if newCustomer.InsertDB() else print("The execution doesn't work\n")
-        self.MenuChoice()
+        while not new_customer.firstName.isalpha():
+            new_customer.firstName = input("What's the first name ?\n-> ")
+        while not new_customer.lastName.isalpha():
+            new_customer.lastName = input("What's the last name ?\n-> ")
+        while not (new_customer.phone.isdigit() and len(new_customer.phone) == 10):
+            new_customer.phone = input("What's the phone number (10 numbers)\n-> ")
+        new_customer.phone = int(new_customer.phone)
+        while not (re.fullmatch(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]+\b', new_customer.mail)):
+            new_customer.mail = input("What's the email address ?\n-> ")
+        while not re.fullmatch(r"[a-zA-Z0-9\s._%+-]+, [a-zA-Z0-9\s._%+-]+\b", new_customer.address):
+            new_customer.address = input("What's the address ?\n-> ")
+        if new_customer.insert_db():
+            print("New customer added\n")
+        else:
+            print("The execution doesn't work\n")
+        self.menu_choice()
 
-    def DisplayStock(self) -> None:
+    def display_stock(self) -> None:
         """
         This function display the stock from the database
         :returns: None
         :rtype: None
         """
-        strList = ["Id", "Brand", "Type", "Price (€)"]
-        spaceDict = {
-            strList[0]: len(strList[0]) + self.spaceDisplay,
-            strList[1]: len(max(self.carListStock, key=lambda x: len(x.brand.name)).brand.name) + self.spaceDisplay,
-            strList[2]: len(max(self.carListStock, key=lambda x: len(x.type.name)).type.name) + self.spaceDisplay
-        }
-        for i in range(len(strList) - 1):
-            if spaceDict[strList[i]] < len(strList[i]):
-                spaceDict[strList[i]] = len(strList[i]) + self.spaceDisplay
+        str_list: list = ["Id", "Brand", "Type", "Price (€)"]
+        space_dict: dict = {
+            str_list[0]: len(str_list[0]) + self.spaceDisplay,
+            str_list[1]: len(max(self.carListStock, key=lambda x: len(x.brand.name)).brand.name) + self.spaceDisplay,
+            str_list[2]: len(max(self.carListStock, key=lambda x: len(x.type.name)).type.name) + self.spaceDisplay}
 
-        print(f"{strList[0]}" + " " * self.spaceDisplay +
-              f"{strList[1]}" + " " * (spaceDict[strList[1]] - len(f"{strList[1]}")) +
-              f"{strList[2]}" + " " * (spaceDict[strList[2]] - len(f"{strList[2]}")) +
-              f"{strList[3]}")
+        for i in range(len(str_list) - 1):
+            i: int
+            if space_dict[str_list[i]] < len(str_list[i]):
+                space_dict[str_list[i]]: int = len(str_list[i]) + self.spaceDisplay
+
+        print(f"{str_list[0]}" + " " * self.spaceDisplay +
+              f"{str_list[1]}" + " " * (space_dict[str_list[1]] - len(f"{str_list[1]}")) +
+              f"{str_list[2]}" + " " * (space_dict[str_list[2]] - len(f"{str_list[2]}")) +
+              f"{str_list[3]}")
 
         for car in self.carListStock:
-            print(f"{str(car.id):{spaceDict[strList[0]]}}"
-                  f"{car.brand.name:{spaceDict[strList[1]]}}"
-                  f"{car.type.name:{spaceDict[strList[2]]}}"
+            car: Car
+            print(f"{str(car.id):{space_dict[str_list[0]]}}"
+                  f"{car.brand.name:{space_dict[str_list[1]]}}"
+                  f"{car.type.name:{space_dict[str_list[2]]}}"
                   f"{str(car.price)}")
 
-        nextStep = ""
-        while not CheckNumberInput(nextStep, 1, 5):
-            nextStep = input("\nWhat do you want to do next ?\n"
-                             " 1 : Return to the choice menu.\n"
-                             " 2 : See a car's details.\n"
-                             " 3 : Rent a car.\n"
-                             " 4 : Make a deal.\n"
-                             " 5 : Remove a car.\n"
-                             "-> ")
-        nextStep = int(nextStep)
-        if nextStep == 1:
-            self.MenuChoice()
-        elif nextStep == 2:
-            goodChoice = False
-            while not goodChoice:
-                carId = input("Which car do you want to see details from ?\n-> ")
-                if carId.isdigit():
-                    carId = int(carId)
+        next_step: str = ""
+        while not check_number_input(next_step, 1, 5):
+            next_step: str = input("\nWhat do you want to do next ?\n"
+                                   " 1 : Return to the choice menu.\n"
+                                   " 2 : See a car's details.\n"
+                                   " 3 : Rent a car.\n"
+                                   " 4 : Make a deal.\n"
+                                   " 5 : Remove a car.\n"
+                                   "-> ")
+        next_step: int = int(next_step)
+        if next_step == 1:
+            self.menu_choice()
+        elif next_step == 2:
+            good_choice: bool = False
+            while not good_choice:
+                car_id: str = input("Which car do you want to see details from ?\n-> ")
+                if car_id.isdigit():
+                    car_id: int = int(car_id)
                     for car in self.carListStock:
-                        if carId == car.id:
+                        car: Car
+                        if car_id == car.id:
                             print(f"Brand : {car.brand.name}\n"
                                   f"Type : {car.type.name}\n"
                                   f"Motor : {car.motor.name}\n"
@@ -160,186 +165,200 @@ class ApplicationConsole:
                                   f"Promo : {str(car.promo)}%\n"
                                   f"In stock since : {car.dateStock}\n"
                                   f"Next control : {car.dateTechControl}\n")
-                            goodChoice = True
+                            good_choice: bool = True
                             break
-        elif nextStep == 3:
-            self.DoTransaction(True)
-        elif nextStep == 4:
-            self.DoTransaction(False)
-        elif nextStep == 5:
-            goodCarId = False
-            while not goodCarId:
-                carId = input("Which car do you want to remove (n for quit this operation)?\n-> ")
-                if carId.lower() == "n":
-                    goodCarId = True
+        elif next_step == 3:
+            self.do_transaction(True)
+        elif next_step == 4:
+            self.do_transaction(False)
+        elif next_step == 5:
+            good_car_id: bool = False
+            while not good_car_id:
+                car_id: str = input("Which car do you want to remove (n for quit this operation)?\n-> ")
+                if car_id.lower() == "n":
+                    good_car_id: bool = True
                     print("Operation abandoned.\n")
-                elif carId.isdigit():
+                elif car_id.isdigit():
                     for car in self.carListStock:
-                        if car.id == int(carId):
-                            goodCarId = True
-                            car.RemoveDb()
-                            self.carListStock = Car.GetCarList()
+                        car: Car
+                        if car.id == int(car_id):
+                            good_car_id: bool = True
+                            car.remove_db()
+                            self.carListStock: list = Car.get_car_list()
                             print("Car removed\n")
-        self.MenuChoice()
+        self.menu_choice()
 
-    def DisplayHistory(self) -> None:
+    def display_history(self) -> None:
         """
         This function display the history of the user transaction from the database
         :returns: None
         :rtype: None
         """
-        choiceHistory = ""
-        while not CheckNumberInput(choiceHistory, 1, 2):
-            choiceHistory = input("\n"
-                                  " 1 : Rent history display.\n"
-                                  " 2 : Transaction history display.\n"
-                                  "-> ")
-        choiceHistory = int(choiceHistory)
-        strList = ["Id", "Date", "Duration", "Brand", "Type", "Price (€)"]
-        spaceDict = {}
-        listToDisplay = None
-        if choiceHistory == 1:
-            listToDisplay = self.rentList
+        choice_history: str = ""
+        while not check_number_input(choice_history, 1, 2):
+            choice_history: str = input("\n"
+                                        " 1 : Rent history display.\n"
+                                        " 2 : Transaction history display.\n"
+                                        "-> ")
+        choice_history: int = int(choice_history)
+        str_list: list = ["Id", "Date", "Duration", "Brand", "Type", "Price (€)"]
+        space_dict: dict = {}
+        list_to_display: list = []
+        if choice_history == 1:
+            list_to_display: list = self.rentList
         else:
-            listToDisplay = self.soldList
+            list_to_display: list = self.soldList
 
-        if not listToDisplay:
+        if not list_to_display:
             print("There isn't a deal in this categories\n")
-            self.MenuChoice()
+            self.menu_choice()
             return None
 
-        spaceDict[strList[0]] = len(str(
-            max(listToDisplay, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
-        spaceDict[strList[1]] = len(
-            max(listToDisplay, key=lambda x: len(x.dateStartRent)).dateStartRent) + self.spaceDisplay
-        spaceDict[strList[2]] = len(str(
-            max(listToDisplay, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
-        spaceDict[strList[3]] = len(
-            max(listToDisplay, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.spaceDisplay
-        spaceDict[strList[4]] = len(
-            max(listToDisplay, key=lambda x: len(x.car.type.name)).car.type.name) + self.spaceDisplay
+        space_dict[str_list[0]]: int = len(str(
+            max(list_to_display, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
+        space_dict[str_list[1]]: int = len(
+            max(list_to_display, key=lambda x: len(x.dateStartRent)).dateStartRent) + self.spaceDisplay
+        space_dict[str_list[2]]: int = len(str(
+            max(list_to_display, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
+        space_dict[str_list[3]]: int = len(
+            max(list_to_display, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.spaceDisplay
+        space_dict[str_list[4]]: int = len(
+            max(list_to_display, key=lambda x: len(x.car.type.name)).car.type.name) + self.spaceDisplay
 
-        for i in range(len(strList) - 1):
-            if spaceDict[strList[i]] < len(strList[i]):
-                spaceDict[strList[i]] = len(strList[i]) + self.spaceDisplay
+        for i in range(len(str_list) - 1):
+            i: int
+            if space_dict[str_list[i]] < len(str_list[i]):
+                space_dict[str_list[i]]: int = len(str_list[i]) + self.spaceDisplay
 
         print(f"\n"
-              f"{strList[0]}" + " " * (spaceDict[strList[0]] - len(f"{strList[0]}")) +
-              f"{strList[1]}" + " " * (spaceDict[strList[1]] - len(f"{strList[1]}")) +
-              f"{strList[2]}" + " " * (spaceDict[strList[2]] - len(f"{strList[2]}")) +
-              f"{strList[3]}" + " " * (spaceDict[strList[3]] - len(f"{strList[3]}")) +
-              f"{strList[4]}" + " " * (spaceDict[strList[4]] - len(f"{strList[4]}")) +
-              f"{strList[5]}")
+              f"{str_list[0]}" + " " * (space_dict[str_list[0]] - len(f"{str_list[0]}")) +
+              f"{str_list[1]}" + " " * (space_dict[str_list[1]] - len(f"{str_list[1]}")) +
+              f"{str_list[2]}" + " " * (space_dict[str_list[2]] - len(f"{str_list[2]}")) +
+              f"{str_list[3]}" + " " * (space_dict[str_list[3]] - len(f"{str_list[3]}")) +
+              f"{str_list[4]}" + " " * (space_dict[str_list[4]] - len(f"{str_list[4]}")) +
+              f"{str_list[5]}")
 
         for deal in self.rentList:
-            print(f"{str(deal.id):{spaceDict[strList[0]]}}"
-                  f"{deal.dateStartRent:{spaceDict[strList[1]]}}"
-                  f"{str(deal.durationDaysRent):{spaceDict[strList[2]]}}"
-                  f"{deal.car.brand.name:{spaceDict[strList[3]]}}"
-                  f"{deal.car.type.name:{spaceDict[strList[4]]}}"
+            deal: Deal
+            print(f"{str(deal.id):{space_dict[str_list[0]]}}"
+                  f"{deal.dateStartRent:{space_dict[str_list[1]]}}"
+                  f"{str(deal.durationDaysRent):{space_dict[str_list[2]]}}"
+                  f"{deal.car.brand.name:{space_dict[str_list[3]]}}"
+                  f"{deal.car.type.name:{space_dict[str_list[4]]}}"
                   f"{str(deal.car.price)}")
         print("")
-        self.MenuChoice()
+        self.menu_choice()
 
-    def DoTransaction(self, boolRent: bool) -> None:
+    def do_transaction(self, bool_rent: bool) -> None:
         """
         This function asks the user to make a deal between one car and one customer
         :returns: None
         :rtype: None
         """
-        deal = Deal()
-        goodCarId = goodStartDate = goodCustomerId = deal.idCar = None
-        deal.idCustomer = deal.durationDays = deal.dateStart = None
-        deal.isRent = bool(boolRent)
-        spaceDict = {}
-        strList = ["Id", "Name", "Phone"]
+        deal: Deal = Deal()
+        good_car_id: bool = False
+        good_start_date: bool = False
+        good_customer_id: bool = False
+        deal.isRent = bool(bool_rent)
+        space_dict: dict = {}
+        str_list = ["Id", "Name", "Phone"]
 
-        while not goodCarId:
+        while not good_car_id:
             deal.idCar = input("What is the car id ?\n-> ")
             if deal.idCar.isdigit():
                 deal.idCar = int(deal.idCar)
                 for car in self.carListStock:
                     if car.id == deal.idCar:
-                        goodCarId = True
+                        good_car_id: bool = True
                         break
 
-        spaceDict[strList[0]] = len(str(max(self.customerList, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
-        longestCustomer = max(self.customerList, key=lambda x: len(x.lastName))
-        spaceDict[strList[1]] = len(
-            f"{longestCustomer.firstName[0]}.{longestCustomer.lastName}") + self.spaceDisplay
+        space_dict[str_list[0]]: int = len(
+            str(max(self.customerList, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
+        longest_customer: Customer = max(self.customerList, key=lambda x: len(x.lastName))
+        space_dict[str_list[1]]: int = len(
+            f"{longest_customer.firstName[0]}.{longest_customer.lastName}") + self.spaceDisplay
 
-        for i in range(len(strList) - 1):
-            if spaceDict[strList[i]] < len(strList[i]):
-                spaceDict[strList[i]] = len(strList[i])
+        for i in range(len(str_list) - 1):
+            i: int
+            if space_dict[str_list[i]] < len(str_list[i]):
+                space_dict[str_list[i]]: int = len(str_list[i])
 
         print(f"List of customers : \n"
-              f"{strList[0]}" + " " * (spaceDict[strList[0]] - len(f"{strList[0]}")) +
-              f"{strList[1]}" + " " * (spaceDict[strList[1]] - len(f"{strList[0]}")) +
-              f"{strList[2]}")
+              f"{str_list[0]}" + " " * (space_dict[str_list[0]] - len(f"{str_list[0]}")) +
+              f"{str_list[1]}" + " " * (space_dict[str_list[1]] - len(f"{str_list[0]}")) +
+              f"{str_list[2]}")
 
         for customer in self.customerList:
-            print(f"{str(customer.id):{spaceDict[strList[0]]}}"
-                  f"{f'{customer.firstName[0]}.{customer.lastName}':{spaceDict[strList[1]]}}"
+            customer: Customer
+            print(f"{str(customer.id):{space_dict[str_list[0]]}}"
+                  f"{f'{customer.firstName[0]}.{customer.lastName}':{space_dict[str_list[1]]}}"
                   f"{customer.phone}")
 
-        while not goodCustomerId:
+        while not good_customer_id:
             deal.idCustomer = input("What is the customer's id ?\n-> ")
             if deal.idCustomer.isdigit():
                 deal.idCustomer = int(deal.idCustomer)
                 for customer in self.customerList:
                     if customer.id == deal.idCustomer:
-                        goodCustomerId = True
+                        good_customer_id: bool = True
                         break
         if deal.isRent:
-            while not goodStartDate:
+            while not good_start_date:
                 deal.dateStart = input("When does the rent start ?\n-> ")
                 try:
                     deal.dateStart = datetime.strptime(deal.dateStart, '%d/%m/%Y').strftime("%d/%m/%Y")
-                    goodStartDate = True
+                    good_start_date: bool = True
                 except ValueError:
                     continue
 
-            while not CheckNumberInput(deal.durationDays, minimum=1):
+            while not check_number_input(deal.durationDays, minimum=1):
                 deal.durationDays = input("How many days will the rent spend ?\n-> ")
-        deal.InsertDB()
-        self.MenuChoice()
+        deal.insert_db()
+        self.menu_choice()
 
-    def AddCar(self) -> None:
+    def add_car(self) -> None:
         """
         This function asks the user to add a car to the database with all the characteristics
         :returns: None
         :rtype: None
         """
-        if Car.CarFreePlacesStock() <= 40:
-            car = Car()
-            nameBrand = nameType = nameMotor = car.price = car.promo = car.dateTechControl = goodDate = None
+        if Car.car_free_places_stock() <= 40:
+            car: Car = Car()
+            name_brand: str = ""
+            name_type: str = ""
+            name_motor: str = ""
+            good_date: bool = False
 
-            while not nameBrand:
-                nameBrand = input("What is the name of the brand ?\n-> ")
-            while not nameType:
-                nameType = input("What is the type ?\n-> ")
-            while not nameMotor:
-                nameMotor = input("What is the motor's name ?\n-> ")
-            while not CheckNumberInput(car.price, minimum=0):
+            while not name_brand:
+                name_brand: str = input("What is the name of the brand ?\n-> ")
+            while not name_type:
+                name_type: str = input("What is the type ?\n-> ")
+            while not name_motor:
+                name_motor: str = input("What is the motor's name ?\n-> ")
+            while not check_number_input(car.price, minimum=0):
                 car.price = input("What is the price ?\n-> ")
             car.price = int(car.price)
-            while not CheckNumberInput(car.promo, 0, 100):
+            while not check_number_input(car.promo, 0, 100):
                 car.promo = input("Any promotion (%) ?\n-> ")
             car.promo = int(car.promo)
-            while not goodDate:
+            while not good_date:
                 car.dateTechControl = input("What is the date of the tech control ?\n-> ")
                 try:
                     car.dateTechControl = datetime.strptime(car.dateTechControl, '%d/%m/%Y').strftime("%d/%m/%Y")
-                    goodDate = True
+                    good_date: bool = True
                 except ValueError:
                     continue
-            car.idBrand = Brand.GetId(nameBrand)
-            car.idType = Type.GetId(nameType)
-            car.idMotor = Motor.GetId(nameMotor)
-            print("Executed\n") if (car.InsertDB()) else print("Not executed\n")
+
+            car.idBrand = Brand.get_id(name_brand)
+            car.idType = Type.get_id(name_type)
+            car.idMotor = Motor.get_id(name_motor)
+            if car.insert_db():
+                print("Executed\n")
+            else:
+                print("Not executed\n")
         else:
             print("No free places in stock.\n")
-        self.MenuChoice()
+        self.menu_choice()
 
 
 ApplicationConsole()

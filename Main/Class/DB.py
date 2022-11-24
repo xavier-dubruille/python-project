@@ -1,24 +1,25 @@
+import sqlite3
 import sqlite3 as sql
 import sys
 
 
 class DBAccess:
     @staticmethod
-    def DBCursor() -> tuple:
+    def db_cursor() -> tuple | None:
         """
         This function get the connection and the cursor of the database
         :returns: The connection and the cursor of the database
         :rtype: tuple
         """
         try:
-            dbConnection = sql.connect("../Db/bambooConcess.db")
-            return dbConnection.cursor(), dbConnection
+            db_connection: sql.dbapi2.Connection = sql.connect("../Db/bambooConcess.db")
+            return db_connection.cursor(), db_connection
         except sql.OperationalError:
             print(f"Error in DBCursor {sys.exc_info()}")
-            return ()
+            return None
 
     @staticmethod
-    def DBClose(cursor: sql.dbapi2.Connection) -> None:
+    def db_close(cursor: sql.dbapi2.Cursor) -> None:
         """
         This function close a connection of the database chosen by its cursor
         :param cursor: A SQLITE3 object
@@ -29,28 +30,7 @@ class DBAccess:
         cursor.close()
 
     @classmethod
-    def LoadWithId(cls, idNumber: int) -> object:
-        """
-        This function collect date of the class chosen by cls from the idNumber in the database
-        :param idNumber: An integer number
-        :type idNumber: int
-        :returns: A cls object
-        :rtype: object
-        """
-        cursor = cls.DBCursor()[0]
-        if cursor is not None:
-            try:
-                cursor.execute(f"SELECT * FROM {cls.NameTable()} WHERE {cls.IdColumn()} = {idNumber}")
-                result = cursor.fetchone()
-                return cls.LoadResults(cursor, result)
-            except sql.OperationalError:
-                print(f"Error in LoadWithId {sys.exc_info()}")
-            finally:
-                cls.DBClose(cursor)
-        return None
-
-    @classmethod
-    def LoadResults(cls, cursor: sql.dbapi2.Connection, data: list) -> object:
+    def load_results(cls, cursor: sql.Cursor, data: list) -> any:
         """
         This function create a new object with the data
         :param cursor: A SQLITE3 object
@@ -60,38 +40,38 @@ class DBAccess:
         :returns: A new cls object
         :rtype: object
         """
-        newInstance = cls()
-        counter = 0
+        new_instance = cls()
+        counter: int = 0
         for columnName in cursor.description:
-            setattr(newInstance, columnName[0], data[counter])
+            setattr(new_instance, columnName[0], data[counter])
             counter += 1
-        return newInstance
+        return new_instance
 
     @classmethod
-    def GetAll(cls) -> list:
+    def get_all(cls) -> list | None:
         """
         This function get all the data from the database chosen by cls.
         :returns: A list of all the cls object from the database.
         :rtype: list
         """
-        cursor = cls.DBCursor()[0]
-        instancesList = []
+        cursor: sql.dbapi2.Cursor = cls.db_cursor()[0]
+        instances_list: list = []
         if cursor is not None:
             try:
-                cursor.execute(f"SELECT * FROM {cls.NameTable()}")
-                resultsQuery = cursor.fetchall()
-                for row in resultsQuery:
-                    newInstance = cls.LoadResults(cursor, row)
-                    instancesList.append(newInstance)
-                return instancesList
+                cursor.execute(f"SELECT * FROM {cls.name_table()}")
+                results_query: list = cursor.fetchall()
+                for row in results_query:
+                    new_instance: object = cls.load_results(cursor, row)
+                    instances_list.append(new_instance)
+                return instances_list
             except sql.OperationalError:
                 print(f"Error in GetAllDB {sys.exc_info()}")
             finally:
-                cls.DBClose(cursor)
-        return []
+                cls.db_close(cursor)
+        return None
 
     @classmethod
-    def GetId(cls, name: str) -> int:
+    def get_id(cls, name: str) -> int | None:
         """
         This function get the id from the row that the name matches
         :param name: A string of the name of a row in the database
@@ -99,43 +79,54 @@ class DBAccess:
         :returns: The id of the row checked with the name
         :rtype: int
         """
-        cursor, dbConnection = cls.DBCursor()
+        tuple_db: tuple = cls.db_cursor()
+        cursor: sql.dbapi2.Cursor = tuple_db[0]
+        db_connection: sql.dbapi2.Connection = tuple_db[1]
         if cursor and name:
             try:
-                query = f"SELECT {cls.IdColumn()} FROM {cls.NameTable()} WHERE name = '{name}'"
+                query: str = f"SELECT {cls.id_column()} FROM {cls.name_table()} WHERE name = '{name}'"
                 cursor.execute(query)
-                result = cursor.fetchone()
+                result: tuple = cursor.fetchone()
                 if not result:
-                    query = f"INSERT INTO {cls.NameTable()} (name) VALUES ('{name}')"
+                    query: str = f"INSERT INTO {cls.name_table()} (name) VALUES ('{name}')"
                     cursor.execute(query)
-                    dbConnection.commit()
+                    db_connection.commit()
                     cursor.execute("SELECT last_insert_rowid()")
-                    result = cursor.fetchone()
+                    result: tuple = cursor.fetchone()
                 return result[0]
             except sql.OperationalError:
                 print(f"Error in GetId {sys.exc_info()}")
             finally:
-                cls.DBClose(cursor)
-        return 0
+                cls.db_close(cursor)
+        return None
 
     @classmethod
-    def GetCarComponent(cls, idCar: int) -> object:
+    def get_car_component(cls, id_car: int) -> any:
         """
         This function get a component of a car chosen by its id
-        :param idCar: An integer number matches a car
-        :type idCar: int
+        :param id_car: An integer number matches a car
+        :type id_car: int
         :returns: A new cls object
         :rtype: object
         """
-        cursor, dbConnection = cls.DBCursor()
-        if cursor is not None:
+        cursor: sql.dbapi2.Cursor = cls.db_cursor()[0]
+        if cursor:
             try:
-                query = f"SELECT {cls.NameTable()}.id, {cls.NameTable()}.name FROM {cls.NameTable()} JOIN Car " \
-                        f"ON {cls.NameTable()}.{cls.IdColumn()} = Car.id{cls.NameTable()} WHERE Car.id = {idCar}"
+                query: str = f"SELECT {cls.name_table()}.id, {cls.name_table()}.name FROM {cls.name_table()} " \
+                             f"JOIN Car ON {cls.name_table()}.{cls.id_column()} = Car.id{cls.name_table()} " \
+                             f"WHERE Car.id = {id_car} ORDER BY Car.id"
                 cursor.execute(query)
-                return cls.LoadResults(cursor, cursor.fetchone())
+                return cls.load_results(cursor, cursor.fetchone())
             except sql.OperationalError:
                 print(f"Error in GetCarComponent {sys.exc_info()}")
             finally:
-                cls.DBClose(cursor)
+                cls.db_close(cursor)
         return None
+
+    @staticmethod
+    def name_table():
+        pass
+
+    @staticmethod
+    def id_column():
+        pass
