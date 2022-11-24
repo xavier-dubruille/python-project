@@ -476,7 +476,31 @@ class Application:
         buttonAddCustomer.grid(column=1, row=90, rowspan=15, sticky=NSEW)
 
     def VerifyCustomerInsert(self, customerStringVar: dict) -> None:
-        pass
+        textInfo: str = ""
+        customer = Customer()
+        customer.firstName = customerStringVar["firstName"].get()
+        if not customer.firstName:
+            textInfo += "- There is no firstname.\n"
+        customer.lastName = customerStringVar["lastName"].get()
+        if not customer.lastName:
+            textInfo += "- There is no lastname.\n"
+        customer.phone = customerStringVar["phone"].get()
+        if not customer.phone:
+            textInfo += "- There is no phone number.\n"
+        customer.mail = customerStringVar["mail"].get()
+        if not customer.mail:
+            textInfo += "- There is no email address.\n"
+        customer.address = customerStringVar["address"].get()
+        if not customer.address:
+            textInfo += "- It's not a good address.\n"
+        if not textInfo:
+            customer.InsertDB()
+            self.customerList = Customer.GetAll()
+            textInfo = "Customer saved"
+        for widget in self.frameSort.winfo_children():
+            widget.destroy()
+        labelError = Label(self.frameSort, text=textInfo)
+        labelError.pack()
 
     def VerifyCarInsert(self, carStringVar: dict) -> None:
         """
