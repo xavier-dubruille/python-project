@@ -51,6 +51,7 @@ class Application:
         self.buttonReservation = None
         self.buttonHistory = None
         self.buttonStock = None
+        self.buttonAddCustomer = None
         self.window = None
         self.frameButtons = None
         self.printDetails = None
@@ -90,7 +91,7 @@ class Application:
 
         self.frameButtons = Frame(self.window)
         self.frameButtons.grid(column=0, row=1, rowspan=5, sticky=NSEW)
-        for i in range(5):
+        for i in range(6):
             self.frameButtons.rowconfigure(i, weight=1)
         self.frameButtons.columnconfigure(0, weight=1)
 
@@ -104,6 +105,8 @@ class Application:
         self.buttonDeal.grid(column=0, row=3, sticky=NSEW)
         self.buttonAddCar = Button(self.frameButtons, text="Add a car in stock", command=self.DisplayWindowAddCar)
         self.buttonAddCar.grid(column=0, row=4, sticky=NSEW)
+        self.buttonAddCustomer = Button(self.frameButtons, text="Add a customer", command=self.DisplayWindowAddCustomer)
+        self.buttonAddCustomer.grid(column=0, row=5, sticky=NSEW)
 
         frameTitle = Frame(self.window, highlightthickness=2, highlightbackground="black")
         frameTitle.grid(column=1, row=0, sticky=NSEW)
@@ -119,6 +122,10 @@ class Application:
 
         self.frameDisplay = Frame(self.window)
         self.frameDisplay.grid(column=1, row=2, rowspan=6, sticky=NSEW)
+        for i in range(105):
+            self.frameDisplay.grid_rowconfigure(i, weight=1)
+        for i in range(2):
+            self.frameDisplay.grid_columnconfigure(i, weight=1)
         self.frameDisplay.pack_propagate(False)
         self.frameDisplay.grid_propagate(False)
 
@@ -199,10 +206,6 @@ class Application:
 
     # When you click a row to show more information about the car you selected.
     def DisplayDetailsStock(self, event: Event) -> None:
-        for i in range(2):
-            self.frameDetails.rowconfigure(i, weight=1)
-        self.frameDetails.columnconfigure(0, weight=1)
-
         car = self.carListStock[event.widget.curselection()[0]]
         self.printDetails = f"Brand : {car.brand.name}\nType : {car.type.name}\nMotor : {car.motor.name}\n" \
                             f"Price : {car.price}€\n" \
@@ -286,6 +289,7 @@ class Application:
 
     # It will help you to change the reservation's status for a particular car.
     """5"""
+
     def DisplayWindowRent(self) -> None:
         for widget in self.frameButtons.winfo_children():
             if widget.widgetName == "button":
@@ -295,7 +299,7 @@ class Application:
         self.ResetDisplayAndSortFrames()
 
         if not self.carListFree:
-            labelNoFreePlaces = Label(self.frameDisplay, text="No car left for renting")
+            labelNoFreePlaces = Label(self.frameDisplay, text="No car left for renting.")
             labelNoFreePlaces.pack()
 
         else:
@@ -307,33 +311,34 @@ class Application:
             rawDeal.isRent = 1
 
             labelCarId = Label(self.frameDisplay, text="Car id : ")
-            labelCarId.grid(column=0, row=0, sticky=NSEW)
+            labelCarId.grid(column=0, row=0, rowspan=21, sticky=NSEW)
             dropdownCarId = OptionMenu(self.frameDisplay, rawDeal.idCar,
                                        *map(lambda x: f"{x.id} price : {x.price} promo : {x.promo}", self.carListFree))
-            dropdownCarId.grid(column=1, row=0, sticky=NSEW)
+            dropdownCarId.grid(column=1, row=0, rowspan=21, sticky=NSEW)
 
             labelIdCustomer = Label(self.frameDisplay, text="Customer id : ")
-            labelIdCustomer.grid(column=0, row=1, sticky=NSEW)
+            labelIdCustomer.grid(column=0, row=21, sticky=NSEW)
             dropdownIdCustomer = OptionMenu(self.frameDisplay, rawDeal.idCustomer,
                                             *map(lambda x: f"{x.id} {x.firstName[0]}.{x.lastName}", self.customerList))
-            dropdownIdCustomer.grid(column=1, row=1, sticky=NSEW)
+            dropdownIdCustomer.grid(column=1, row=21, rowspan=21, sticky=NSEW)
 
             labelDateStartRent = Label(self.frameDisplay, text="Date of the rent : ")
-            labelDateStartRent.grid(column=0, row=2, sticky=NSEW)
+            labelDateStartRent.grid(column=0, row=42, rowspan=21, sticky=NSEW)
             entryDateStartRent = tkCal(self.frameDisplay, textvariable=rawDeal.dateStartRent, locale='fr_BE',
                                        date_pattern="dd/mm/yyyy")
-            entryDateStartRent.grid(column=1, row=2, sticky=NSEW)
+            entryDateStartRent.grid(column=1, row=42, rowspan=21, sticky=NSEW)
 
             labelDurationDaysRent = Label(self.frameDisplay, text="Duration days of the rent : ")
-            labelDurationDaysRent.grid(column=0, row=3, sticky=NSEW)
+            labelDurationDaysRent.grid(column=0, row=63, rowspan=21, sticky=NSEW)
             entryDurationDaysRent = Entry(self.frameDisplay, textvariable=rawDeal.durationDaysRent)
-            entryDurationDaysRent.grid(column=1, row=3, sticky=NSEW)
+            entryDurationDaysRent.grid(column=1, row=63, rowspan=21, sticky=NSEW)
 
             buttonRentACar = Button(self.frameDisplay, text="Make the rent", command=lambda: self.VerifyDeal(rawDeal))
-            buttonRentACar.grid(column=1, row=4, sticky=NSEW)
+            buttonRentACar.grid(column=1, row=84, rowspan=21, sticky=NSEW)
 
     # It will help you to sell a particular car.
     """3"""
+
     def DisplayWindowSelling(self) -> None:
         for widget in self.frameButtons.winfo_children():
             if widget.widgetName == "button":
@@ -341,7 +346,7 @@ class Application:
         self.buttonDeal["state"] = DISABLED
 
         self.ResetDisplayAndSortFrames()
-        if Car.CarFreePlacesStock() <= 40:
+        if self.carListFree:
 
             rawDeal = Deal()
             rawDeal.idCar = StringVar()
@@ -349,26 +354,27 @@ class Application:
             rawDeal.isRent = 0
 
             labelCarId = Label(self.frameDisplay, text="Car id : ")
-            labelCarId.grid(column=0, row=0, sticky=NSEW)
+            labelCarId.grid(column=0, row=0, rowspan=35, sticky=NSEW)
             dropdownCarId = OptionMenu(self.frameDisplay, rawDeal.idCar,
                                        *map(lambda x: f"{x.id} price : {x.price} promo : {x.promo}", self.carListFree))
-            dropdownCarId.grid(column=1, row=0, sticky=NSEW)
+            dropdownCarId.grid(column=1, row=0, rowspan=35, sticky=NSEW)
 
             labelIdCustomer = Label(self.frameDisplay, text="Customer id : ")
-            labelIdCustomer.grid(column=0, row=1, sticky=NSEW)
+            labelIdCustomer.grid(column=0, row=35, rowspan=35, sticky=NSEW)
             dropdownIdCustomer = OptionMenu(self.frameDisplay, rawDeal.idCustomer,
                                             *map(lambda x: f"{x.id} {x.firstName[0]}.{x.lastName}", self.customerList))
-            dropdownIdCustomer.grid(column=1, row=1, sticky=NSEW)
+            dropdownIdCustomer.grid(column=1, row=35, rowspan=35, sticky=NSEW)
 
             buttonMakeDeal = Button(self.frameDisplay, text="Make the deal", command=lambda: self.VerifyDeal(rawDeal))
-            buttonMakeDeal.grid(column=1, row=2, sticky=NSEW)
+            buttonMakeDeal.grid(column=1, row=70, rowspan=35, sticky=NSEW)
 
         else:
-            labelNoFreePlaces = Label(self.frameDisplay, text="No free places")
-            labelNoFreePlaces.grid(column=0, row=0)
+            labelNoFreePlaces = Label(self.frameDisplay, text="No car left for selling.")
+            labelNoFreePlaces.pack()
 
     # This menu will help you to add a new car in your stock with a form.
     """7"""
+
     def DisplayWindowAddCar(self) -> None:
         for widget in self.frameButtons.winfo_children():
             if widget.widgetName == "button":
@@ -388,42 +394,89 @@ class Application:
             }
 
             labelBrand = Label(self.frameDisplay, text="Brand : ")
-            labelBrand.grid(column=0, row=0, sticky=NSEW)
+            labelBrand.grid(column=0, row=0, rowspan=15, sticky=NSEW)
             entryBrand = Entry(self.frameDisplay, textvariable=rawCar["nameBrand"])
-            entryBrand.grid(column=1, row=0, sticky=NSEW)
+            entryBrand.grid(column=1, row=0, rowspan=15, sticky=NSEW)
 
             labelType = Label(self.frameDisplay, text="Type : ")
-            labelType.grid(column=0, row=1, sticky=NSEW)
+            labelType.grid(column=0, row=15, rowspan=15, sticky=NSEW)
             entryType = Entry(self.frameDisplay, textvariable=rawCar["nameType"])
-            entryType.grid(column=1, row=1, sticky=NSEW)
+            entryType.grid(column=1, row=15, rowspan=15, sticky=NSEW)
 
             labelMotor = Label(self.frameDisplay, text="Motor : ")
-            labelMotor.grid(column=0, row=2, sticky=NSEW)
+            labelMotor.grid(column=0, row=30, rowspan=15, sticky=NSEW)
             entryType = Entry(self.frameDisplay, textvariable=rawCar["nameMotor"])
-            entryType.grid(column=1, row=2, sticky=NSEW)
+            entryType.grid(column=1, row=30, rowspan=15, sticky=NSEW)
 
             labelNextControl = Label(self.frameDisplay, text="Next tech control :")
-            labelNextControl.grid(column=0, row=3, sticky=NSEW)
+            labelNextControl.grid(column=0, row=45, rowspan=15, sticky=NSEW)
             entryNextControl = tkCal(self.frameDisplay, textvariable=rawCar["dateTechControl"], locale='fr_BE',
                                      date_pattern="dd/mm/yyyy")
-            entryNextControl.grid(column=1, row=3, sticky=NSEW)
+            entryNextControl.grid(column=1, row=45, rowspan=15, sticky=NSEW)
 
             labelPrice = Label(self.frameDisplay, text="Price : ")
-            labelPrice.grid(column=0, row=4, sticky=NSEW)
+            labelPrice.grid(column=0, row=60, rowspan=15, sticky=NSEW)
             entryPrice = Entry(self.frameDisplay, textvariable=rawCar["price"])
-            entryPrice.grid(column=1, row=4, sticky=NSEW)
+            entryPrice.grid(column=1, row=60, rowspan=15, sticky=NSEW)
 
             labelPromo = Label(self.frameDisplay, text="Promo : ")
-            labelPromo.grid(column=0, row=5, sticky=NSEW)
+            labelPromo.grid(column=0, row=75, rowspan=15, sticky=NSEW)
             entryPromo = Entry(self.frameDisplay, textvariable=rawCar["promo"])
-            entryPromo.grid(column=1, row=5, sticky=NSEW)
+            entryPromo.grid(column=1, row=75, rowspan=15, sticky=NSEW)
 
             buttonAddCar = Button(self.frameDisplay, text="Add a car in stock",
                                   command=lambda: self.VerifyCarInsert(rawCar))
-            buttonAddCar.grid(column=1, row=6, sticky=NSEW)
+            buttonAddCar.grid(column=1, row=90, rowspan=15, sticky=NSEW)
         else:
             labelNoFreePlaces = Label(self.frameDisplay, text="No free places")
-            labelNoFreePlaces.grid(column=0, row=0)
+            labelNoFreePlaces.pack()
+
+    def DisplayWindowAddCustomer(self):
+        for widget in self.frameButtons.winfo_children():
+            if widget.widgetName == "button":
+                widget["state"] = NORMAL
+        self.buttonAddCustomer["state"] = DISABLED
+
+        self.ResetDisplayAndSortFrames()
+
+        rawCustomer = {
+            "firstName": StringVar(),
+            "lastName": StringVar(),
+            "phone": StringVar(),
+            "mail": StringVar(),
+            "address": StringVar()
+        }
+        labelFirstName = Label(self.frameDisplay, text="Firstname : ")
+        labelFirstName.grid(column=0, row=0, rowspan=21, sticky=NSEW)
+        entryFirstName = Entry(self.frameDisplay, textvariable=rawCustomer["firstName"])
+        entryFirstName.grid(column=1, row=0, rowspan=21, sticky=NSEW)
+
+        labelLastName = Label(self.frameDisplay, text="Lastname : ")
+        labelLastName.grid(column=0, row=21, rowspan=21, sticky=NSEW)
+        entryLastName = Entry(self.frameDisplay, textvariable=rawCustomer["lastName"])
+        entryLastName.grid(column=1, row=21, rowspan=21, sticky=NSEW)
+
+        labelPhone = Label(self.frameDisplay, text="Phone : ")
+        labelPhone.grid(column=0, row=42, rowspan=21, sticky=NSEW)
+        entryPhone = Entry(self.frameDisplay, textvariable=rawCustomer["phone"])
+        entryPhone.grid(column=1, row=42, rowspan=21, sticky=NSEW)
+
+        labelMail = Label(self.frameDisplay, text="Email Address :")
+        labelMail.grid(column=0, row=63, rowspan=21, sticky=NSEW)
+        entryMail = Entry(self.frameDisplay, textvariable=rawCustomer["mail"])
+        entryMail.grid(column=1, row=63, rowspan=21, sticky=NSEW)
+
+        labelAddress = Label(self.frameDisplay, text="Address : ")
+        labelAddress.grid(column=0, row=84, rowspan=21, sticky=NSEW)
+        entryAddress = Entry(self.frameDisplay, textvariable=rawCustomer["address"])
+        entryAddress.grid(column=1, row=84, rowspan=21, sticky=NSEW)
+
+        buttonAddCustomer = Button(self.frameDisplay, text="Add a car in stock",
+                                   command=lambda: self.VerifyCustomerInsert(rawCustomer))
+        buttonAddCustomer.grid(column=1, row=90, rowspan=15, sticky=NSEW)
+
+    def VerifyCustomerInsert(self, customerStringVar: dict) -> None:
+        pass
 
     def VerifyCarInsert(self, carStringVar: dict) -> None:
         """
@@ -463,11 +516,18 @@ class Application:
     def VerifyDeal(self, deal: Deal) -> None:
         textInfo = ""
         newDeal = Deal()
-        newDeal.dateStartRent = newDeal.durationDaysRent = None
-        newDeal.idCar = deal.idCar.get().split()[0]
+        newDeal.dateStartRent = None
+        newDeal.durationDaysRent = None
+        newDeal.idCustomer = None
+        newDeal.idCar = None
+        rawIdCar = deal.idCar.get()
+        if rawIdCar:
+            newDeal.idCar = rawIdCar.split()[0]
         if not newDeal.idCar:
             textInfo += "- There is no car id chosen.\n"
-        newDeal.idCustomer = deal.idCustomer.get().split()[0]
+        rawIdCustomer = deal.idCustomer.get()
+        if rawIdCustomer:
+            newDeal.idCustomer = rawIdCustomer.split()[0]
         if not newDeal.idCustomer:
             textInfo += "- There is no customer id chosen.\n"
         newDeal.isRent = deal.isRent
@@ -482,14 +542,14 @@ class Application:
             newDeal.InsertDB()
             self.SetOrResetCarLists()
             textInfo = "Deal saved"
+            if newDeal.isRent:
+                self.DisplayWindowRent()
+            else:
+                self.DisplayWindowSelling()
         for widget in self.frameSort.winfo_children():
             widget.destroy()
         labelError = Label(self.frameSort, text=textInfo)
         labelError.pack()
-        if newDeal.isRent:
-            self.DisplayWindowRent()
-        else:
-            self.DisplayWindowSelling()
 
     def SetOrResetCarLists(self):
         self.carListStock = Car.GetCarList()
