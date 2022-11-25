@@ -113,8 +113,8 @@ class DBAccess:
         if cursor:
             try:
                 query: str = f"SELECT {cls.name_table()}.id, {cls.name_table()}.name FROM {cls.name_table()} " \
-                             f"JOIN Car ON {cls.name_table()}.{cls.id_column()} = Car.id{cls.name_table()} " \
-                             f"WHERE Car.id = {id_car} ORDER BY Car.id"
+                             f"JOIN car ON {cls.name_table()}.{cls.id_column()} = car.id_{cls.name_table()} " \
+                             f"WHERE car.id = {id_car} ORDER BY Car.id"
                 cursor.execute(query)
                 return cls.load_results(cursor, cursor.fetchone())
             except sql.OperationalError:

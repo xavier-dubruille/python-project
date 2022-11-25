@@ -13,7 +13,7 @@ class Brand(Db):
         :returns: The name of the brand table in the database
         :rtype: str
         """
-        return "Brand"
+        return "brand"
 
     @staticmethod
     def id_column() -> str:

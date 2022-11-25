@@ -13,7 +13,7 @@ class Type(Db):
         :returns: The name of the type table in the database
         :rtype: str
         """
-        return "Type"
+        return "type"
 
     @staticmethod
     def id_column() -> str:

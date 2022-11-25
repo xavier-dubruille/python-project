@@ -8,11 +8,11 @@ import sys
 class Deal(Db):
     def __init__(self) -> None:
         self.id: int = 0
-        self.idCar: any = None
-        self.idCustomer: any = None
-        self.isRent: bool = False
-        self.dateStartRent: any = None
-        self.durationDaysRent: any = None
+        self.id_car: any = None
+        self.id_customer: any = None
+        self.is_rent: bool = False
+        self.date_start_rent: any = None
+        self.duration_days_rent: any = None
         self.car: Car = Car()
         self.customer: Customer = Customer()
 
@@ -23,7 +23,7 @@ class Deal(Db):
         :returns: The name of the deal table in the database
         :rtype: str
         """
-        return "Deal"
+        return "deal"
 
     @staticmethod
     def id_column() -> str:
@@ -46,13 +46,14 @@ class Deal(Db):
         if cursor is not None:
             try:
                 query: str = ""
-                if self.isRent:
-                    query: str = f"INSERT INTO Deal (isRent, dateStartRent, durationDaysRent, idCar, idCustomer) " \
-                        f"VALUES ({self.isRent}, {self.dateStartRent}, {self.durationDaysRent}, {self.idCar}, " \
-                        f"{self.idCustomer})"
+                if self.is_rent:
+                    query: str = f"INSERT INTO deal " \
+                                 f"(is_rent, date_start_rent, duration_days_rent, id_car, id_customer) " \
+                        f"VALUES ({self.is_rent}, {self.date_start_rent}, {self.duration_days_rent}, {self.id_car}, " \
+                        f"{self.id_customer})"
                 else:
-                    query: str = f"INSERT INTO Deal (isRent, idCar, idCustomer) " \
-                        f"VALUES ({self.isRent}, {self.idCar}, {self.idCustomer})"
+                    query: str = f"INSERT INTO deal (is_rent, id_car, id_customer) " \
+                        f"VALUES ({self.is_rent}, {self.id_car}, {self.id_customer})"
                 cursor.execute(query)
                 db_connection.commit()
                 return True
@@ -73,12 +74,12 @@ class Deal(Db):
         deal_list: list = []
         if cursor is not None:
             try:
-                cursor.execute("SELECT * FROM Deal ORDER BY idCar")
+                cursor.execute("SELECT * FROM deal ORDER BY id_car")
                 results_query: list = cursor.fetchall()
                 for row in results_query:
                     new_deal: Deal = Deal.load_results(cursor, row)
-                    new_deal.car = Car.get_car(new_deal.idCar)
-                    new_deal.customer = Customer.get_customer(new_deal.idCustomer)
+                    new_deal.car = Car.get_car(new_deal.id_car)
+                    new_deal.customer = Customer.get_customer(new_deal.id_customer)
                     deal_list.append(new_deal)
                 return deal_list
             except sql.OperationalError:

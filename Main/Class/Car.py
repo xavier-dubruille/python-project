@@ -10,13 +10,13 @@ from Main.Class.Type import Type
 class Car(Db):
     def __init__(self) -> None:
         self.id: int = 0
-        self.dateStock: str = ""
-        self.dateTechControl: str = ""
+        self.date_stock: str = ""
+        self.date_tech_control: str = ""
         self.price: int = 0
         self.promo: int = 0
-        self.idBrand: int = 0
-        self.idType: int = 0
-        self.idMotor: int = 0
+        self.id_brand: int = 0
+        self.id_type: int = 0
+        self.id_motor: int = 0
         self.brand: Brand = Brand()
         self.motor: Motor = Motor()
         self.type: Type = Type()
@@ -28,7 +28,7 @@ class Car(Db):
         :returns: The name of the car table in the database
         :rtype: str
         """
-        return "Car"
+        return "car"
 
     @staticmethod
     def id_column() -> str:
@@ -50,9 +50,9 @@ class Car(Db):
         cursor: sql.dbapi2.Cursor = Db.db_cursor()[0]
         if cursor:
             try:
-                query: str = "SELECT id, STRFTIME('%d/%m/%Y', dateStock) as dateStock, " \
-                        "dateTechControl, price || '0' as price, promo FROM Car WHERE id " \
-                        "NOT IN (select idCar FROM Deal WHERE isRent = 0) ORDER BY id"
+                query: str = "SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, " \
+                        "date_tech_control, price || '0' as price, promo FROM car WHERE id " \
+                        "NOT IN (select id_car FROM deal WHERE is_rent = 0) ORDER BY id"
                 cursor.execute(query)
                 results_query: list = cursor.fetchall()
                 for row in results_query:
@@ -76,7 +76,7 @@ class Car(Db):
         cursor: sql.dbapi2.Cursor = Db.db_cursor()[0]
         if cursor is not None:
             try:
-                query: str = "SELECT count(*) FROM Car WHERE id NOT IN (SELECT id FROM Deal WHERE isRent = 0)"
+                query: str = "SELECT count(*) FROM car WHERE id NOT IN (SELECT id FROM deal WHERE is_rent = 0)"
                 cursor.execute(query)
                 return cursor.fetchone()[0]
             except sql.OperationalError:
@@ -96,9 +96,9 @@ class Car(Db):
         db_connection: sql.dbapi2.Connection = tuple_db[1]
         if cursor is not None:
             try:
-                query: str = f"INSERT INTO Car (dateTechControl, price, idBrand, idType, idMotor, promo) " \
-                        f"VALUES ('{self.dateTechControl}', {self.price}, {self.idBrand},{self.idType}, " \
-                        f"{self.idMotor}, {self.promo})"
+                query: str = f"INSERT INTO car (date_tech_control, price, id_brand, id_type, id_motor, promo) " \
+                        f"VALUES ('{self.date_tech_control}', {self.price}, {self.id_brand},{self.id_type}, " \
+                        f"{self.id_motor}, {self.promo})"
                 cursor.execute(query)
                 db_connection.commit()
                 return True
@@ -119,7 +119,7 @@ class Car(Db):
         db_connection: sql.dbapi2.Connection = tuple_db[1]
         if cursor is not None:
             try:
-                query: str = f"DELETE FROM Car WHERE id = {self.id}"
+                query: str = f"DELETE FROM car WHERE id = {self.id}"
                 cursor.execute(query)
                 db_connection.commit()
                 del self
@@ -142,8 +142,8 @@ class Car(Db):
         cursor: sql.dbapi2.Cursor = Car.db_cursor()[0]
         if cursor is not None:
             try:
-                query: str = f"SELECT id, STRFTIME('%d/%m/%Y', dateStock) as dateStock, dateTechControl, " \
-                        f"price || '0' as price, promo FROM Car WHERE id = {id_car} "
+                query: str = f"SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, date_tech_control, " \
+                        f"price || '0' as price, promo FROM car WHERE id = {id_car} "
                 cursor.execute(query)
                 new_car = Car.load_results(cursor, cursor.fetchone())
                 new_car.get_components()
@@ -163,3 +163,4 @@ class Car(Db):
         self.brand = Brand.get_car_component(self.id)
         self.motor = Motor.get_car_component(self.id)
         self.type = Type.get_car_component(self.id)
+

@@ -7,8 +7,8 @@ from Main.Class.DB import DBAccess as Db
 class Customer(Db):
     def __init__(self) -> None:
         self.id: int = 0
-        self.firstName: str = ""
-        self.lastName: str = ""
+        self.first_name: str = ""
+        self.last_name: str = ""
         self.phone: int | str = 0
         self.mail: str = ""
         self.address: str = ""
@@ -25,7 +25,7 @@ class Customer(Db):
         cursor: sql.dbapi2.Cursor = Customer.db_cursor()[0]
         if cursor is not None:
             try:
-                query: str = f"SELECT * FROM Customer WHERE id = {id_customer}"
+                query: str = f"SELECT * FROM customer WHERE id = {id_customer}"
                 cursor.execute(query)
                 new_customer: Customer = Customer.load_results(cursor, cursor.fetchone())
                 return new_customer
@@ -46,8 +46,9 @@ class Customer(Db):
         db_connection: sql.dbapi2.Connection = tuple_db[1]
         if cursor is not None:
             try:
-                query: str = f"INSERT INTO Customer (firstName, lastName, phone, mail, address) " \
-                        f"VALUES ('{self.firstName}', '{self.lastName}', {self.phone}, '{self.mail}', '{self.address}')"
+                query: str = f"INSERT INTO customer (first_name, last_name, phone, mail, address) " \
+                        f"VALUES ('{self.first_name}', '{self.last_name}', {self.phone}, " \
+                             f"'{self.mail}', '{self.address}')"
                 cursor.execute(query)
                 db_connection.commit()
                 return True
@@ -64,7 +65,7 @@ class Customer(Db):
         :returns: The name of the customer table in the database
         :rtype: str
         """
-        return "Customer"
+        return "customer"
 
     @staticmethod
     def id_column() -> str:

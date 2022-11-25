@@ -43,20 +43,20 @@ def check_number_input(string: str, minimum: int = None, maximum: int = None) ->
 
 class ApplicationConsole:
     def __init__(self) -> None:
-        self.carListStock: list = Car.get_car_list()
-        self.brandList: list = Brand.get_all()
-        self.motorList: list = Motor.get_all()
-        self.typeList: list = Type.get_all()
+        self.car_list_stock: list = Car.get_car_list()
+        self.brand_list: list = Brand.get_all()
+        self.motor_list: list = Motor.get_all()
+        self.type_list: list = Type.get_all()
         deal_list: list = Deal.get_all()
-        self.rentList: list = []
-        self.soldList: list = []
+        self.rent_list: list = []
+        self.sold_list: list = []
         for deal in deal_list:
-            if deal.isRent:
-                self.rentList.append(deal)
+            if deal.is_rent:
+                self.rent_list.append(deal)
             else:
-                self.soldList.append(deal)
-        self.customerList: list = Customer.get_all()
-        self.spaceDisplay: int = 4
+                self.sold_list.append(deal)
+        self.customer_list: list = Customer.get_all()
+        self.space_display: int = 4
         print("Welcome to Bamboo Concess\n")
         self.menu_choice()
 
@@ -91,10 +91,10 @@ class ApplicationConsole:
         """
         new_customer: Customer = Customer()
 
-        while not new_customer.firstName.isalpha():
-            new_customer.firstName = input("What's the first name ?\n-> ")
-        while not new_customer.lastName.isalpha():
-            new_customer.lastName = input("What's the last name ?\n-> ")
+        while not new_customer.first_name.isalpha():
+            new_customer.first_name = input("What's the first name ?\n-> ")
+        while not new_customer.last_name.isalpha():
+            new_customer.last_name = input("What's the last name ?\n-> ")
         while not (new_customer.phone.isdigit() and len(new_customer.phone) == 10):
             new_customer.phone = input("What's the phone number (10 numbers)\n-> ")
         new_customer.phone = int(new_customer.phone)
@@ -116,21 +116,21 @@ class ApplicationConsole:
         """
         str_list: list = ["Id", "Brand", "Type", "Price (€)"]
         space_dict: dict = {
-            str_list[0]: len(str_list[0]) + self.spaceDisplay,
-            str_list[1]: len(max(self.carListStock, key=lambda x: len(x.brand.name)).brand.name) + self.spaceDisplay,
-            str_list[2]: len(max(self.carListStock, key=lambda x: len(x.type.name)).type.name) + self.spaceDisplay}
+            str_list[0]: len(str_list[0]) + self.space_display,
+            str_list[1]: len(max(self.car_list_stock, key=lambda x: len(x.brand.name)).brand.name) + self.space_display,
+            str_list[2]: len(max(self.car_list_stock, key=lambda x: len(x.type.name)).type.name) + self.space_display}
 
         for i in range(len(str_list) - 1):
             i: int
             if space_dict[str_list[i]] < len(str_list[i]):
-                space_dict[str_list[i]]: int = len(str_list[i]) + self.spaceDisplay
+                space_dict[str_list[i]]: int = len(str_list[i]) + self.space_display
 
-        print(f"{str_list[0]}" + " " * self.spaceDisplay +
+        print(f"{str_list[0]}" + " " * self.space_display +
               f"{str_list[1]}" + " " * (space_dict[str_list[1]] - len(f"{str_list[1]}")) +
               f"{str_list[2]}" + " " * (space_dict[str_list[2]] - len(f"{str_list[2]}")) +
               f"{str_list[3]}")
 
-        for car in self.carListStock:
+        for car in self.car_list_stock:
             car: Car
             print(f"{str(car.id):{space_dict[str_list[0]]}}"
                   f"{car.brand.name:{space_dict[str_list[1]]}}"
@@ -155,7 +155,7 @@ class ApplicationConsole:
                 car_id: str = input("Which car do you want to see details from ?\n-> ")
                 if car_id.isdigit():
                     car_id: int = int(car_id)
-                    for car in self.carListStock:
+                    for car in self.car_list_stock:
                         car: Car
                         if car_id == car.id:
                             print(f"Brand : {car.brand.name}\n"
@@ -163,8 +163,8 @@ class ApplicationConsole:
                                   f"Motor : {car.motor.name}\n"
                                   f"Price : {str(car.price)}€\n"
                                   f"Promo : {str(car.promo)}%\n"
-                                  f"In stock since : {car.dateStock}\n"
-                                  f"Next control : {car.dateTechControl}\n")
+                                  f"In stock since : {car.date_stock}\n"
+                                  f"Next control : {car.date_tech_control}\n")
                             good_choice: bool = True
                             break
         elif next_step == 3:
@@ -179,12 +179,12 @@ class ApplicationConsole:
                     good_car_id: bool = True
                     print("Operation abandoned.\n")
                 elif car_id.isdigit():
-                    for car in self.carListStock:
+                    for car in self.car_list_stock:
                         car: Car
                         if car.id == int(car_id):
                             good_car_id: bool = True
                             car.remove_db()
-                            self.carListStock: list = Car.get_car_list()
+                            self.car_list_stock: list = Car.get_car_list()
                             print("Car removed\n")
         self.menu_choice()
 
@@ -203,11 +203,9 @@ class ApplicationConsole:
         choice_history: int = int(choice_history)
         str_list: list = ["Id", "Date", "Duration", "Brand", "Type", "Price (€)"]
         space_dict: dict = {}
-        list_to_display: list = []
+        list_to_display: list = self.sold_list
         if choice_history == 1:
-            list_to_display: list = self.rentList
-        else:
-            list_to_display: list = self.soldList
+            list_to_display: list = self.rent_list
 
         if not list_to_display:
             print("There isn't a deal in this categories\n")
@@ -215,20 +213,20 @@ class ApplicationConsole:
             return None
 
         space_dict[str_list[0]]: int = len(str(
-            max(list_to_display, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
+            max(list_to_display, key=lambda x: len(str(x.id))).id)) + self.space_display
         space_dict[str_list[1]]: int = len(
-            max(list_to_display, key=lambda x: len(x.dateStartRent)).dateStartRent) + self.spaceDisplay
+            max(list_to_display, key=lambda x: len(x.date_start_rent)).date_start_rent) + self.space_display
         space_dict[str_list[2]]: int = len(str(
-            max(list_to_display, key=lambda x: len(str(x.durationDaysRent))).durationDaysRent)) + self.spaceDisplay
+            max(list_to_display, key=lambda x: len(str(x.duration_days_rent))).duration_days_rent)) + self.space_display
         space_dict[str_list[3]]: int = len(
-            max(list_to_display, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.spaceDisplay
+            max(list_to_display, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.space_display
         space_dict[str_list[4]]: int = len(
-            max(list_to_display, key=lambda x: len(x.car.type.name)).car.type.name) + self.spaceDisplay
+            max(list_to_display, key=lambda x: len(x.car.type.name)).car.type.name) + self.space_display
 
         for i in range(len(str_list) - 1):
             i: int
             if space_dict[str_list[i]] < len(str_list[i]):
-                space_dict[str_list[i]]: int = len(str_list[i]) + self.spaceDisplay
+                space_dict[str_list[i]]: int = len(str_list[i]) + self.space_display
 
         print(f"\n"
               f"{str_list[0]}" + " " * (space_dict[str_list[0]] - len(f"{str_list[0]}")) +
@@ -238,11 +236,11 @@ class ApplicationConsole:
               f"{str_list[4]}" + " " * (space_dict[str_list[4]] - len(f"{str_list[4]}")) +
               f"{str_list[5]}")
 
-        for deal in self.rentList:
+        for deal in self.rent_list:
             deal: Deal
             print(f"{str(deal.id):{space_dict[str_list[0]]}}"
-                  f"{deal.dateStartRent:{space_dict[str_list[1]]}}"
-                  f"{str(deal.durationDaysRent):{space_dict[str_list[2]]}}"
+                  f"{deal.date_start_rent:{space_dict[str_list[1]]}}"
+                  f"{str(deal.duration_days_rent):{space_dict[str_list[2]]}}"
                   f"{deal.car.brand.name:{space_dict[str_list[3]]}}"
                   f"{deal.car.type.name:{space_dict[str_list[4]]}}"
                   f"{str(deal.car.price)}")
@@ -259,24 +257,24 @@ class ApplicationConsole:
         good_car_id: bool = False
         good_start_date: bool = False
         good_customer_id: bool = False
-        deal.isRent = bool(bool_rent)
+        deal.is_rent = bool(bool_rent)
         space_dict: dict = {}
         str_list = ["Id", "Name", "Phone"]
 
         while not good_car_id:
-            deal.idCar = input("What is the car id ?\n-> ")
-            if deal.idCar.isdigit():
-                deal.idCar = int(deal.idCar)
-                for car in self.carListStock:
-                    if car.id == deal.idCar:
+            deal.id_car = input("What is the car id ?\n-> ")
+            if deal.id_car.isdigit():
+                deal.id_car = int(deal.id_car)
+                for car in self.car_list_stock:
+                    if car.id == deal.id_car:
                         good_car_id: bool = True
                         break
 
         space_dict[str_list[0]]: int = len(
-            str(max(self.customerList, key=lambda x: len(str(x.id))).id)) + self.spaceDisplay
-        longest_customer: Customer = max(self.customerList, key=lambda x: len(x.lastName))
+            str(max(self.customer_list, key=lambda x: len(str(x.id))).id)) + self.space_display
+        longest_customer: Customer = max(self.customer_list, key=lambda x: len(x.last_name))
         space_dict[str_list[1]]: int = len(
-            f"{longest_customer.firstName[0]}.{longest_customer.lastName}") + self.spaceDisplay
+            f"{longest_customer.first_name[0]}.{longest_customer.last_name}") + self.space_display
 
         for i in range(len(str_list) - 1):
             i: int
@@ -288,21 +286,21 @@ class ApplicationConsole:
               f"{str_list[1]}" + " " * (space_dict[str_list[1]] - len(f"{str_list[0]}")) +
               f"{str_list[2]}")
 
-        for customer in self.customerList:
+        for customer in self.customer_list:
             customer: Customer
             print(f"{str(customer.id):{space_dict[str_list[0]]}}"
-                  f"{f'{customer.firstName[0]}.{customer.lastName}':{space_dict[str_list[1]]}}"
+                  f"{f'{customer.first_name[0]}.{customer.last_name}':{space_dict[str_list[1]]}}"
                   f"{customer.phone}")
 
         while not good_customer_id:
-            deal.idCustomer = input("What is the customer's id ?\n-> ")
-            if deal.idCustomer.isdigit():
-                deal.idCustomer = int(deal.idCustomer)
-                for customer in self.customerList:
-                    if customer.id == deal.idCustomer:
+            deal.id_customer = input("What is the customer's id ?\n-> ")
+            if deal.id_customer.isdigit():
+                deal.id_customer = int(deal.id_customer)
+                for customer in self.customer_list:
+                    if customer.id == deal.id_customer:
                         good_customer_id: bool = True
                         break
-        if deal.isRent:
+        if deal.is_rent:
             while not good_start_date:
                 deal.dateStart = input("When does the rent start ?\n-> ")
                 try:
@@ -342,16 +340,16 @@ class ApplicationConsole:
                 car.promo = input("Any promotion (%) ?\n-> ")
             car.promo = int(car.promo)
             while not good_date:
-                car.dateTechControl = input("What is the date of the tech control ?\n-> ")
+                car.date_tech_control = input("What is the date of the tech control ?\n-> ")
                 try:
-                    car.dateTechControl = datetime.strptime(car.dateTechControl, '%d/%m/%Y').strftime("%d/%m/%Y")
+                    car.date_tech_control = datetime.strptime(car.date_tech_control, '%d/%m/%Y').strftime("%d/%m/%Y")
                     good_date: bool = True
                 except ValueError:
                     continue
 
-            car.idBrand = Brand.get_id(name_brand)
-            car.idType = Type.get_id(name_type)
-            car.idMotor = Motor.get_id(name_motor)
+            car.id_brand = Brand.get_id(name_brand)
+            car.id_type = Type.get_id(name_type)
+            car.id_motor = Motor.get_id(name_motor)
             if car.insert_db():
                 print("Executed\n")
             else:
