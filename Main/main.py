@@ -41,16 +41,16 @@ def check_number_input(string: str, minimum: int = None, maximum: int = None) ->
     return True
 
 
-class Application:
-    # TODO : change to snake case the db
+class Window:
     def __init__(self) -> None:
         self.window: Tk | None = None
         self.button_add_car: Button | None = None
         self.button_deal: Button | None = None
-        self.button_reservation: Button | None = None
+        self.button_rent: Button | None = None
         self.button_history: Button | None = None
         self.button_stock: Button | None = None
         self.button_add_customer: Button | None = None
+        self.check_button_id: Checkbutton | None = None
         self.frame_buttons: Frame | None = None
         self.frame_details: Frame | None = None
         self.frame_display: Frame | None = None
@@ -108,9 +108,9 @@ class Application:
         self.button_history: Button = Button(self.frame_buttons, text="Display History",
                                              command=self.display_window_history)
         self.button_history.grid(column=0, row=1, sticky=NSEW)
-        self.button_reservation: Button = Button(self.frame_buttons, text="Rent a car",
-                                                 command=self.display_window_rent)
-        self.button_reservation.grid(column=0, row=2, sticky=NSEW)
+        self.button_rent: Button = Button(self.frame_buttons, text="Rent a car",
+                                          command=self.display_window_rent)
+        self.button_rent.grid(column=0, row=2, sticky=NSEW)
         self.button_deal: Button = Button(self.frame_buttons, text="Make a deal",
                                           command=self.display_window_selling)
         self.button_deal.grid(column=0, row=3, sticky=NSEW)
@@ -165,14 +165,19 @@ class Application:
         self.display_window_stock()
         self.window.mainloop()
 
+    def sort_display(self, sorting_element: str) -> None:
+        self.display_window_stock()
+
+    def display_window_sort(self) -> None:
+        self.check_button_id: Checkbutton = Checkbutton(self.frame_sort, text=" : sorting id",
+                                                        command=lambda: self.sort_display("id"))
+        self.check_button_id.pack()
+
     # It shows you which car you have in your stock. It is displayed by default.
     def display_window_stock(self) -> None:
-        for widget in self.frame_buttons.winfo_children():
-            if widget.widgetName == "button":
-                widget["state"] = NORMAL
-        self.button_stock["state"] = DISABLED
-
         self.reset_display_and_sort_frames()
+        self.button_stock["state"] = DISABLED
+        self.display_window_sort()
 
         str_list: list = ["Id", "Brand", "Type", "Price (€)", "Rented"]
         space_dict: dict = {
@@ -227,12 +232,9 @@ class Application:
 
     # It will show you which car you sell.
     def display_window_history(self) -> None:
-        for widget in self.frame_buttons.winfo_children():
-            if widget.widgetName == "button":
-                widget["state"] = NORMAL
-        self.button_history["state"] = DISABLED
-
         self.reset_display_and_sort_frames()
+        self.button_history["state"] = DISABLED
+        self.display_window_sort()
 
         if not self.deal_list:
             listbox_history: Listbox = Listbox(self.frame_display)
@@ -297,13 +299,10 @@ class Application:
         self.label_details.configure(text=self.print_details)
 
     # It will help you to change the reservation's status for a particular car.
-    # 5
     def display_window_rent(self) -> None:
-        for widget in self.frame_buttons.winfo_children():
-            if widget.widgetName == "button":
-                widget["state"] = NORMAL
-        self.button_reservation["state"] = DISABLED
         self.reset_display_and_sort_frames()
+        self.button_rent["state"] = DISABLED
+
         rowspan: int = int(self.lcm_row_number_display / self.row_number_rent)
         if not self.car_list_free:
             label_no_free_places: Label = Label(self.frame_display, text="No car left for renting.")
@@ -348,13 +347,10 @@ class Application:
             button_rent_a_car.grid(column=1, row=rowspan * 4, rowspan=rowspan, sticky=NSEW)
 
     # It will help you to sell a particular car.
-    # 3
     def display_window_selling(self) -> None:
-        for widget in self.frame_buttons.winfo_children():
-            if widget.widgetName == "button":
-                widget["state"] = NORMAL
-        self.button_deal["state"] = DISABLED
         self.reset_display_and_sort_frames()
+        self.button_deal["state"] = DISABLED
+
         rowspan: int = int(self.lcm_row_number_display / self.row_number_selling)
 
         if self.car_list_free:
@@ -386,13 +382,9 @@ class Application:
             label_no_free_places.pack()
 
     # This menu will help you to add a new car in your stock with a form.
-    # 7
     def display_window_add_car(self) -> None:
-        for widget in self.frame_buttons.winfo_children():
-            if widget.widgetName == "button":
-                widget["state"] = NORMAL
-        self.button_add_car["state"] = DISABLED
         self.reset_display_and_sort_frames()
+        self.button_add_car["state"] = DISABLED
         rowspan: int = int(self.lcm_row_number_display / self.row_number_add_car)
 
         if Car.car_free_places_stock() <= 40:
@@ -444,7 +436,6 @@ class Application:
             label_no_free_places: Label = Label(self.frame_display, text="No free places")
             label_no_free_places.pack()
 
-    # 6
     def display_window_add_customer(self):
         for widget in self.frame_buttons.winfo_children():
             if widget.widgetName == "button":
@@ -609,7 +600,10 @@ class Application:
             widget.destroy()
         for widget in self.frame_sort.winfo_children():
             widget.destroy()
+        for widget in self.frame_buttons.winfo_children():
+            if widget.widgetName == "button":
+                widget["state"] = NORMAL
 
 
 # It will launch the application
-Application()
+Window()

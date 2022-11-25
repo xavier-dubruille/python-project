@@ -52,7 +52,7 @@ class Car(Db):
             try:
                 query: str = "SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, " \
                         "date_tech_control, price || '0' as price, promo FROM car WHERE id " \
-                        "NOT IN (select id_car FROM deal WHERE is_rent = 0) ORDER BY id"
+                        "NOT IN (select id_car FROM deal WHERE is_rent = 0)"
                 cursor.execute(query)
                 results_query: list = cursor.fetchall()
                 for row in results_query:
