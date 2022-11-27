@@ -165,12 +165,42 @@ class Window:
         self.display_window_stock()
         self.window.mainloop()
 
-    def sort_display(self, sorting_element: str) -> None:
-        self.display_window_stock()
+    def display_car_listbox(self, list_car: list, listbox: Listbox, dict_space: dict, list_str: list, bool_stock: bool):
+        for car_or_deal in list_car:
+            if type(list_car[0]) == Car:
+                car: Car = car_or_deal
+                rented: str = ""
+                for deal in self.rent_list:
+                    if deal.id_car == car.id:
+                        rented: str = "Rented"
+                        break
+                listbox.insert(END,
+                               f"{str(car.id):{dict_space[list_str[0]]}}"
+                               f"{car.brand.name:{dict_space[list_str[1]]}}"
+                               f"{car.type.name:{dict_space[list_str[2]]}}"
+                               f"{car.price:{dict_space[list_str[3]]}}"
+                               f"{rented}")
+                listbox.bind('<<ListboxSelect>>', self.display_details_stock)
+            else:
+                deal: Deal = car_or_deal
+                listbox.insert(END,
+                               f"{str(deal.car.id):{dict_space[list_str[0]]}}"
+                               f"{deal.car.brand.name:{dict_space[list_str[1]]}}"
+                               f"{deal.car.type.name:{dict_space[list_str[2]]}}"
+                               f"{deal.car.price:{dict_space[list_str[3]]}}"
+                               f"{deal.customer.first_name[0]}.{deal.customer.last_name}")
+                listbox.bind('<<ListboxSelect>>', self.display_details_history)
+
+    def sort_display(self, sorting_element: Checkbutton, value: IntVar) -> None:
+        if value.get():
+            self.deal_list = Deal.get_all(sorting_element.winfo_name())
+            self.display_window_history()
+
 
     def display_window_sort(self) -> None:
-        self.check_button_id: Checkbutton = Checkbutton(self.frame_sort, text=" : sorting id",
-                                                        command=lambda: self.sort_display("id"))
+        value_check: IntVar= IntVar()
+        self.check_button_id: Checkbutton = Checkbutton(self.frame_sort, text=" : sorting id", name="id", variable=value_check,
+                                                        command=lambda: self.sort_display(self.check_button_id, value_check))
         self.check_button_id.pack()
 
     # It shows you which car you have in your stock. It is displayed by default.
@@ -205,19 +235,7 @@ class Window:
         listbox_stock: Listbox = Listbox(frame_list_box_scroll)
         listbox_stock.pack(expand=True, fill=BOTH, anchor=W)
 
-        for car in self.car_list_stock:
-            rented: str = ""
-            for deal in self.rent_list:
-                if deal.id_car == car.id:
-                    rented: str = "Rented"
-                    break
-            listbox_stock.insert(END,
-                                 f"{str(car.id):{space_dict[str_list[0]]}}"
-                                 f"{car.brand.name:{space_dict[str_list[1]]}}"
-                                 f"{car.type.name:{space_dict[str_list[2]]}}"
-                                 f"{car.price:{space_dict[str_list[3]]}}"
-                                 f"{rented}")
-            listbox_stock.bind('<<ListboxSelect>>', self.display_details_stock)
+        self.display_car_listbox(self.car_list_stock, listbox_stock, space_dict, str_list, True)
 
         listbox_stock.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listbox_stock.yview)
@@ -272,14 +290,7 @@ class Window:
             listbox_history: Listbox = Listbox(frame_list_box_scroll)
             listbox_history.pack(expand=True, fill=BOTH)
 
-            for deal in self.deal_list:
-                listbox_history.insert(END,
-                                       f"{str(deal.car.id):{space_dict[str_list[0]]}}"
-                                       f"{deal.car.brand.name:{space_dict[str_list[1]]}}"
-                                       f"{deal.car.type.name:{space_dict[str_list[2]]}}"
-                                       f"{deal.car.price:{space_dict[str_list[3]]}}"
-                                       f"{deal.customer.first_name[0]}.{deal.customer.last_name}")
-                listbox_history.bind('<<ListboxSelect>>', self.display_details_history)
+            self.display_car_listbox(self.deal_list, listbox_history, space_dict, str_list, False)
 
             listbox_history.configure(yscrollcommand=scrollbar.set)
             scrollbar.configure(command=listbox_history.yview)
