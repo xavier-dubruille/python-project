@@ -50,7 +50,6 @@ class Window:
         self.button_history: Button | None = None
         self.button_stock: Button | None = None
         self.button_add_customer: Button | None = None
-        self.check_button_id: Checkbutton | None = None
         self.frame_buttons: Frame | None = None
         self.frame_details: Frame | None = None
         self.frame_display: Frame | None = None
@@ -72,7 +71,7 @@ class Window:
         self.car_list_free: list = []
         self.car_list_stock: list = []
         self.deal_list: list = []
-        self.set_or_reset_car_lists()
+        self.reset_car_lists()
         self.brand_list: list = Brand.get_all()
         self.motor_list: list = Motor.get_all()
         self.type_list: list = Type.get_all()
@@ -165,7 +164,7 @@ class Window:
         self.display_window_stock()
         self.window.mainloop()
 
-    def display_car_listbox(self, list_car: list, listbox: Listbox, dict_space: dict, list_str: list, bool_stock: bool):
+    def display_car_listbox(self, list_car: list, listbox: Listbox, dict_space: dict, list_str: list):
         for car_or_deal in list_car:
             if type(list_car[0]) == Car:
                 car: Car = car_or_deal
@@ -191,17 +190,53 @@ class Window:
                                f"{deal.customer.first_name[0]}.{deal.customer.last_name}")
                 listbox.bind('<<ListboxSelect>>', self.display_details_history)
 
-    def sort_display(self, sorting_element: Checkbutton, value: IntVar) -> None:
-        if value.get():
-            self.deal_list = Deal.get_all(sorting_element.winfo_name())
-            self.display_window_history()
-
+    def sort_display(self, value_sorting: StringVar, value_order: IntVar) -> None:
+        value_sorting: str = value_sorting.get()
+        if value_sorting:
+            if self.button_stock["state"] == DISABLED:
+                self.car_list_stock.sort(key=lambda x: getattr(x, value_sorting), reverse=bool(value_order.get()))
+                self.display_window_stock()
+            else:
+                self.deal_list = Deal.get_all()
+                self.display_window_history()
 
     def display_window_sort(self) -> None:
-        value_check: IntVar= IntVar()
-        self.check_button_id: Checkbutton = Checkbutton(self.frame_sort, text=" : sorting id", name="id", variable=value_check,
-                                                        command=lambda: self.sort_display(self.check_button_id, value_check))
-        self.check_button_id.pack()
+        value_radio_button: StringVar = StringVar()
+        value_check_button_order: IntVar = IntVar()
+        if self.button_stock["state"] == DISABLED:
+            radio_button_id: Radiobutton = Radiobutton(self.frame_sort, text=" : Sorting id", value="id",
+                                                       variable=value_radio_button,
+                                                       command=lambda: self.sort_display(value_radio_button,
+                                                                                         value_check_button_order))
+            radio_button_id.pack()
+            radio_button_price: Radiobutton = Radiobutton(self.frame_sort, text=" : Sorting price",
+                                                          value="price", variable=value_radio_button,
+                                                          command=lambda: self.sort_display(value_radio_button,
+                                                                                            value_check_button_order))
+            radio_button_price.pack()
+            radio_button_date_stock: Radiobutton = Radiobutton(self.frame_sort, text=" : Sorting date stock",
+                                                               value="date_stock", variable=value_radio_button,
+                                                               command=lambda: self.sort_display(
+                                                                   value_radio_button, value_check_button_order))
+            radio_button_date_stock.pack()
+            radio_button_date_control: Radiobutton = Radiobutton(self.frame_sort, text=" : Sorting date control",
+                                                                 value="date_tech_control", variable=value_radio_button,
+                                                                 command=lambda: self.sort_display(
+                                                                     value_radio_button, value_check_button_order))
+            radio_button_date_control.pack()
+            check_button_order: Checkbutton = Checkbutton(self.frame_sort, text="Descending ?",
+                                                          variable=value_check_button_order)
+            check_button_order.pack()
+            # radio_button_brand: Radiobutton = Radiobutton(self.frame_sort, text=" : sorting brand",
+            #                                               value="brand name", variable=value_radio_button,
+            #                                               command=lambda: self.sort_display(value_radio_button))
+            # radio_button_brand.pack()
+        else:
+            value_radio_button: StringVar = StringVar()
+            radio_button_id: Radiobutton = Radiobutton(self.frame_sort, text=" : sorting id", value="id",
+                                                       variable=value_radio_button,
+                                                       command=lambda: self.sort_display(value_radio_button))
+            radio_button_id.pack()
 
     # It shows you which car you have in your stock. It is displayed by default.
     def display_window_stock(self) -> None:
@@ -235,7 +270,7 @@ class Window:
         listbox_stock: Listbox = Listbox(frame_list_box_scroll)
         listbox_stock.pack(expand=True, fill=BOTH, anchor=W)
 
-        self.display_car_listbox(self.car_list_stock, listbox_stock, space_dict, str_list, True)
+        self.display_car_listbox(self.car_list_stock, listbox_stock, space_dict, str_list)
 
         listbox_stock.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listbox_stock.yview)
@@ -290,7 +325,7 @@ class Window:
             listbox_history: Listbox = Listbox(frame_list_box_scroll)
             listbox_history.pack(expand=True, fill=BOTH)
 
-            self.display_car_listbox(self.deal_list, listbox_history, space_dict, str_list, False)
+            self.display_car_listbox(self.deal_list, listbox_history, space_dict, str_list)
 
             listbox_history.configure(yscrollcommand=scrollbar.set)
             scrollbar.configure(command=listbox_history.yview)
@@ -546,7 +581,7 @@ class Window:
             text_info += "- It's not a good promotion.\n"
         if not text_info:
             car.insert_db()
-            self.set_or_reset_car_lists()
+            self.reset_car_lists()
             self.display_window_stock()
         for widget in self.frame_sort.winfo_children():
             widget.destroy()
@@ -576,7 +611,7 @@ class Window:
                 text_info += "- There is no duration for the rent.\n"
         if not text_info:
             new_deal.insert_db()
-            self.set_or_reset_car_lists()
+            self.reset_car_lists()
             text_info: str = "Deal saved"
             if new_deal.is_rent:
                 self.display_window_rent()
@@ -587,7 +622,7 @@ class Window:
         label_error: Label = Label(self.frame_sort, text=text_info)
         label_error.pack()
 
-    def set_or_reset_car_lists(self):
+    def reset_car_lists(self):
         self.car_list_stock: list = Car.get_car_list()
         self.deal_list: list = Deal.get_all()
         self.rent_list: list = []

@@ -43,16 +43,16 @@ class Car(Db):
     def get_car_list() -> list | None:
         """
         This function get the cars in the database
-        :returns: A list of cars from the database
-        :rtype: list
+        :returns : A list of cars from the database
+        :rtype : list
         """
         car_list: list = []
         cursor: sql.dbapi2.Cursor = Db.db_cursor()[0]
         if cursor:
             try:
-                query: str = "SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, " \
-                        "date_tech_control, price || '0' as price, promo FROM car WHERE id " \
-                        "NOT IN (select id_car FROM deal WHERE is_rent = 0)"
+                query: str = f"SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, " \
+                             f"date_tech_control, price || '0' as price, promo FROM car WHERE id " \
+                             f"NOT IN (select id_car FROM deal WHERE is_rent = 0)"
                 cursor.execute(query)
                 results_query: list = cursor.fetchall()
                 for row in results_query:
@@ -97,8 +97,8 @@ class Car(Db):
         if cursor is not None:
             try:
                 query: str = f"INSERT INTO car (date_tech_control, price, id_brand, id_type, id_motor, promo) " \
-                        f"VALUES ('{self.date_tech_control}', {self.price}, {self.id_brand},{self.id_type}, " \
-                        f"{self.id_motor}, {self.promo})"
+                             f"VALUES ('{self.date_tech_control}', {self.price}, {self.id_brand},{self.id_type}, " \
+                             f"{self.id_motor}, {self.promo})"
                 cursor.execute(query)
                 db_connection.commit()
                 return True
@@ -143,7 +143,7 @@ class Car(Db):
         if cursor is not None:
             try:
                 query: str = f"SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, date_tech_control, " \
-                        f"price || '0' as price, promo FROM car WHERE id = {id_car} "
+                             f"price || '0' as price, promo FROM car WHERE id = {id_car} "
                 cursor.execute(query)
                 new_car = Car.load_results(cursor, cursor.fetchone())
                 new_car.get_components()
@@ -163,4 +163,3 @@ class Car(Db):
         self.brand = Brand.get_car_component(self.id)
         self.motor = Motor.get_car_component(self.id)
         self.type = Type.get_car_component(self.id)
-
