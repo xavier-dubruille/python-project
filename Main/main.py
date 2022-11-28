@@ -232,10 +232,10 @@ class Window:
             #                                               command=lambda: self.sort_display(value_radio_button))
             # radio_button_brand.pack()
         else:
-            value_radio_button: StringVar = StringVar()
             radio_button_id: Radiobutton = Radiobutton(self.frame_sort, text=" : sorting id", value="id",
                                                        variable=value_radio_button,
-                                                       command=lambda: self.sort_display(value_radio_button))
+                                                       command=lambda: self.sort_display(value_radio_button,
+                                                                                         value_check_button_order))
             radio_button_id.pack()
 
     # It shows you which car you have in your stock. It is displayed by default.
