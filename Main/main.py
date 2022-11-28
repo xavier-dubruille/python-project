@@ -224,11 +224,10 @@ class Window:
             str_list[1]: len(max(self.car_list_stock, key=lambda x: len(x.brand.name)).brand.name) + self.space_display,
             str_list[2]: len(max(self.car_list_stock, key=lambda x: len(x.type.name)).type.name) + self.space_display,
             str_list[3]: len(str(max(self.car_list_stock, key=lambda x: len(str(x.price))).price)) + self.space_display}
-        title_column: str = f"{str_list[0]}" + " " * (space_dict[str_list[0]] - len(f"{str_list[0]}")) + \
-                            f"{str_list[1]}" + " " * (space_dict[str_list[1]] - len(f"{str_list[1]}")) + \
-                            f"{str_list[2]}" + " " * (space_dict[str_list[2]] - len(f"{str_list[2]}")) + \
-                            f"{str_list[3]}" + " " * (space_dict[str_list[2]] - len(f"{str_list[2]}")) + \
-                            f"{str_list[4]}"
+        title_column: str = ""
+        for i in range(len(space_dict)):
+            title_column += f"{str_list[i]}" + " " * (space_dict[str_list[i]] - len(f"{str_list[i]}"))
+        title_column += f"{str_list[4]}"
         label_title_column: Label = Label(self.frame_display, text=title_column)
         label_title_column.pack(anchor=NW)
         frame_list_box_scroll: Frame = Frame(self.frame_display)
@@ -268,11 +267,10 @@ class Window:
                     max(self.deal_list, key=lambda x: len(x.car.type.name)).car.type.name) + self.space_display,
                 str_list[3]: len(str(
                     max(self.deal_list, key=lambda x: len(str(x.car.price))).car.price)) + self.space_display}
-            title_column: str = f"{str_list[0]}" + " " * (space_dict[str_list[0]] - len(f"{str_list[0]}")) + \
-                                f"{str_list[1]}" + " " * (space_dict[str_list[1]] - len(f"{str_list[1]}")) + \
-                                f"{str_list[2]}" + " " * (space_dict[str_list[2]] - len(f"{str_list[2]}")) + \
-                                f"{str_list[3]}" + " " * (space_dict[str_list[3]] - len(f"{str_list[3]}")) + \
-                                f"{str_list[4]}"
+            title_column: str = ""
+            for i in range(len(space_dict)):
+                title_column += f"{str_list[i]}" + " " * (space_dict[str_list[i]] - len(f"{str_list[i]}"))
+            title_column += f"{str_list[4]}"
             label_title: Label = Label(self.frame_display, text=title_column, anchor="w")
             label_title.pack(anchor=W)
             frame_list_box_scroll: Frame = Frame(self.frame_display)
@@ -345,9 +343,9 @@ class Window:
             raw_deal: Deal = Deal()
             raw_deal.id_car = StringVar()
             raw_deal.id_customer = StringVar()
-            raw_deal.is_rent = 0
-            label_car_id: Label = Label(self.frame_display, text="Car id : ")
-            label_car_id.grid(column=0, row=0, rowspan=rowspan, sticky=NSEW)
+            raw_deal.is_rent = False
+            label_id_car: Label = Label(self.frame_display, text="Car id : ")
+            label_id_car.grid(column=0, row=0, rowspan=rowspan, sticky=NSEW)
             dropdown_car_id: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_car,
                                                      *map(lambda x: f"{x.id} price : {x.price} promo : {x.promo}",
                                                           self.car_list_free))
