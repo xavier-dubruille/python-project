@@ -51,7 +51,7 @@ class Car(Db):
         if cursor:
             try:
                 query: str = f"SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, " \
-                             f"date_tech_control, price || '0' as price, promo FROM car WHERE id " \
+                             f"date_tech_control, price, promo FROM car WHERE id " \
                              f"NOT IN (select id_car FROM deal WHERE is_rent = 0)"
                 cursor.execute(query)
                 results_query: list = cursor.fetchall()
@@ -143,7 +143,7 @@ class Car(Db):
         if cursor is not None:
             try:
                 query: str = f"SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, date_tech_control, " \
-                             f"price || '0' as price, promo FROM car WHERE id = {id_car} "
+                             f"price, promo FROM car WHERE id = {id_car} "
                 cursor.execute(query)
                 new_car = Car.load_results(cursor, cursor.fetchone())
                 new_car.get_components()
