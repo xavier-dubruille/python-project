@@ -206,10 +206,14 @@ class Window:
 
     def display_window_stock(self) -> None:
         """
-       It shows you all of your cars you have in your stock. It is displayed by default.
-       """
+        It shows you all of your cars you have in your stock. It is displayed by default.
+        """
         self.reset_display_and_sort_frames(self.button_stock)
         self.display_frame_sort()
+        if not self.car_list_stock:
+            label_info: Label = Label(self.frame_display, text="There are no cars in your stock.")
+            label_info.pack()
+            return
         str_list: list = ["Id", "Brand", "Type", "Price (€)", "Rented"]
         space_dict: dict = {
             str_list[0]: len(str(max(self.car_list_stock, key=lambda x: len(str(x.id))).id)) + self.space_display,
@@ -250,35 +254,34 @@ class Window:
         self.reset_display_and_sort_frames(self.button_history)
         self.display_frame_sort()
         if not self.deal_list:
-            listbox_history: Listbox = Listbox(self.frame_display)
-            listbox_history.pack(expand=True, fill=BOTH)
-            listbox_history.insert(END, "There is no cars in this category")
-        else:
-            str_list: list = ["Id", "Brand", "Type", "Price (€)", "Customer"]
-            space_dict: dict = {
-                str_list[0]: len(str(
-                    max(self.deal_list, key=lambda x: len(str(x.car.id))).car.id)) + self.space_display,
-                str_list[1]: len(
-                    max(self.deal_list, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.space_display,
-                str_list[2]: len(
-                    max(self.deal_list, key=lambda x: len(x.car.type.name)).car.type.name) + self.space_display,
-                str_list[3]: len(str(
-                    max(self.deal_list, key=lambda x: len(str(x.car.price))).car.price)) + self.space_display}
-            title_column: str = ""
-            for i in range(len(space_dict)):
-                title_column += f"{str_list[i]}" + " " * (space_dict[str_list[i]] - len(f"{str_list[i]}"))
-            title_column += f"{str_list[4]}"
-            label_title: Label = Label(self.frame_display, text=title_column, anchor="w")
-            label_title.pack(anchor=W)
-            frame_list_box_scroll: Frame = Frame(self.frame_display)
-            frame_list_box_scroll.pack(expand=True, fill=BOTH)
-            scrollbar: Scrollbar = Scrollbar(frame_list_box_scroll)
-            scrollbar.pack(side=RIGHT, fill=Y)
-            listbox_history: Listbox = Listbox(frame_list_box_scroll)
-            listbox_history.pack(expand=True, fill=BOTH)
-            self.display_car_listbox(self.deal_list, listbox_history, space_dict, str_list)
-            listbox_history.configure(yscrollcommand=scrollbar.set)
-            scrollbar.configure(command=listbox_history.yview)
+            label_info: Label = Label(self.frame_display, text="There are no deals made before.")
+            label_info.pack()
+            return
+        str_list: list = ["Id", "Brand", "Type", "Price (€)", "Customer"]
+        space_dict: dict = {
+            str_list[0]: len(str(
+                max(self.deal_list, key=lambda x: len(str(x.car.id))).car.id)) + self.space_display,
+            str_list[1]: len(
+                max(self.deal_list, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.space_display,
+            str_list[2]: len(
+                max(self.deal_list, key=lambda x: len(x.car.type.name)).car.type.name) + self.space_display,
+            str_list[3]: len(str(
+                max(self.deal_list, key=lambda x: len(str(x.car.price))).car.price)) + self.space_display}
+        title_column: str = ""
+        for i in range(len(space_dict)):
+            title_column += f"{str_list[i]}" + " " * (space_dict[str_list[i]] - len(f"{str_list[i]}"))
+        title_column += f"{str_list[4]}"
+        label_title: Label = Label(self.frame_display, text=title_column, anchor="w")
+        label_title.pack(anchor=W)
+        frame_list_box_scroll: Frame = Frame(self.frame_display)
+        frame_list_box_scroll.pack(expand=True, fill=BOTH)
+        scrollbar: Scrollbar = Scrollbar(frame_list_box_scroll)
+        scrollbar.pack(side=RIGHT, fill=Y)
+        listbox_history: Listbox = Listbox(frame_list_box_scroll)
+        listbox_history.pack(expand=True, fill=BOTH)
+        self.display_car_listbox(self.deal_list, listbox_history, space_dict, str_list)
+        listbox_history.configure(yscrollcommand=scrollbar.set)
+        scrollbar.configure(command=listbox_history.yview)
 
     def display_details_history(self, event: Event) -> None:
         """
@@ -302,40 +305,40 @@ class Window:
         """
         self.reset_display_and_sort_frames(self.button_rent)
         rowspan: int = int(self.lcm_row_number_display / self.row_number_rent)
-        if not self.car_list_free:
-            label_no_free_places: Label = Label(self.frame_display, text="No car left for renting.")
+        if not self.car_list_free or not self.customer_list:
+            label_no_free_places: Label = Label(self.frame_display, text="There are no cars to sell or customers")
             label_no_free_places.pack()
-        else:
-            raw_deal: Deal = Deal()
-            raw_deal.id_car = StringVar()
-            raw_deal.id_customer = StringVar()
-            raw_deal.date_start_rent = StringVar()
-            raw_deal.duration_days_rent = StringVar()
-            raw_deal.is_rent = 1
-            label_id_car: Label = Label(self.frame_display, text="Car id : ")
-            label_id_car.grid(column=0, row=0, rowspan=rowspan, sticky=NSEW)
-            dropdown_car_id: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_car,
-                                                     *map(lambda x: f"{x.id} price : {x.price} promo : {x.promo}",
-                                                          self.car_list_free))
-            dropdown_car_id.grid(column=1, row=0, rowspan=rowspan, sticky=NSEW)
-            label_id_customer: Label = Label(self.frame_display, text="Customer id : ")
-            label_id_customer.grid(column=0, row=rowspan, rowspan=rowspan, sticky=NSEW)
-            dropdown_id_customer: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_customer,
-                                                          *map(lambda x: f"{x.id} {x.first_name[0]}.{x.last_name}",
-                                                               self.customer_list))
-            dropdown_id_customer.grid(column=1, row=rowspan, rowspan=rowspan, sticky=NSEW)
-            label_date_start_rent: Label = Label(self.frame_display, text="Date of the rent : ")
-            label_date_start_rent.grid(column=0, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
-            entry_date_start_rent: tkCal = tkCal(self.frame_display, textvariable=raw_deal.date_start_rent,
-                                                 locale='fr_BE', date_pattern="dd/mm/yyyy")
-            entry_date_start_rent.grid(column=1, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
-            label_duration_days_rent: Label = Label(self.frame_display, text="Duration days of the rent : ")
-            label_duration_days_rent.grid(column=0, row=rowspan * 3, rowspan=rowspan, sticky=NSEW)
-            entry_duration_days_rent: Entry = Entry(self.frame_display, textvariable=raw_deal.duration_days_rent)
-            entry_duration_days_rent.grid(column=1, row=rowspan * 3, rowspan=rowspan, sticky=NSEW)
-            button_rent_a_car: Button = Button(self.frame_display, text="Make the rent",
-                                               command=lambda: self.verify_deal(raw_deal))
-            button_rent_a_car.grid(column=1, row=rowspan * 4, rowspan=rowspan, sticky=NSEW)
+            return
+        raw_deal: Deal = Deal()
+        raw_deal.id_car = StringVar()
+        raw_deal.id_customer = StringVar()
+        raw_deal.date_start_rent = StringVar()
+        raw_deal.duration_days_rent = StringVar()
+        raw_deal.is_rent = 1
+        label_id_car: Label = Label(self.frame_display, text="Car id : ")
+        label_id_car.grid(column=0, row=0, rowspan=rowspan, sticky=NSEW)
+        dropdown_car_id: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_car,
+                                                 *map(lambda x: f"{x.id} price : {x.price} promo : {x.promo}",
+                                                      self.car_list_free))
+        dropdown_car_id.grid(column=1, row=0, rowspan=rowspan, sticky=NSEW)
+        label_id_customer: Label = Label(self.frame_display, text="Customer id : ")
+        label_id_customer.grid(column=0, row=rowspan, rowspan=rowspan, sticky=NSEW)
+        dropdown_id_customer: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_customer,
+                                                      *map(lambda x: f"{x.id} {x.first_name[0]}.{x.last_name}",
+                                                           self.customer_list))
+        dropdown_id_customer.grid(column=1, row=rowspan, rowspan=rowspan, sticky=NSEW)
+        label_date_start_rent: Label = Label(self.frame_display, text="Date of the rent : ")
+        label_date_start_rent.grid(column=0, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
+        entry_date_start_rent: tkCal = tkCal(self.frame_display, textvariable=raw_deal.date_start_rent,
+                                             locale='fr_BE', date_pattern="dd/mm/yyyy")
+        entry_date_start_rent.grid(column=1, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
+        label_duration_days_rent: Label = Label(self.frame_display, text="Duration days of the rent : ")
+        label_duration_days_rent.grid(column=0, row=rowspan * 3, rowspan=rowspan, sticky=NSEW)
+        entry_duration_days_rent: Entry = Entry(self.frame_display, textvariable=raw_deal.duration_days_rent)
+        entry_duration_days_rent.grid(column=1, row=rowspan * 3, rowspan=rowspan, sticky=NSEW)
+        button_rent_a_car: Button = Button(self.frame_display, text="Make the rent",
+                                           command=lambda: self.verify_deal(raw_deal))
+        button_rent_a_car.grid(column=1, row=rowspan * 4, rowspan=rowspan, sticky=NSEW)
 
     def display_window_selling(self) -> None:
         """
@@ -343,29 +346,29 @@ class Window:
         """
         self.reset_display_and_sort_frames(self.button_deal)
         rowspan: int = int(self.lcm_row_number_display / self.row_number_selling)
-        if self.car_list_free:
-            raw_deal: Deal = Deal()
-            raw_deal.id_car = StringVar()
-            raw_deal.id_customer = StringVar()
-            raw_deal.is_rent = False
-            label_id_car: Label = Label(self.frame_display, text="Car id : ")
-            label_id_car.grid(column=0, row=0, rowspan=rowspan, sticky=NSEW)
-            dropdown_car_id: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_car,
-                                                     *map(lambda x: f"{x.id} price : {x.price} promo : {x.promo}",
-                                                          self.car_list_free))
-            dropdown_car_id.grid(column=1, row=0, rowspan=rowspan, sticky=NSEW)
-            label_id_customer: Label = Label(self.frame_display, text="Customer id : ")
-            label_id_customer.grid(column=0, row=rowspan, rowspan=rowspan, sticky=NSEW)
-            dropdown_id_customer: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_customer,
-                                                          *map(lambda x: f"{x.id} {x.first_name[0]}.{x.last_name}",
-                                                               self.customer_list))
-            dropdown_id_customer.grid(column=1, row=rowspan, rowspan=rowspan, sticky=NSEW)
-            button_make_deal: Button = Button(self.frame_display, text="Make the deal",
-                                              command=lambda: self.verify_deal(raw_deal))
-            button_make_deal.grid(column=1, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
-        else:
-            label_no_free_places: Label = Label(self.frame_display, text="No car left for selling.")
+        if not self.car_list_free or not self.car_list_stock:
+            label_no_free_places: Label = Label(self.frame_display, text="There are no cars to sell or customers")
             label_no_free_places.pack()
+            return
+        raw_deal: Deal = Deal()
+        raw_deal.id_car = StringVar()
+        raw_deal.id_customer = StringVar()
+        raw_deal.is_rent = False
+        label_id_car: Label = Label(self.frame_display, text="Car id : ")
+        label_id_car.grid(column=0, row=0, rowspan=rowspan, sticky=NSEW)
+        dropdown_car_id: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_car,
+                                                 *map(lambda x: f"{x.id} price : {x.price} promo : {x.promo}",
+                                                      self.car_list_free))
+        dropdown_car_id.grid(column=1, row=0, rowspan=rowspan, sticky=NSEW)
+        label_id_customer: Label = Label(self.frame_display, text="Customer id : ")
+        label_id_customer.grid(column=0, row=rowspan, rowspan=rowspan, sticky=NSEW)
+        dropdown_id_customer: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_customer,
+                                                      *map(lambda x: f"{x.id} {x.first_name[0]}.{x.last_name}",
+                                                           self.customer_list))
+        dropdown_id_customer.grid(column=1, row=rowspan, rowspan=rowspan, sticky=NSEW)
+        button_make_deal: Button = Button(self.frame_display, text="Make the deal",
+                                          command=lambda: self.verify_deal(raw_deal))
+        button_make_deal.grid(column=1, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
 
     def display_window_add_car(self) -> None:
         """
@@ -373,40 +376,40 @@ class Window:
         """
         self.reset_display_and_sort_frames(self.button_add_car)
         rowspan: int = int(self.lcm_row_number_display / self.row_number_add_car)
-        if Car.car_free_places_stock() <= 40:
-            raw_car: dict = {"nameBrand": StringVar(), "nameType": StringVar(), "nameMotor": StringVar(),
-                             "price": StringVar(), "promo": StringVar(), "dateTechControl": StringVar()}
-            label_brand: Label = Label(self.frame_display, text="Brand : ")
-            label_brand.grid(column=0, row=0, rowspan=rowspan, sticky=NSEW)
-            entry_brand: Entry = Entry(self.frame_display, textvariable=raw_car["nameBrand"])
-            entry_brand.grid(column=1, row=0, rowspan=rowspan, sticky=NSEW)
-            label_type: Label = Label(self.frame_display, text="Type : ")
-            label_type.grid(column=0, row=rowspan, rowspan=rowspan, sticky=NSEW)
-            entry_type: Entry = Entry(self.frame_display, textvariable=raw_car["nameType"])
-            entry_type.grid(column=1, row=rowspan, rowspan=rowspan, sticky=NSEW)
-            label_motor: Label = Label(self.frame_display, text="Motor : ")
-            label_motor.grid(column=0, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
-            entry_type: Entry = Entry(self.frame_display, textvariable=raw_car["nameMotor"])
-            entry_type.grid(column=1, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
-            label_next_control: Label = Label(self.frame_display, text="Next tech control :")
-            label_next_control.grid(column=0, row=rowspan * 3, rowspan=rowspan, sticky=NSEW)
-            entry_next_control: tkCal = tkCal(self.frame_display, textvariable=raw_car["dateTechControl"],
-                                              locale='fr_BE', date_pattern="dd/mm/yyyy")
-            entry_next_control.grid(column=1, row=rowspan * 3, rowspan=rowspan, sticky=NSEW)
-            label_price: Label = Label(self.frame_display, text="Price : ")
-            label_price.grid(column=0, row=rowspan * 4, rowspan=rowspan, sticky=NSEW)
-            entry_price: Entry = Entry(self.frame_display, textvariable=raw_car["price"])
-            entry_price.grid(column=1, row=rowspan * 4, rowspan=rowspan, sticky=NSEW)
-            label_promo: Label = Label(self.frame_display, text="Promo : ")
-            label_promo.grid(column=0, row=rowspan * 5, rowspan=rowspan, sticky=NSEW)
-            entry_promo: Entry = Entry(self.frame_display, textvariable=raw_car["promo"])
-            entry_promo.grid(column=1, row=rowspan * 5, rowspan=rowspan, sticky=NSEW)
-            button_add_car: Button = Button(self.frame_display, text="Add a car in stock",
-                                            command=lambda: self.verify_car_insert(raw_car))
-            button_add_car.grid(column=1, row=rowspan * 6, rowspan=rowspan, sticky=NSEW)
-        else:
+        if Car.number_of_cars_stock() > 40:
             label_no_free_places: Label = Label(self.frame_display, text="No free places")
             label_no_free_places.pack()
+            return
+        raw_car: dict = {"nameBrand": StringVar(), "nameType": StringVar(), "nameMotor": StringVar(),
+                         "price": StringVar(), "promo": StringVar(), "dateTechControl": StringVar()}
+        label_brand: Label = Label(self.frame_display, text="Brand : ")
+        label_brand.grid(column=0, row=0, rowspan=rowspan, sticky=NSEW)
+        entry_brand: Entry = Entry(self.frame_display, textvariable=raw_car["nameBrand"])
+        entry_brand.grid(column=1, row=0, rowspan=rowspan, sticky=NSEW)
+        label_type: Label = Label(self.frame_display, text="Type : ")
+        label_type.grid(column=0, row=rowspan, rowspan=rowspan, sticky=NSEW)
+        entry_type: Entry = Entry(self.frame_display, textvariable=raw_car["nameType"])
+        entry_type.grid(column=1, row=rowspan, rowspan=rowspan, sticky=NSEW)
+        label_motor: Label = Label(self.frame_display, text="Motor : ")
+        label_motor.grid(column=0, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
+        entry_type: Entry = Entry(self.frame_display, textvariable=raw_car["nameMotor"])
+        entry_type.grid(column=1, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
+        label_next_control: Label = Label(self.frame_display, text="Next tech control :")
+        label_next_control.grid(column=0, row=rowspan * 3, rowspan=rowspan, sticky=NSEW)
+        entry_next_control: tkCal = tkCal(self.frame_display, textvariable=raw_car["dateTechControl"],
+                                          locale='fr_BE', date_pattern="dd/mm/yyyy")
+        entry_next_control.grid(column=1, row=rowspan * 3, rowspan=rowspan, sticky=NSEW)
+        label_price: Label = Label(self.frame_display, text="Price : ")
+        label_price.grid(column=0, row=rowspan * 4, rowspan=rowspan, sticky=NSEW)
+        entry_price: Entry = Entry(self.frame_display, textvariable=raw_car["price"])
+        entry_price.grid(column=1, row=rowspan * 4, rowspan=rowspan, sticky=NSEW)
+        label_promo: Label = Label(self.frame_display, text="Promo : ")
+        label_promo.grid(column=0, row=rowspan * 5, rowspan=rowspan, sticky=NSEW)
+        entry_promo: Entry = Entry(self.frame_display, textvariable=raw_car["promo"])
+        entry_promo.grid(column=1, row=rowspan * 5, rowspan=rowspan, sticky=NSEW)
+        button_add_car: Button = Button(self.frame_display, text="Add a car in stock",
+                                        command=lambda: self.verify_car_insert(raw_car))
+        button_add_car.grid(column=1, row=rowspan * 6, rowspan=rowspan, sticky=NSEW)
 
     def display_window_add_customer(self):
         """

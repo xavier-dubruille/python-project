@@ -3,6 +3,7 @@ from Main.Class.car import Car
 from Main.Class.customer import Customer
 import sqlite3 as sql
 import sys
+from datetime import datetime, timedelta
 
 
 class Deal(Db):
@@ -11,11 +12,11 @@ class Deal(Db):
         It creates a new object Deal
         """
         self.id: int = 0
-        self.id_car: any = None
-        self.id_customer: any = None
+        self.id_car: int = 0
+        self.id_customer: int = 0
         self.is_rent: bool = False
-        self.date_start_rent: any = None
-        self.duration_days_rent: any = None
+        self.date_start_rent: str = ""
+        self.duration_days_rent: str = ""
         self.car: Car = Car()
         self.customer: Customer = Customer()
 
@@ -49,11 +50,11 @@ class Deal(Db):
                 if self.is_rent:
                     query: str = f"INSERT INTO deal " \
                                  f"(is_rent, date_start_rent, duration_days_rent, id_car, id_customer) " \
-                        f"VALUES ({self.is_rent}, {self.date_start_rent}, {self.duration_days_rent}, {self.id_car}, " \
-                        f"{self.id_customer})"
+                                 f"VALUES ({self.is_rent}, {self.date_start_rent}, {self.duration_days_rent}, {self.id_car}, " \
+                                 f"{self.id_customer})"
                 else:
                     query: str = f"INSERT INTO deal (is_rent, id_car, id_customer) " \
-                        f"VALUES ({self.is_rent}, {self.id_car}, {self.id_customer})"
+                                 f"VALUES ({self.is_rent}, {self.id_car}, {self.id_customer})"
                 cursor.execute(query)
                 db_connection.commit()
                 return True
@@ -62,6 +63,14 @@ class Deal(Db):
             finally:
                 self.db_close(cursor)
         return False
+
+    def check_rent(self) -> None:
+        return
+        # date_end = datetime.strptime(self.date_start_rent, "%d/%m/%Y") + timedelta(days=int(self.duration_days_rent))
+        # if date_end >= datetime.strptime(datetime.strftime(datetime.today(), "%d/%m/%Y"), "%d/%m/%Y"):
+        #     print("c'est fini")
+        # else:
+        #     print("c'est pas fini")
 
     @staticmethod
     def get_all() -> list | None:
@@ -79,6 +88,7 @@ class Deal(Db):
                     new_deal: Deal = Deal.load_results(cursor, row)
                     new_deal.car = Car.get_car(new_deal.id_car)
                     new_deal.customer = Customer.get_customer(new_deal.id_customer)
+                    new_deal.check_rent()
                     deal_list.append(new_deal)
                 return deal_list
             except sql.OperationalError:

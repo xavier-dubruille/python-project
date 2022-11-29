@@ -10,7 +10,7 @@ class DBAccess:
         :returns: The connection and the cursor of the database
         """
         try:
-            db_connection: sql.dbapi2.Connection = sql.connect("../Db/bambooConcess.db")
+            db_connection: sql.dbapi2.Connection = sql.connect("../Db/bamboo_concess.db")
             return db_connection.cursor(), db_connection
         except sql.OperationalError:
             print(f"Error in DBCursor {sys.exc_info()}")

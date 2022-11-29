@@ -67,7 +67,7 @@ class Car(Db):
         return None
 
     @staticmethod
-    def car_free_places_stock() -> int | None:
+    def number_of_cars_stock() -> int | None:
         """
         This function check if there is free places in the stock for another car
         :returns: The number of free places in the stock

@@ -280,7 +280,7 @@ class ApplicationConsole:
         """
         This function asks the user to add a car to the database with all the characteristics
         """
-        if Car.car_free_places_stock() <= 40:
+        if Car.number_of_cars_stock() <= 40:
             car: Car = Car()
             name_brand: str = ""
             name_type: str = ""
