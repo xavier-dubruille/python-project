@@ -3,46 +3,20 @@ from tkinter import *
 from tkcalendar import DateEntry as tkCal
 import math
 import re
-from Main.Class.Brand import Brand
-from Main.Class.Customer import Customer
-from Main.Class.Deal import Deal
-from Main.Class.Motor import Motor
-from Main.Class.Type import Type
-from Main.Class.Car import Car
-
-
-def check_number_input(string: str, minimum: int = None, maximum: int = None) -> bool:
-    """
-    This function check if the string is convertible into integer
-    If minimum and/or maximum are given, check also if it's between them
-    :param string: A string that will be checked for a number
-    :type string: str
-    :param minimum: An integer number
-    :type string: int
-    :param maximum: An integer number
-    :type string: int
-    :returns: True if the string is convertible to digit and respect the minimum and the maximum
-    :rtype: bool
-    """
-    if not string.isdigit():
-        return False
-    if maximum is not None and minimum is not None:
-        if maximum >= int(string) >= minimum:
-            return True
-        return False
-    elif maximum is not None:
-        if maximum >= int(string):
-            return True
-        return False
-    elif minimum is not None:
-        if int(string) >= minimum:
-            return True
-        return False
-    return True
+from Main.CommonCode.function_common import *
+from Main.Class.brand import Brand
+from Main.Class.customer import Customer
+from Main.Class.deal import Deal
+from Main.Class.motor import Motor
+from Main.Class.type import Type
+from Main.Class.car import Car
 
 
 class Window:
     def __init__(self) -> None:
+        """
+        It will initialise a new object window
+        """
         self.window: Tk | None = None
         self.button_add_car: Button | None = None
         self.button_deal: Button | None = None
@@ -79,8 +53,10 @@ class Window:
         self.customer_list: list = Customer.get_all()
         self.create_basic_window()
 
-    # The main display function for the application.
     def create_basic_window(self) -> None:
+        """
+        It set the window and all the widget for it
+        """
         self.window: Tk = Tk()
         self.window.title(self.title)
         self.window.attributes('-fullscreen', True)
@@ -158,7 +134,15 @@ class Window:
         self.display_window_stock()
         self.window.mainloop()
 
-    def display_car_listbox(self, list_car: list, listbox: Listbox, dict_space: dict, list_str: list):
+    def display_car_listbox(self, list_car: list, listbox: Listbox, dict_space: dict, list_str: list) -> None:
+        """
+        It displays the list of cars or deals in the listbox
+
+        :param list_str: The list of string to print in the title of the listbox
+        :param dict_space: The dictionary of space for each string
+        :param listbox: The list where the list sorted will be display
+        :param list_car: The list will be sort
+        """
         for car_or_deal in list_car:
             if type(list_car[0]) == Car:
                 car_or_deal: Car
@@ -182,6 +166,9 @@ class Window:
                 listbox.bind('<<ListboxSelect>>', self.display_details_history)
 
     def sort_display(self, value_sorting: str) -> None:
+        """
+        It sorts the listbox and display the good window
+        """
         if value_sorting:
             if self.button_stock["state"] == DISABLED:
                 self.car_list_stock.sort(key=lambda x: getattr(x, value_sorting),
@@ -193,6 +180,9 @@ class Window:
                 self.display_window_history()
 
     def display_frame_sort(self) -> None:
+        """
+       It displays the sorting frame
+       """
         if self.value_check_button_order is None:
             self.value_check_button_order = IntVar()
         label_info_sorting: Label = Label(self.frame_sort, text="Sorting by : ")
@@ -214,8 +204,10 @@ class Window:
                                                       variable=self.value_check_button_order)
         check_button_order.grid(column=0, row=3, rowspan=2, sticky=NSEW)
 
-    # It shows you which car you have in your stock. It is displayed by default.
     def display_window_stock(self) -> None:
+        """
+       It shows you all of your cars you have in your stock. It is displayed by default.
+       """
         self.reset_display_and_sort_frames(self.button_stock)
         self.display_frame_sort()
         str_list: list = ["Id", "Brand", "Type", "Price (€)", "Rented"]
@@ -240,16 +232,21 @@ class Window:
         listbox_stock.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listbox_stock.yview)
 
-    # When you click a row to show more information about the car you selected.
     def display_details_stock(self, event: Event) -> None:
+        """
+        When you click a row to show more information about the car you selected
+        :param event: The event create when a click is performed on the listbox
+        """
         car: Car = self.car_list_stock[event.widget.curselection()[0]]
         self.print_details: str = f"Brand : {car.brand.name}\nType : {car.type.name}\nMotor : {car.motor.name}\n" \
                                   f"Price : {car.price}€\nPromo : {car.promo}%\nIn stock since : {car.date_stock}\n" \
                                   f"Next control : {car.date_tech_control}"
         self.label_details.configure(text=self.print_details)
 
-    # It will show you which car you sell.
     def display_window_history(self) -> None:
+        """
+        It will show you which car you sell.
+        """
         self.reset_display_and_sort_frames(self.button_history)
         self.display_frame_sort()
         if not self.deal_list:
@@ -283,8 +280,11 @@ class Window:
             listbox_history.configure(yscrollcommand=scrollbar.set)
             scrollbar.configure(command=listbox_history.yview)
 
-    # When you click a row to show more information about the car you selected.
     def display_details_history(self, event: Event) -> None:
+        """
+        When you click a row to show more information about the car you selected
+        :param event: The event create when a click is performed on the listbox
+        """
         for i in range(2):
             self.frame_details.rowconfigure(i, weight=1)
         self.frame_details.columnconfigure(0, weight=1)
@@ -296,8 +296,10 @@ class Window:
                                   f"The customer is : {deal.customer.first_name} {deal.customer.last_name}"
         self.label_details.configure(text=self.print_details)
 
-    # It will help you to change the reservation's status for a particular car.
     def display_window_rent(self) -> None:
+        """
+        It will help you to change the reservation's status for a particular car
+        """
         self.reset_display_and_sort_frames(self.button_rent)
         rowspan: int = int(self.lcm_row_number_display / self.row_number_rent)
         if not self.car_list_free:
@@ -335,8 +337,10 @@ class Window:
                                                command=lambda: self.verify_deal(raw_deal))
             button_rent_a_car.grid(column=1, row=rowspan * 4, rowspan=rowspan, sticky=NSEW)
 
-    # It will help you to sell a particular car.
     def display_window_selling(self) -> None:
+        """
+        It will help you to sell a particular car.
+        """
         self.reset_display_and_sort_frames(self.button_deal)
         rowspan: int = int(self.lcm_row_number_display / self.row_number_selling)
         if self.car_list_free:
@@ -363,8 +367,10 @@ class Window:
             label_no_free_places: Label = Label(self.frame_display, text="No car left for selling.")
             label_no_free_places.pack()
 
-    # This menu will help you to add a new car in your stock with a form.
     def display_window_add_car(self) -> None:
+        """
+        This menu will help you to add a new car in your stock with a form.
+        """
         self.reset_display_and_sort_frames(self.button_add_car)
         rowspan: int = int(self.lcm_row_number_display / self.row_number_add_car)
         if Car.car_free_places_stock() <= 40:
@@ -403,6 +409,9 @@ class Window:
             label_no_free_places.pack()
 
     def display_window_add_customer(self):
+        """
+        It displays a window to create a customer in the database
+        """
         self.reset_display_and_sort_frames(self.button_add_customer)
         rowspan: int = int(self.lcm_row_number_display / self.row_number_add_customer)
         raw_customer: dict = {"firstName": StringVar(), "lastName": StringVar(), "phone": StringVar(),
@@ -432,6 +441,11 @@ class Window:
         button_add_customer.grid(column=1, row=rowspan * 5, rowspan=rowspan, sticky=NSEW)
 
     def verify_customer_insert(self, customer_string_var: dict) -> None:
+        """
+        It verifies that the data entered are corrects
+        :param customer_string_var: The dictionary that keep the raw information for the new customer
+        :return:
+        """
         text_info: str = ""
         new_customer: Customer = Customer()
         new_customer.first_name = customer_string_var["firstName"].get()
@@ -460,8 +474,8 @@ class Window:
 
     def verify_car_insert(self, car_string_var: dict) -> None:
         """
-        :type car_string_var: object
-        :rtype: object
+        It verifies the data are correct for the new car
+        :param car_string_var: The dictionary of the raw car
         """
         text_info: str = ""
         car: Car = Car()
@@ -493,6 +507,10 @@ class Window:
         label_error.pack()
 
     def verify_deal(self, deal: Deal) -> None:
+        """
+        It verifies that the data entered are corrects
+        :param deal: The deal that contains the raw information checked
+        """
         text_info: str = ""
         new_deal: Deal = Deal()
         raw_id_car = deal.id_car.get()
@@ -526,7 +544,10 @@ class Window:
         label_error: Label = Label(self.frame_sort, text=text_info)
         label_error.pack()
 
-    def reset_car_lists(self):
+    def reset_car_lists(self) -> None:
+        """
+        It resets the main lists used in the program
+        """
         self.car_list_stock: list = Car.get_car_list()
         self.deal_list: list = Deal.get_all()
         self.rent_list: list = []
@@ -545,6 +566,10 @@ class Window:
                 self.car_list_free.append(car)
 
     def reset_display_and_sort_frames(self, button_to_disable: Button):
+        """
+        It reset the two main frames and up all the button but disable one
+        :param button_to_disable: The button that has to be disabled
+        """
         for widget in self.frame_display.winfo_children():
             widget.destroy()
         for widget in self.frame_sort.winfo_children():

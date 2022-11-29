@@ -1,12 +1,15 @@
-from Main.Class.DB import DBAccess as Db
-from Main.Class.Car import Car
-from Main.Class.Customer import Customer
+from Main.Class.database import DBAccess as Db
+from Main.Class.car import Car
+from Main.Class.customer import Customer
 import sqlite3 as sql
 import sys
 
 
 class Deal(Db):
     def __init__(self) -> None:
+        """
+        It creates a new object Deal
+        """
         self.id: int = 0
         self.id_car: any = None
         self.id_customer: any = None
@@ -21,7 +24,6 @@ class Deal(Db):
         """
         This function returns the name of the deal table in the database
         :returns: The name of the deal table in the database
-        :rtype: str
         """
         return "deal"
 
@@ -30,7 +32,6 @@ class Deal(Db):
         """
         This function returns the primary key name in the deal table in the database
         :returns: The name of the primary key in the deal table in the database
-        :rtype: str
         """
         return "id"
 
@@ -38,7 +39,6 @@ class Deal(Db):
         """
         This function insert in the database a new deal
         :returns: True if the insert was correctly executed
-        :rtype: bool
         """
         tuple_db: tuple = self.db_cursor()
         cursor: sql.dbapi2.Cursor = tuple_db[0]
@@ -68,7 +68,6 @@ class Deal(Db):
         """
         This function get all the cars from the database
         :returns: A list of all the cars
-        :rtype: list
         """
         cursor: sql.dbapi2.Cursor = Deal.db_cursor()[0]
         deal_list: list = []

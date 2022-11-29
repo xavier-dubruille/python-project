@@ -1,48 +1,20 @@
 import sys
-
-from Main.Class.Car import Car
-from Main.Class.Brand import Brand
-from Main.Class.Type import Type
-from Main.Class.Motor import Motor
-from Main.Class.Deal import Deal
-from Main.Class.Customer import Customer
-
+from Main.Class.car import Car
+from Main.Class.brand import Brand
+from Main.Class.type import Type
+from Main.Class.motor import Motor
+from Main.Class.deal import Deal
+from Main.Class.customer import Customer
 from datetime import datetime
 import re
-
-
-def check_number_input(string: str, minimum: int = None, maximum: int = None) -> bool:
-    """
-    This function check if the string is convertible into integer
-    If minimum and/or maximum are given, check also if it's between them
-    :param string: A string that will be checked for a number
-    :type string: str
-    :param minimum: An integer number
-    :type minimum: int
-    :param maximum: An integer number
-    :type maximum: int
-    :returns: True if the string is convertible to digit and respect the minimum and the maximum
-    :rtype: bool
-    """
-    if not string.isdigit():
-        return False
-    if maximum is not None and minimum is not None:
-        if maximum >= int(string) >= minimum:
-            return True
-        return False
-    elif maximum is not None:
-        if maximum >= int(string):
-            return True
-        return False
-    elif minimum is not None:
-        if int(string) >= minimum:
-            return True
-        return False
-    return True
+from Main.CommonCode.function_common import *
 
 
 class ApplicationConsole:
     def __init__(self) -> None:
+        """
+        It creates a new object ApplicationConsole
+        """
         self.car_list_stock: list = Car.get_car_list()
         self.brand_list: list = Brand.get_all()
         self.motor_list: list = Motor.get_all()
@@ -63,8 +35,6 @@ class ApplicationConsole:
     def menu_choice(self) -> None:
         """
         This function display the basic menu for the user
-        :returns: None
-        :rtype: None
         """
         menu_input: str = ""
         while not check_number_input(menu_input, 1, 5):
@@ -86,8 +56,6 @@ class ApplicationConsole:
     def add_customer(self) -> None:
         """
         This function asks the user to add a customer to the database with all his characteristics
-        :returns: None
-        :rtype: None
         """
         new_customer: Customer = Customer()
 
@@ -111,8 +79,6 @@ class ApplicationConsole:
     def display_stock(self) -> None:
         """
         This function display the stock from the database
-        :returns: None
-        :rtype: None
         """
         str_list: list = ["Id", "Brand", "Type", "Price (€)"]
         space_dict: dict = {
@@ -191,8 +157,6 @@ class ApplicationConsole:
     def display_history(self) -> None:
         """
         This function display the history of the user transaction from the database
-        :returns: None
-        :rtype: None
         """
         choice_history: str = ""
         while not check_number_input(choice_history, 1, 2):
@@ -250,8 +214,6 @@ class ApplicationConsole:
     def do_transaction(self, bool_rent: bool) -> None:
         """
         This function asks the user to make a deal between one car and one customer
-        :returns: None
-        :rtype: None
         """
         deal: Deal = Deal()
         good_car_id: bool = False
@@ -317,8 +279,6 @@ class ApplicationConsole:
     def add_car(self) -> None:
         """
         This function asks the user to add a car to the database with all the characteristics
-        :returns: None
-        :rtype: None
         """
         if Car.car_free_places_stock() <= 40:
             car: Car = Car()

@@ -1,4 +1,3 @@
-import sqlite3
 import sqlite3 as sql
 import sys
 
@@ -9,7 +8,6 @@ class DBAccess:
         """
         This function get the connection and the cursor of the database
         :returns: The connection and the cursor of the database
-        :rtype: tuple
         """
         try:
             db_connection: sql.dbapi2.Connection = sql.connect("../Db/bambooConcess.db")
@@ -23,9 +21,7 @@ class DBAccess:
         """
         This function close a connection of the database chosen by its cursor
         :param cursor: A SQLITE3 object
-        :type cursor: sqlite3.dbapi2.Connection
         :returns: None
-        :rtype: None
         """
         cursor.close()
 
@@ -34,11 +30,8 @@ class DBAccess:
         """
         This function create a new object with the data
         :param cursor: A SQLITE3 object
-        :type cursor: sqlite3.dbapi2.Connection
         :param data: A list with all the data to create a new object
-        :type data: list
         :returns: A new cls object
-        :rtype: object
         """
         new_instance = cls()
         counter: int = 0
@@ -52,7 +45,6 @@ class DBAccess:
         """
         This function get all the data from the database chosen by cls.
         :returns: A list of all the cls object from the database.
-        :rtype: list
         """
         cursor: sql.dbapi2.Cursor = cls.db_cursor()[0]
         instances_list: list = []
@@ -75,9 +67,7 @@ class DBAccess:
         """
         This function get the id from the row that the name matches
         :param name: A string of the name of a row in the database
-        :type name: str
         :returns: The id of the row checked with the name
-        :rtype: int
         """
         tuple_db: tuple = cls.db_cursor()
         cursor: sql.dbapi2.Cursor = tuple_db[0]
@@ -105,9 +95,7 @@ class DBAccess:
         """
         This function get a component of a car chosen by its id
         :param id_car: An integer number matches a car
-        :type id_car: int
         :returns: A new cls object
-        :rtype: object
         """
         cursor: sql.dbapi2.Cursor = cls.db_cursor()[0]
         if cursor:
@@ -122,11 +110,3 @@ class DBAccess:
             finally:
                 cls.db_close(cursor)
         return None
-
-    @staticmethod
-    def name_table():
-        pass
-
-    @staticmethod
-    def id_column():
-        pass

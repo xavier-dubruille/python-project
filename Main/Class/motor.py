@@ -1,8 +1,11 @@
-from Main.Class.DB import DBAccess as Db
+from Main.Class.database import DBAccess as Db
 
 
 class Motor(Db):
     def __init__(self) -> None:
+        """
+        It creates a new object Motor
+        """
         self.id: int = 0
         self.name: str = ""
 
@@ -11,7 +14,6 @@ class Motor(Db):
         """
         This function returns the name of the motor table in the database
         :returns: The name of the motor table in the database
-        :rtype: str
         """
         return "motor"
 
@@ -20,6 +22,5 @@ class Motor(Db):
         """
         This function returns the primary key name in the motor table in the database
         :returns: The name of the primary key in the motor table in the database
-        :rtype: str
         """
         return "id"

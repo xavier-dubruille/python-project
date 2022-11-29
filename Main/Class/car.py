@@ -1,14 +1,17 @@
 import sqlite3 as sql
 import sys
 
-from Main.Class.Brand import Brand
-from Main.Class.DB import DBAccess as Db
-from Main.Class.Motor import Motor
-from Main.Class.Type import Type
+from Main.Class.brand import Brand
+from Main.Class.database import DBAccess as Db
+from Main.Class.motor import Motor
+from Main.Class.type import Type
 
 
 class Car(Db):
     def __init__(self) -> None:
+        """
+        It creates a new object Car
+        """
         self.id: int = 0
         self.date_stock: str = ""
         self.date_tech_control: str = ""
@@ -26,7 +29,6 @@ class Car(Db):
         """
         This function returns the name of the car table in the database
         :returns: The name of the car table in the database
-        :rtype: str
         """
         return "car"
 
@@ -35,7 +37,6 @@ class Car(Db):
         """
         This function returns the primary key name in the car table in the database
         :returns: The name of the primary key in the car table in the database
-        :rtype: str
         """
         return "idCar"
 
@@ -43,8 +44,7 @@ class Car(Db):
     def get_car_list() -> list | None:
         """
         This function get the cars in the database
-        :returns : A list of cars from the database
-        :rtype : list
+        :return: A list of cars from the database if found
         """
         car_list: list = []
         cursor: sql.dbapi2.Cursor = Db.db_cursor()[0]
@@ -56,7 +56,7 @@ class Car(Db):
                 cursor.execute(query)
                 results_query: list = cursor.fetchall()
                 for row in results_query:
-                    car = Car.load_results(cursor, row)
+                    car: Car = Car.load_results(cursor, row)
                     car.get_components()
                     car_list.append(car)
                 return car_list
@@ -71,7 +71,6 @@ class Car(Db):
         """
         This function check if there is free places in the stock for another car
         :returns: The number of free places in the stock
-        :rtype: int
         """
         cursor: sql.dbapi2.Cursor = Db.db_cursor()[0]
         if cursor is not None:
@@ -89,7 +88,6 @@ class Car(Db):
         """
         This function insert in the database a new car
         :returns: True if the insert was correctly executed
-        :rtype: bool
         """
         tuple_db: tuple = self.db_cursor()
         cursor: sql.dbapi2.Cursor = tuple_db[0]
@@ -112,7 +110,6 @@ class Car(Db):
         """
         This function delete the car
         :returns: True if the deleting was correctly executed
-        :rtype: bool
         """
         tuple_db: tuple = self.db_cursor()
         cursor: sql.dbapi2.Cursor = tuple_db[0]
@@ -135,9 +132,7 @@ class Car(Db):
         """
         This function get a car in the database chosen by its id
         :param id_car: A integer number
-        :type id_car: int
         :returns: An object car with all its components
-        :rtype: object
         """
         cursor: sql.dbapi2.Cursor = Car.db_cursor()[0]
         if cursor is not None:
@@ -145,7 +140,7 @@ class Car(Db):
                 query: str = f"SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, date_tech_control, " \
                              f"price, promo FROM car WHERE id = {id_car} "
                 cursor.execute(query)
-                new_car = Car.load_results(cursor, cursor.fetchone())
+                new_car: Car = Car.load_results(cursor, cursor.fetchone())
                 new_car.get_components()
                 return new_car
             except sql.OperationalError:
@@ -157,8 +152,6 @@ class Car(Db):
     def get_components(self) -> None:
         """
         This function add to the car its components from the database
-        :returns: None
-        :rtype: None
         """
         self.brand = Brand.get_car_component(self.id)
         self.motor = Motor.get_car_component(self.id)

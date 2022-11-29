@@ -1,8 +1,11 @@
-from Main.Class.DB import DBAccess as Db
+from Main.Class.database import DBAccess as Db
 
 
 class Brand(Db):
     def __init__(self) -> None:
+        """
+        It creates a new object Brand
+        """
         self.id: int = 0
         self.name: str = ""
 
@@ -11,7 +14,6 @@ class Brand(Db):
         """
         This function returns the name of the brand table in the database
         :returns: The name of the brand table in the database
-        :rtype: str
         """
         return "brand"
 
@@ -20,6 +22,5 @@ class Brand(Db):
         """
         This function returns the primary key name in the brand table in the database
         :returns: The name of the primary key in the brand table in the database
-        :rtype: str
         """
         return "id"

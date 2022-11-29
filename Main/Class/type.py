@@ -1,8 +1,11 @@
-from Main.Class.DB import DBAccess as Db
+from Main.Class.database import DBAccess as Db
 
 
 class Type(Db):
     def __init__(self) -> None:
+        """
+        It creates a new object Type
+        """
         self.id: int = 0
         self.name: str = ""
 
@@ -11,7 +14,6 @@ class Type(Db):
         """
         This function returns the name of the type table in the database
         :returns: The name of the type table in the database
-        :rtype: str
         """
         return "type"
 
@@ -20,6 +22,5 @@ class Type(Db):
         """
         This function returns the primary key name in the type table in the database
         :returns: The name of the primary key in the type table in the database
-        :rtype: str
         """
         return "id"

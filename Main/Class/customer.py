@@ -1,11 +1,14 @@
 import sqlite3 as sql
 import sys
 
-from Main.Class.DB import DBAccess as Db
+from Main.Class.database import DBAccess as Db
 
 
 class Customer(Db):
     def __init__(self) -> None:
+        """
+        It creates a new object Customer
+        """
         self.id: int = 0
         self.first_name: str = ""
         self.last_name: str = ""
@@ -18,9 +21,7 @@ class Customer(Db):
         """
         This function get a customer from the database chosen by its id
         :param id_customer: An integer number
-        :type id_customer: int
         :returns: A customer object
-        :rtype: object
         """
         cursor: sql.dbapi2.Cursor = Customer.db_cursor()[0]
         if cursor is not None:
@@ -39,7 +40,6 @@ class Customer(Db):
         """
         This function insert a customer in the database
         :returns: True if the insertion was correctly executed
-        :rtype: bool
         """
         tuple_db: tuple = self.db_cursor()
         cursor: sql.dbapi2.Cursor = tuple_db[0]
@@ -63,7 +63,6 @@ class Customer(Db):
         """
         This function returns the name of the customer table in the database
         :returns: The name of the customer table in the database
-        :rtype: str
         """
         return "customer"
 
@@ -72,6 +71,5 @@ class Customer(Db):
         """
         This function returns the primary key name in the customer table in the database
         :returns: The name of the primary key in the customer table in the database
-        :rtype: str
         """
         return "id"
