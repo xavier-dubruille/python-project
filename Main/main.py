@@ -13,6 +13,9 @@ from Main.Class.car import Car
 
 
 class Window:
+    """
+    It manages all the methods for the graphic application utilities
+    """
     def __init__(self) -> None:
         """
         It will initialise a new object window
@@ -309,32 +312,28 @@ class Window:
             label_no_free_places: Label = Label(self.frame_display, text="There are no cars to sell or customers")
             label_no_free_places.pack()
             return
-        raw_deal: Deal = Deal()
-        raw_deal.id_car = StringVar()
-        raw_deal.id_customer = StringVar()
-        raw_deal.date_start_rent = StringVar()
-        raw_deal.duration_days_rent = StringVar()
-        raw_deal.is_rent = 1
+        raw_deal: dict = {"id_car": StringVar(), "id_customer": StringVar(), "date_start_rent": StringVar(),
+                          "duration_days_rent": StringVar(), "is_rent": 1}
         label_id_car: Label = Label(self.frame_display, text="Car id : ")
         label_id_car.grid(column=0, row=0, rowspan=rowspan, sticky=NSEW)
-        dropdown_car_id: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_car,
+        dropdown_car_id: OptionMenu = OptionMenu(self.frame_display, raw_deal["id_car"],
                                                  *map(lambda x: f"{x.id} price : {x.price} promo : {x.promo}",
                                                       self.car_list_free))
         dropdown_car_id.grid(column=1, row=0, rowspan=rowspan, sticky=NSEW)
         label_id_customer: Label = Label(self.frame_display, text="Customer id : ")
         label_id_customer.grid(column=0, row=rowspan, rowspan=rowspan, sticky=NSEW)
-        dropdown_id_customer: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_customer,
+        dropdown_id_customer: OptionMenu = OptionMenu(self.frame_display, raw_deal["id_customer"],
                                                       *map(lambda x: f"{x.id} {x.first_name[0]}.{x.last_name}",
                                                            self.customer_list))
         dropdown_id_customer.grid(column=1, row=rowspan, rowspan=rowspan, sticky=NSEW)
         label_date_start_rent: Label = Label(self.frame_display, text="Date of the rent : ")
         label_date_start_rent.grid(column=0, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
-        entry_date_start_rent: tkCal = tkCal(self.frame_display, textvariable=raw_deal.date_start_rent,
+        entry_date_start_rent: tkCal = tkCal(self.frame_display, textvariable=raw_deal["date_start_rent"],
                                              locale='fr_BE', date_pattern="dd/mm/yyyy")
         entry_date_start_rent.grid(column=1, row=rowspan * 2, rowspan=rowspan, sticky=NSEW)
         label_duration_days_rent: Label = Label(self.frame_display, text="Duration days of the rent : ")
         label_duration_days_rent.grid(column=0, row=rowspan * 3, rowspan=rowspan, sticky=NSEW)
-        entry_duration_days_rent: Entry = Entry(self.frame_display, textvariable=raw_deal.duration_days_rent)
+        entry_duration_days_rent: Entry = Entry(self.frame_display, textvariable=raw_deal["duration_days_rent"])
         entry_duration_days_rent.grid(column=1, row=rowspan * 3, rowspan=rowspan, sticky=NSEW)
         button_rent_a_car: Button = Button(self.frame_display, text="Make the rent",
                                            command=lambda: self.verify_deal(raw_deal))
@@ -350,19 +349,16 @@ class Window:
             label_no_free_places: Label = Label(self.frame_display, text="There are no cars to sell or customers")
             label_no_free_places.pack()
             return
-        raw_deal: Deal = Deal()
-        raw_deal.id_car = StringVar()
-        raw_deal.id_customer = StringVar()
-        raw_deal.is_rent = False
+        raw_deal: dict = {"id_car": StringVar(), "id_customer": StringVar(), "is_rent": False}
         label_id_car: Label = Label(self.frame_display, text="Car id : ")
         label_id_car.grid(column=0, row=0, rowspan=rowspan, sticky=NSEW)
-        dropdown_car_id: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_car,
+        dropdown_car_id: OptionMenu = OptionMenu(self.frame_display, raw_deal["id_car"],
                                                  *map(lambda x: f"{x.id} price : {x.price} promo : {x.promo}",
                                                       self.car_list_free))
         dropdown_car_id.grid(column=1, row=0, rowspan=rowspan, sticky=NSEW)
         label_id_customer: Label = Label(self.frame_display, text="Customer id : ")
         label_id_customer.grid(column=0, row=rowspan, rowspan=rowspan, sticky=NSEW)
-        dropdown_id_customer: OptionMenu = OptionMenu(self.frame_display, raw_deal.id_customer,
+        dropdown_id_customer: OptionMenu = OptionMenu(self.frame_display, raw_deal["id_customer"],
                                                       *map(lambda x: f"{x.id} {x.first_name[0]}.{x.last_name}",
                                                            self.customer_list))
         dropdown_id_customer.grid(column=1, row=rowspan, rowspan=rowspan, sticky=NSEW)
@@ -509,35 +505,33 @@ class Window:
         label_error: Label = Label(self.frame_sort, text=text_info)
         label_error.pack()
 
-    def verify_deal(self, deal: Deal) -> None:
+    def verify_deal(self, deal: dict) -> None:
         """
         It verifies that the data entered are corrects
         :param deal: The deal that contains the raw information checked
         """
         text_info: str = ""
         new_deal: Deal = Deal()
-        raw_id_car = deal.id_car.get()
-        if raw_id_car:
-            new_deal.id_car = raw_id_car.split()[0]
-        if not new_deal.id_car:
+        raw_id_car = deal["id_car"].get().split()[0]
+        if not raw_id_car:
             text_info += "- There is no car id chosen.\n"
-        raw_id_customer = deal.id_customer.get()
-        if raw_id_customer:
-            new_deal.id_customer = raw_id_customer.split()[0]
-        if not new_deal.id_customer:
+        raw_id_customer = deal["id_customer"].get().split()[0]
+        if not raw_id_customer:
             text_info += "- There is no customer id chosen.\n"
-        new_deal.is_rent = deal.is_rent
-        if new_deal.is_rent:
-            new_deal.date_start_rent = deal.date_start_rent.get()
+        raw_is_rent = deal["is_rent"]
+        if raw_is_rent:
+            new_deal.date_start_rent = deal["date_start_rent"].get()
             if not new_deal.date_start_rent:
                 text_info += "- There is no date for the rent.\n"
-            new_deal.duration_days_rent = deal.duration_days_rent.get()
+            new_deal.duration_days_rent = deal["duration_days_rent"].get()
             if not new_deal.duration_days_rent:
                 text_info += "- There is no duration for the rent.\n"
         if not text_info:
+            new_deal.id_car = raw_id_car
+            new_deal.id_customer = raw_id_customer
+            new_deal.is_rent = raw_is_rent
             new_deal.insert_db()
             self.reset_car_lists()
-            text_info: str = "Deal saved"
             if new_deal.is_rent:
                 self.display_window_rent()
             else:

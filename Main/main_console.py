@@ -11,6 +11,9 @@ from Main.CommonCode.function_common import *
 
 
 class ApplicationConsole:
+    """
+    It manages all the methods for the console application utilities
+    """
     def __init__(self) -> None:
         """
         It creates a new object ApplicationConsole

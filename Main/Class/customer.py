@@ -5,6 +5,9 @@ from Main.Class.database import DBAccess as Db
 
 
 class Customer(Db):
+    """
+    It manages all the methods for customers utilities
+    """
     def __init__(self) -> None:
         """
         It creates a new object Customer

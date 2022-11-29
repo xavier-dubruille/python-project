@@ -8,6 +8,9 @@ from Main.Class.type import Type
 
 
 class Car(Db):
+    """
+    It manages all the methods for cars utilities
+    """
     def __init__(self) -> None:
         """
         It creates a new object Car

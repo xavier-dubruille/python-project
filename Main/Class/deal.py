@@ -7,6 +7,9 @@ from datetime import datetime, timedelta
 
 
 class Deal(Db):
+    """
+    It manages all the methods for deals utilities
+    """
     def __init__(self) -> None:
         """
         It creates a new object Deal
@@ -16,7 +19,7 @@ class Deal(Db):
         self.id_customer: int = 0
         self.is_rent: bool = False
         self.date_start_rent: str = ""
-        self.duration_days_rent: str = ""
+        self.duration_days_rent: int = 0
         self.car: Car = Car()
         self.customer: Customer = Customer()
 
@@ -44,17 +47,15 @@ class Deal(Db):
         tuple_db: tuple = self.db_cursor()
         cursor: sql.dbapi2.Cursor = tuple_db[0]
         db_connection: sql.dbapi2.Connection = tuple_db[1]
-        if cursor is not None:
+        if cursor:
             try:
-                query: str = ""
+                query: str = f"INSERT INTO deal (is_rent, id_car, id_customer)" \
+                             f"VALUES ({self.is_rent}, {self.id_car}, {self.id_customer})"
                 if self.is_rent:
                     query: str = f"INSERT INTO deal " \
                                  f"(is_rent, date_start_rent, duration_days_rent, id_car, id_customer) " \
-                                 f"VALUES ({self.is_rent}, {self.date_start_rent}, {self.duration_days_rent}, {self.id_car}, " \
-                                 f"{self.id_customer})"
-                else:
-                    query: str = f"INSERT INTO deal (is_rent, id_car, id_customer) " \
-                                 f"VALUES ({self.is_rent}, {self.id_car}, {self.id_customer})"
+                                 f"VALUES ({self.is_rent}, '{self.date_start_rent}', {self.duration_days_rent}, " \
+                                 f"{self.id_car}, {self.id_customer})"
                 cursor.execute(query)
                 db_connection.commit()
                 return True
@@ -64,13 +65,29 @@ class Deal(Db):
                 self.db_close(cursor)
         return False
 
-    def check_rent(self) -> None:
-        return
-        # date_end = datetime.strptime(self.date_start_rent, "%d/%m/%Y") + timedelta(days=int(self.duration_days_rent))
-        # if date_end >= datetime.strptime(datetime.strftime(datetime.today(), "%d/%m/%Y"), "%d/%m/%Y"):
-        #     print("c'est fini")
-        # else:
-        #     print("c'est pas fini")
+    def check_rent(self) -> bool:
+        """
+        It checks if the rent continue or is finished
+        :returns: True if the rent is finished
+        """
+        if self.is_rent:
+            if (datetime.today() - (datetime.strptime(self.date_start_rent, "%d/%m/%y") +
+                                    timedelta(days=self.duration_days_rent))).days >= 0:
+                tuple_db: tuple = self.db_cursor()
+                cursor: sql.dbapi2.Cursor = tuple_db[0]
+                db_connection: sql.dbapi2.Connection = tuple_db[1]
+                if cursor:
+                    try:
+                        query: str = f"UPDATE deal SET is_rent = 0, date_start_rent = NULL, " \
+                                     f"duration_days_rent = NULL WHERE id = {self.id}"
+                        cursor.execute(query)
+                        db_connection.commit()
+                        return True
+                    except sql.OperationalError:
+                        print(f"Error in check_rent {sys.exc_info()}")
+                    finally:
+                        self.db_close(cursor)
+        return False
 
     @staticmethod
     def get_all() -> list | None:
@@ -80,15 +97,19 @@ class Deal(Db):
         """
         cursor: sql.dbapi2.Cursor = Deal.db_cursor()[0]
         deal_list: list = []
-        if cursor is not None:
+        if cursor:
             try:
-                cursor.execute(f"SELECT * FROM deal")
+                query: str = f"SELECT * FROM deal"
+                cursor.execute(query)
                 results_query: list = cursor.fetchall()
                 for row in results_query:
                     new_deal: Deal = Deal.load_results(cursor, row)
                     new_deal.car = Car.get_car(new_deal.id_car)
                     new_deal.customer = Customer.get_customer(new_deal.id_customer)
-                    new_deal.check_rent()
+                    if new_deal.check_rent():
+                        new_deal.is_rent = 0
+                        new_deal.date_start_rent = ""
+                        new_deal.duration_days_rent = 0
                     deal_list.append(new_deal)
                 return deal_list
             except sql.OperationalError:
