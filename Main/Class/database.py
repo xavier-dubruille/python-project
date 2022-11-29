@@ -6,6 +6,7 @@ class DBAccess:
     """
     It manages all the methods for general database utilities
     """
+
     @staticmethod
     def db_cursor() -> tuple | None:
         """

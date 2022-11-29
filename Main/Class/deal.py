@@ -10,6 +10,7 @@ class Deal(Db):
     """
     It manages all the methods for deals utilities
     """
+
     def __init__(self) -> None:
         """
         It creates a new object Deal
@@ -49,13 +50,13 @@ class Deal(Db):
         db_connection: sql.dbapi2.Connection = tuple_db[1]
         if cursor:
             try:
-                query: str = f"INSERT INTO deal (is_rent, id_car, id_customer)" \
-                             f"VALUES ({self.is_rent}, {self.id_car}, {self.id_customer})"
+                query: str = (f"INSERT INTO deal (is_rent, id_car, id_customer)"
+                              f"VALUES ({self.is_rent}, {self.id_car}, {self.id_customer})")
                 if self.is_rent:
-                    query: str = f"INSERT INTO deal " \
-                                 f"(is_rent, date_start_rent, duration_days_rent, id_car, id_customer) " \
-                                 f"VALUES ({self.is_rent}, '{self.date_start_rent}', {self.duration_days_rent}, " \
-                                 f"{self.id_car}, {self.id_customer})"
+                    query: str = (f"INSERT INTO deal "
+                                  f"(is_rent, date_start_rent, duration_days_rent, id_car, id_customer) "
+                                  f"VALUES ({self.is_rent}, '{self.date_start_rent}', {self.duration_days_rent}, "
+                                  f"{self.id_car}, {self.id_customer})")
                 cursor.execute(query)
                 db_connection.commit()
                 return True
@@ -71,15 +72,14 @@ class Deal(Db):
         :returns: True if the rent is finished
         """
         if self.is_rent:
-            if (datetime.today() - (datetime.strptime(self.date_start_rent, "%d/%m/%y") +
+            if (datetime.today() - (datetime.strptime(self.date_start_rent, "%d/%m/%Y") +
                                     timedelta(days=self.duration_days_rent))).days >= 0:
                 tuple_db: tuple = self.db_cursor()
                 cursor: sql.dbapi2.Cursor = tuple_db[0]
                 db_connection: sql.dbapi2.Connection = tuple_db[1]
                 if cursor:
                     try:
-                        query: str = f"UPDATE deal SET is_rent = 0, date_start_rent = NULL, " \
-                                     f"duration_days_rent = NULL WHERE id = {self.id}"
+                        query: str = f"DELETE FROM deal WHERE id = {self.id}"
                         cursor.execute(query)
                         db_connection.commit()
                         return True
@@ -92,8 +92,8 @@ class Deal(Db):
     @staticmethod
     def get_all() -> list | None:
         """
-        This function get all the cars from the database
-        :returns: A list of all the cars
+        This function get all the deals from the database
+        :returns: A list of all the deals
         """
         cursor: sql.dbapi2.Cursor = Deal.db_cursor()[0]
         deal_list: list = []

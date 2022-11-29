@@ -14,6 +14,7 @@ class ApplicationConsole:
     """
     It manages all the methods for the console application utilities
     """
+
     def __init__(self) -> None:
         """
         It creates a new object ApplicationConsole
@@ -160,7 +161,7 @@ class ApplicationConsole:
     def display_history(self) -> None:
         """
         This function display the history of the user transaction from the database
-        """
+r        """
         choice_history: str = ""
         while not check_number_input(choice_history, 1, 2):
             choice_history: str = input("\n"
@@ -217,6 +218,8 @@ class ApplicationConsole:
     def do_transaction(self, bool_rent: bool) -> None:
         """
         This function asks the user to make a deal between one car and one customer
+        :param bool_rent: boolean to know if the transaction is a rent or a sold
+        :type bool_rent: bool
         """
         deal: Deal = Deal()
         good_car_id: bool = False
@@ -282,6 +285,7 @@ class ApplicationConsole:
     def add_car(self) -> None:
         """
         This function asks the user to add a car to the database with all the characteristics
+        :rtype: None
         """
         if Car.number_of_cars_stock() <= 40:
             car: Car = Car()

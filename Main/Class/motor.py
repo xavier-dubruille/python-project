@@ -5,6 +5,7 @@ class Motor(Db):
     """
     It manages all the methods for motors utilities
     """
+
     def __init__(self) -> None:
         """
         It creates a new object Motor

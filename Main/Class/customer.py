@@ -8,6 +8,7 @@ class Customer(Db):
     """
     It manages all the methods for customers utilities
     """
+
     def __init__(self) -> None:
         """
         It creates a new object Customer
@@ -49,9 +50,9 @@ class Customer(Db):
         db_connection: sql.dbapi2.Connection = tuple_db[1]
         if cursor is not None:
             try:
-                query: str = f"INSERT INTO customer (first_name, last_name, phone, mail, address) " \
-                        f"VALUES ('{self.first_name}', '{self.last_name}', {self.phone}, " \
-                             f"'{self.mail}', '{self.address}')"
+                query: str = (f"INSERT INTO customer (first_name, last_name, phone, mail, address) "
+                              f"VALUES ('{self.first_name}', '{self.last_name}', {self.phone}, "
+                              f"'{self.mail}', '{self.address}')")
                 cursor.execute(query)
                 db_connection.commit()
                 return True

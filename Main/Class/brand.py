@@ -5,6 +5,7 @@ class Brand(Db):
     """
     It manages all the methods for brands utilities
     """
+
     def __init__(self) -> None:
         """
         It creates a new object Brand

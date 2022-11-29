@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="bamboo_concess" uuid="b154d0b8-0192-40b3-9681-e3d8185abbc0">
+    <data-source source="LOCAL" name="bamboo_concess" uuid="78503c6a-ff84-46d1-877b-0dea61945b24">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>

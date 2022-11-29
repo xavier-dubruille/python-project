@@ -5,6 +5,7 @@ class Type(Db):
     """
     It manages all the methods for types utilities
     """
+
     def __init__(self) -> None:
         """
         It creates a new object Type

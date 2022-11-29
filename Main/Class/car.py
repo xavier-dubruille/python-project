@@ -11,6 +11,7 @@ class Car(Db):
     """
     It manages all the methods for cars utilities
     """
+
     def __init__(self) -> None:
         """
         It creates a new object Car
@@ -53,9 +54,9 @@ class Car(Db):
         cursor: sql.dbapi2.Cursor = Db.db_cursor()[0]
         if cursor:
             try:
-                query: str = f"SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, " \
-                             f"date_tech_control, price, promo FROM car WHERE id " \
-                             f"NOT IN (select id_car FROM deal WHERE is_rent = 0)"
+                query: str = (f"SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, "
+                              f"date_tech_control, price, promo FROM car "
+                              f"WHERE id NOT IN (select id_car FROM deal WHERE is_rent = 0)")
                 cursor.execute(query)
                 results_query: list = cursor.fetchall()
                 for row in results_query:
@@ -97,9 +98,9 @@ class Car(Db):
         db_connection: sql.dbapi2.Connection = tuple_db[1]
         if cursor is not None:
             try:
-                query: str = f"INSERT INTO car (date_tech_control, price, id_brand, id_type, id_motor, promo) " \
-                             f"VALUES ('{self.date_tech_control}', {self.price}, {self.id_brand},{self.id_type}, " \
-                             f"{self.id_motor}, {self.promo})"
+                query: str = (f"INSERT INTO car (date_tech_control, price, id_brand, id_type, id_motor, promo) "
+                              f"VALUES ('{self.date_tech_control}', {self.price}, {self.id_brand},{self.id_type}, "
+                              f"{self.id_motor}, {self.promo})")
                 cursor.execute(query)
                 db_connection.commit()
                 return True
@@ -140,8 +141,8 @@ class Car(Db):
         cursor: sql.dbapi2.Cursor = Car.db_cursor()[0]
         if cursor is not None:
             try:
-                query: str = f"SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, date_tech_control, " \
-                             f"price, promo FROM car WHERE id = {id_car} "
+                query: str = (f"SELECT id, STRFTIME('%d/%m/%Y', date_stock) as date_stock, date_tech_control, "
+                              f"price, promo FROM car WHERE id = {id_car} ")
                 cursor.execute(query)
                 new_car: Car = Car.load_results(cursor, cursor.fetchone())
                 new_car.get_components()
