@@ -19,6 +19,8 @@ class Customer(Db):
         self.phone: int | str = 0
         self.mail: str = ""
         self.address: str = ""
+        self.counter: int = 0
+        self.loyalty_since: str = ""
 
     @staticmethod
     def get_customer(id_customer: int) -> object | None:

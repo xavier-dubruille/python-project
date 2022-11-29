@@ -3,6 +3,7 @@ from tkinter import *
 from tkcalendar import DateEntry as tkCal
 import math
 import re
+from datetime import datetime
 from Main.CommonCode.function_common import *
 from Main.Class.brand import Brand
 from Main.Class.customer import Customer
@@ -375,7 +376,9 @@ class Window:
         label_id_customer.grid(column=0, row=rowspan, rowspan=rowspan, sticky=NSEW)
         dropdown_id_customer: OptionMenu = OptionMenu(self.frame_display, raw_deal["id_customer"],
                                                       *map(lambda x: f"{x.id} {x.first_name[0]}.{x.last_name}",
-                                                           self.customer_list))
+                                                           self.customer_list),
+                                                      command=self.verify_customer_loyalty(
+                                                          raw_deal["id_customer"].get().split()[0]))
         dropdown_id_customer.grid(column=1, row=rowspan, rowspan=rowspan, sticky=NSEW)
         button_make_deal: Button = Button(self.frame_display, text="Make the deal",
                                           command=lambda: self.verify_deal(raw_deal))
@@ -453,6 +456,16 @@ class Window:
         button_add_customer: Button = Button(self.frame_display, text="Add a car in stock",
                                              command=lambda: self.verify_customer_insert(raw_customer))
         button_add_customer.grid(column=1, row=rowspan * 5, rowspan=rowspan, sticky=NSEW)
+
+    def verify_customer_loyalty(self, id_customer: id):
+        """
+        It checks if this customer is loyal and can have a promo on his car
+        :param id_customer: id to check in the db if this customer is loyal
+        """
+        customer: Customer = Customer.get_customer(id_customer)
+        if customer.counter > 3 or (datetime.today() - datetime.strptime("2021-11-30", "%Y-%m-%d")).days >= 365:
+            pass
+            # TODO : change the promo field to customer
 
     def verify_customer_insert(self, customer_string_var: dict) -> None:
         """
