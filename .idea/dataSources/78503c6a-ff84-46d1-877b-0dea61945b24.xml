@@ -1317,7 +1317,7 @@
     <table id="483" parent="166" name="car"/>
     <table id="484" parent="166" name="customer"/>
     <table id="485" parent="166" name="deal"/>
-    <table id="486" parent="166" name="deal_historic"/>
+    <table id="486" parent="166" name="historic_deal"/>
     <table id="487" parent="166" name="motor"/>
     <table id="488" parent="166" name="sqlite_master">
       <System>1</System>
@@ -1497,12 +1497,12 @@
     </key>
     <trigger id="524" parent="485" name="historic_insert">
       <Events>I</Events>
-      <SourceTextLength>278</SourceTextLength>
+      <SourceTextLength>280</SourceTextLength>
       <Turn>after-row</Turn>
     </trigger>
     <trigger id="525" parent="485" name="historic_update">
       <Events>I</Events>
-      <SourceTextLength>278</SourceTextLength>
+      <SourceTextLength>280</SourceTextLength>
       <Turn>after-row</Turn>
     </trigger>
     <column id="526" parent="486" name="id">

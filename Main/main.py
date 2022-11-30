@@ -377,7 +377,7 @@ class Window:
         dropdown_id_customer: OptionMenu = OptionMenu(self.frame_display, raw_deal["id_customer"],
                                                       *map(lambda x: f"{x.id} {x.first_name[0]}.{x.last_name}",
                                                            self.customer_list),
-                                                      command=self.verify_customer_loyalty(
+                                                      command=lambda: self.verify_customer_loyalty(
                                                           raw_deal["id_customer"].get().split()[0]))
         dropdown_id_customer.grid(column=1, row=rowspan, rowspan=rowspan, sticky=NSEW)
         button_make_deal: Button = Button(self.frame_display, text="Make the deal",

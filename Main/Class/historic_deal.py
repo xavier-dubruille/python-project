@@ -19,7 +19,7 @@ class HistoricDeal(Deal):
         This function returns the name of the historic table in the database
         :returns: The name of the historic table in the database
         """
-        return "deal_historic"
+        return "historic_deal"
 
     @staticmethod
     def get_all() -> list | None:
@@ -31,7 +31,7 @@ class HistoricDeal(Deal):
         deal_list: list = []
         if cursor:
             try:
-                query: str = f"SELECT * FROM deal_historic order by id"
+                query: str = f"SELECT * FROM historic_deal order by id"
                 cursor.execute(query)
                 results_query: list = cursor.fetchall()
                 for row in results_query:
