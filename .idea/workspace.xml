@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="669d1dde-84fe-45c9-9ca5-f82b77fc69f8" name="Changes" comment="real historic works">
+    <list default="true" id="669d1dde-84fe-45c9-9ca5-f82b77fc69f8" name="Changes" comment="Refactoring names">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main/main_console.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/main_console.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,24 +43,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "last_opened_file_path": "C:/Users/samfl/OneDrive - EPHEC asbl/BAC2/Python/ExamenJanvier/PythonGit/Backup/Main_30_11_22",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.stylelint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.stylelint": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.uml"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/samfl/OneDrive - EPHEC asbl/BAC2/Python/ExamenJanvier/PythonGit/Backup/Main_30_11_22&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.uml&quot;
   }
-}]]></component>
+}</component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
       <console-settings module-name="python-project" is-module-sdk="true">
@@ -81,7 +83,7 @@
       <recent name="C:\Users\samfl\OneDrive - EPHEC asbl\BAC2\Python\ExamenJanvier\PythonGit\Db" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main_console">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" singleton="false" nameIsGenerated="true">
       <module name="PythonGit" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -184,7 +186,7 @@
       <workItem from="1669717792495" duration="608000" />
       <workItem from="1669720838806" duration="2854000" />
       <workItem from="1669734571548" duration="13729000" />
-      <workItem from="1669753121923" duration="10228000" />
+      <workItem from="1669753121923" duration="10255000" />
     </task>
     <task id="LOCAL-00001" summary="SEFFEZSEZF">
       <created>1667811360340</created>
@@ -487,7 +489,14 @@
       <option name="project" value="LOCAL" />
       <updated>1669763368462</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="real historic works">
+      <created>1669763414117</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1669763414117</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -537,8 +546,8 @@
     <SUITE FILE_PATH="coverage/PythonGit$Car.coverage" NAME="Car Coverage Results" MODIFIED="1668298945296" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Main/Class" />
     <SUITE FILE_PATH="coverage/PythonGit$Deal.coverage" NAME="Deal Coverage Results" MODIFIED="1668295855723" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Main/Class" />
     <SUITE FILE_PATH="coverage/PythonGit$test_sort.coverage" NAME="test_sort Coverage Results" MODIFIED="1669655505179" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test" />
-    <SUITE FILE_PATH="coverage/PythonGit$main_console.coverage" NAME="main_console Coverage Results" MODIFIED="1669753774736" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Main" />
-    <SUITE FILE_PATH="coverage/PythonGit$main.coverage" NAME="main Coverage Results" MODIFIED="1669762807675" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Main" />
+    <SUITE FILE_PATH="coverage/PythonGit$main_console.coverage" NAME="main_console Coverage Results" MODIFIED="1669810900269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Main" />
+    <SUITE FILE_PATH="coverage/PythonGit$main.coverage" NAME="main Coverage Results" MODIFIED="1669724867047" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Main" />
     <SUITE FILE_PATH="coverage/PythonGit$Truc.coverage" NAME="Truc Coverage Results" MODIFIED="1668297577954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test" />
     <SUITE FILE_PATH="coverage/PythonGit$AlwaysExcept.coverage" NAME="AlwaysExcept Coverage Results" MODIFIED="1668521991247" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test" />
     <SUITE FILE_PATH="coverage/PythonGit$test.coverage" NAME="test Coverage Results" MODIFIED="1668093101897" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Test" />
