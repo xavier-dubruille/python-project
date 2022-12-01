@@ -1,22 +1,22 @@
-from Main.Class.DB import DBAccess as DB
+from Main.Class.DB import DBAccess as Db
 
 
-class Motor(DB):
+class Motor(Db):
     def __init__(self) -> None:
-        self.id = 0
-        self.name = ""
+        self.id: int = 0
+        self.name: str = ""
 
     @staticmethod
-    def NameTable() -> str:
+    def name_table() -> str:
         """
         This function returns the name of the motor table in the database
         :returns: The name of the motor table in the database
         :rtype: str
         """
-        return "Motor"
+        return "motor"
 
     @staticmethod
-    def IdColumn() -> str:
+    def id_column() -> str:
         """
         This function returns the primary key name in the motor table in the database
         :returns: The name of the primary key in the motor table in the database
