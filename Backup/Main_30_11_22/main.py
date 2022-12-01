@@ -3,7 +3,6 @@ from tkinter import *
 from tkcalendar import DateEntry as tkCal
 import math
 import re
-from datetime import datetime
 from Main.CommonCode.function_common import *
 from Main.Class.brand import Brand
 from Main.Class.customer import Customer
@@ -11,7 +10,6 @@ from Main.Class.deal import Deal
 from Main.Class.motor import Motor
 from Main.Class.type import Type
 from Main.Class.car import Car
-from Main.Class.historic_deal import HistoricDeal
 
 
 class Window:
@@ -45,13 +43,13 @@ class Window:
         self.lcm_row_number_display: int = math.lcm(self.row_number_rent, self.row_number_selling,
                                                     self.row_number_add_car,
                                                     self.row_number_add_customer)
+        self.print_details: str = ""
         self.police: str = "courier 15"
         self.title: str = "BAMBOO CONCESS"
         self.rent_list: list = []
         self.car_list_free: list = []
         self.car_list_stock: list = []
         self.deal_list: list = []
-        self.historic_deal_list: list = []
         self.reset_car_lists()
         self.brand_list: list = Brand.get_all()
         self.motor_list: list = Motor.get_all()
@@ -128,7 +126,7 @@ class Window:
         label_title_details: Label = Label(self.frame_details, text="DETAILS", anchor="s",
                                            font=self.police + " underline")
         label_title_details.grid(column=0, row=0, sticky='wesn')
-        self.label_details: Label = Label(self.frame_details, text="", justify="left", anchor='nw')
+        self.label_details: Label = Label(self.frame_details, text=self.print_details, justify="left", anchor='nw')
         self.label_details.grid(column=0, row=1, sticky=NSEW)
         frame_exit: Frame = Frame(self.window)
         frame_exit.grid(column=2, row=0, sticky=NSEW)
@@ -143,32 +141,32 @@ class Window:
     def display_car_listbox(self, list_car: list, listbox: Listbox, dict_space: dict, list_str: list) -> None:
         """
         It displays the list of cars or deals in the listbox
+
         :param list_str: The list of string to print in the title of the listbox
         :param dict_space: The dictionary of space for each string
         :param listbox: The list where the list sorted will be display
         :param list_car: The list will be sort
         """
-        for car_or_historical_deal in list_car:
+        for car_or_deal in list_car:
             if type(list_car[0]) == Car:
-                car_or_historical_deal: Car
+                car_or_deal: Car
                 rented: str = ""
                 for deal in self.rent_list:
-                    if deal.id_car == car_or_historical_deal.id:
+                    if deal.id_car == car_or_deal.id:
                         rented: str = "Rented"
                         break
-                listbox.insert(END, f"{str(car_or_historical_deal.id):{dict_space[list_str[0]]}}"
-                                    f"{car_or_historical_deal.brand.name:{dict_space[list_str[1]]}}"
-                                    f"{car_or_historical_deal.type.name:{dict_space[list_str[2]]}}"
-                                    f"{str(car_or_historical_deal.price):{dict_space[list_str[3]]}}{rented}")
+                listbox.insert(END, f"{str(car_or_deal.id):{dict_space[list_str[0]]}}"
+                                    f"{car_or_deal.brand.name:{dict_space[list_str[1]]}}"
+                                    f"{car_or_deal.type.name:{dict_space[list_str[2]]}}"
+                                    f"{str(car_or_deal.price):{dict_space[list_str[3]]}}{rented}")
                 listbox.bind('<<ListboxSelect>>', self.display_details_stock)
             else:
-                car_or_historical_deal: HistoricDeal
-                listbox.insert(END, f"{str(car_or_historical_deal.car.id):{dict_space[list_str[0]]}}"
-                                    f"{car_or_historical_deal.car.brand.name:{dict_space[list_str[1]]}}"
-                                    f"{car_or_historical_deal.car.type.name:{dict_space[list_str[2]]}}"
-                                    f"{str(car_or_historical_deal.car.price):{dict_space[list_str[3]]}}"
-                                    f"{car_or_historical_deal.customer.first_name[0]}."
-                                    f"{car_or_historical_deal.customer.last_name}")
+                car_or_deal: Deal
+                listbox.insert(END, f"{str(car_or_deal.car.id):{dict_space[list_str[0]]}}"
+                                    f"{car_or_deal.car.brand.name:{dict_space[list_str[1]]}}"
+                                    f"{car_or_deal.car.type.name:{dict_space[list_str[2]]}}"
+                                    f"{str(car_or_deal.car.price):{dict_space[list_str[3]]}}"
+                                    f"{car_or_deal.customer.first_name[0]}.{car_or_deal.customer.last_name}")
                 listbox.bind('<<ListboxSelect>>', self.display_details_history)
 
     def sort_display(self, value_sorting: str) -> None:
@@ -181,8 +179,8 @@ class Window:
                                          reverse=bool(self.value_check_button_order.get()))
                 self.display_window_stock()
             else:
-                self.historic_deal_list.sort(key=lambda x: getattr(x.car, value_sorting),
-                                             reverse=bool(self.value_check_button_order.get()))
+                self.deal_list.sort(key=lambda x: getattr(x.car, value_sorting),
+                                    reverse=bool(self.value_check_button_order.get()))
                 self.display_window_history()
 
     def display_frame_sort(self) -> None:
@@ -220,7 +218,7 @@ class Window:
             label_info: Label = Label(self.frame_display, text="There are no cars in your stock.")
             label_info.pack()
             return
-        str_list: list = ["Id", "Brand", "Type", "Price (€)", "Status"]
+        str_list: list = ["Id", "Brand", "Type", "Price (€)", "Rented"]
         space_dict: dict = {
             str_list[0]: len(str(max(self.car_list_stock, key=lambda x: len(str(x.id))).id)) + self.space_display,
             str_list[1]: len(max(self.car_list_stock, key=lambda x: len(x.brand.name)).brand.name) + self.space_display,
@@ -248,18 +246,10 @@ class Window:
         :param event: The event create when a click is performed on the listbox
         """
         car: Car = self.car_list_stock[event.widget.curselection()[0]]
-        rented_deal: None = None
-        for deal in self.rent_list:
-            if deal.id_car == car.id:
-                rented_deal: Deal = deal
-                break
-        print_details: str = (f"Brand : {car.brand.name}\nType : {car.type.name}\nMotor : {car.motor.name}\n"
-                              f"Price : {car.price}€\nPromo : {car.promo}%\nIn stock since : {car.date_stock}\n"
-                              f"Next control : {car.date_tech_control}\n")
-        if rented_deal:
-            print_details += (f"The rent starts : {rented_deal.date_start_rent}\n"
-                              f"Duration : {rented_deal.duration_days_rent} days")
-        self.label_details.configure(text=print_details)
+        self.print_details: str = (f"Brand : {car.brand.name}\nType : {car.type.name}\nMotor : {car.motor.name}\n"
+                                   f"Price : {car.price}€\nPromo : {car.promo}%\nIn stock since : {car.date_stock}\n"
+                                   f"Next control : {car.date_tech_control}")
+        self.label_details.configure(text=self.print_details)
 
     def display_window_history(self) -> None:
         """
@@ -267,20 +257,20 @@ class Window:
         """
         self.reset_display_and_sort_frames(self.button_history)
         self.display_frame_sort()
-        if not self.historic_deal_list:
+        if not self.deal_list:
             label_info: Label = Label(self.frame_display, text="There are no deals made before.")
             label_info.pack()
             return
         str_list: list = ["Id", "Brand", "Type", "Price (€)", "Customer"]
         space_dict: dict = {
             str_list[0]: len(str(
-                max(self.historic_deal_list, key=lambda x: len(str(x.car.id))).car.id)) + self.space_display,
+                max(self.deal_list, key=lambda x: len(str(x.car.id))).car.id)) + self.space_display,
             str_list[1]: len(
-                max(self.historic_deal_list, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.space_display,
+                max(self.deal_list, key=lambda x: len(x.car.brand.name)).car.brand.name) + self.space_display,
             str_list[2]: len(
-                max(self.historic_deal_list, key=lambda x: len(x.car.type.name)).car.type.name) + self.space_display,
+                max(self.deal_list, key=lambda x: len(x.car.type.name)).car.type.name) + self.space_display,
             str_list[3]: len(str(
-                max(self.historic_deal_list, key=lambda x: len(str(x.car.price))).car.price)) + self.space_display}
+                max(self.deal_list, key=lambda x: len(str(x.car.price))).car.price)) + self.space_display}
         title_column: str = ""
         for i in range(len(space_dict)):
             title_column += f"{str_list[i]}" + " " * (space_dict[str_list[i]] - len(f"{str_list[i]}"))
@@ -293,7 +283,7 @@ class Window:
         scrollbar.pack(side=RIGHT, fill=Y)
         listbox_history: Listbox = Listbox(frame_list_box_scroll)
         listbox_history.pack(expand=True, fill=BOTH)
-        self.display_car_listbox(self.historic_deal_list, listbox_history, space_dict, str_list)
+        self.display_car_listbox(self.deal_list, listbox_history, space_dict, str_list)
         listbox_history.configure(yscrollcommand=scrollbar.set)
         scrollbar.configure(command=listbox_history.yview)
 
@@ -305,18 +295,13 @@ class Window:
         for i in range(2):
             self.frame_details.rowconfigure(i, weight=1)
         self.frame_details.columnconfigure(0, weight=1)
-        historical_deal: HistoricDeal = self.historic_deal_list[event.widget.curselection()[0]]
-        print_details: str = (f"Brand : {historical_deal.car.brand.name}\nType : {historical_deal.car.type.name}\n"
-                              f"Motor : {historical_deal.car.motor.name}\nPrice : {historical_deal.car.price}€\n"
-                              f"Promo : {historical_deal.car.promo}%\n"
-                              f"In stock since : {historical_deal.car.date_stock}\n "
-                              f"Next control {historical_deal.car.date_tech_control}\n"
-                              f"The customer is : {historical_deal.customer.first_name} "
-                              f"{historical_deal.customer.last_name}\n")
-        if historical_deal.is_rent:
-            print_details += (f"The rent starts : {historical_deal.date_start_rent}\n"
-                              f"Duration : {historical_deal.duration_days_rent} days")
-        self.label_details.configure(text=print_details)
+        deal: Deal = self.deal_list[event.widget.curselection()[0]]
+        self.print_details: str = (f"Brand : {deal.car.brand.name}\nType : {deal.car.type.name}\n"
+                                   f"Motor : {deal.car.motor.name}\nPrice : {deal.car.price}€\n"
+                                   f"Promo : {deal.car.promo}%\nIn stock since : {deal.car.date_stock}\n"
+                                   f"Next control {deal.car.date_tech_control}\n"
+                                   f"The customer is : {deal.customer.first_name} {deal.customer.last_name}")
+        self.label_details.configure(text=self.print_details)
 
     def display_window_rent(self) -> None:
         """
@@ -376,9 +361,7 @@ class Window:
         label_id_customer.grid(column=0, row=rowspan, rowspan=rowspan, sticky=NSEW)
         dropdown_id_customer: OptionMenu = OptionMenu(self.frame_display, raw_deal["id_customer"],
                                                       *map(lambda x: f"{x.id} {x.first_name[0]}.{x.last_name}",
-                                                           self.customer_list),
-                                                      command=lambda: self.verify_customer_loyalty(
-                                                          raw_deal["id_customer"].get().split()[0]))
+                                                           self.customer_list))
         dropdown_id_customer.grid(column=1, row=rowspan, rowspan=rowspan, sticky=NSEW)
         button_make_deal: Button = Button(self.frame_display, text="Make the deal",
                                           command=lambda: self.verify_deal(raw_deal))
@@ -456,16 +439,6 @@ class Window:
         button_add_customer: Button = Button(self.frame_display, text="Add a car in stock",
                                              command=lambda: self.verify_customer_insert(raw_customer))
         button_add_customer.grid(column=1, row=rowspan * 5, rowspan=rowspan, sticky=NSEW)
-
-    def verify_customer_loyalty(self, id_customer: id):
-        """
-        It checks if this customer is loyal and can have a promo on his car
-        :param id_customer: id to check in the db if this customer is loyal
-        """
-        customer: Customer = Customer.get_customer(id_customer)
-        if customer.counter > 3 or (datetime.today() - datetime.strptime("2021-11-30", "%Y-%m-%d")).days >= 365:
-            pass
-            # TODO : change the promo field to customer
 
     def verify_customer_insert(self, customer_string_var: dict) -> None:
         """
@@ -548,14 +521,12 @@ class Window:
             text_info += "- There is no customer id chosen.\n"
         raw_is_rent = deal["is_rent"]
         if raw_is_rent:
-            date_start_rent: str = deal["date_start_rent"].get()
-            if not date_start_rent:
+            new_deal.date_start_rent = deal["date_start_rent"].get()
+            if not new_deal.date_start_rent:
                 text_info += "- There is no date for the rent.\n"
-            duration_days_rent: str = deal["duration_days_rent"].get()
-            if not check_number_input(duration_days_rent):
+            new_deal.duration_days_rent = deal["duration_days_rent"].get()
+            if not new_deal.duration_days_rent:
                 text_info += "- There is no duration for the rent.\n"
-            new_deal.date_start_rent = date_start_rent
-            new_deal.duration_days_rent = duration_days_rent
         if not text_info:
             new_deal.id_car = raw_id_car
             new_deal.id_customer = raw_id_customer
@@ -577,7 +548,6 @@ class Window:
         """
         self.car_list_stock: list = Car.get_car_list()
         self.deal_list: list = Deal.get_all()
-        self.historic_deal_list: list = HistoricDeal.get_all()
         self.rent_list: list = []
         self.car_list_free: list = []
         for deal in self.deal_list:

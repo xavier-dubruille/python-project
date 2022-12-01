@@ -74,7 +74,7 @@ class Deal(Db):
         deal_list: list = []
         if cursor is not None:
             try:
-                cursor.execute("SELECT * FROM deal")
+                cursor.execute(f"SELECT * FROM deal")
                 results_query: list = cursor.fetchall()
                 for row in results_query:
                     new_deal: Deal = Deal.load_results(cursor, row)
