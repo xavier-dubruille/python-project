@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import sqlite3 as sql
 import sys
 
@@ -23,7 +25,7 @@ class Customer(Db):
         self.loyalty_since: str = ""
 
     @staticmethod
-    def get_customer(id_customer: int) -> object | None:
+    def get_customer(id_customer: int) -> Customer | None:
         """
         This function get a customer from the database chosen by its id
         :param id_customer: An integer number

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import sqlite3 as sql
 import sys
 
@@ -132,7 +134,7 @@ class Car(Db):
         return False
 
     @staticmethod
-    def get_car(id_car: int) -> object | None:
+    def get_car(id_car: int) -> Car | None:
         """
         This function get a car in the database chosen by its id
         :param id_car: A integer number
