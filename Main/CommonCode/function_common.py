@@ -10,9 +10,10 @@ def check_number_input(string: str, minimum: int = None, maximum: int = None) ->
     if not string.isdigit():
         return False
     if maximum is not None and minimum is not None:
-        if maximum >= int(string) >= minimum:
-            return True
-        return False
+        #if maximum >= int(string) >= minimum:
+        #    return True
+        #return False
+        return maximum >= int(string) >= minimum
     elif maximum is not None:
         if maximum >= int(string):
             return True
