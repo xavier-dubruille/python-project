@@ -286,4 +286,6 @@ r        """
         self.menu_choice()
 
 
-ApplicationConsole()
+        if main brol:
+            runner = ApplicationConsole()
+            runner.run()
